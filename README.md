@@ -7,6 +7,10 @@
   + 同人ボードゲームサークル｢HIchain Project｣が制作した配列ゲームです
   + ルールは[こちら](http://hichain.sokon.jp/rule.html)
 
+## ダウンロード
+  + [Windows 32bit版](https://github.com/hichain/HIchain-Prototype/releases/download/r1.0.0/HIchain_Prototype_r1_0_0_x86.zip)
+  + [Windows 64bit版](https://github.com/hichain/HIchain-Prototype/releases/download/r1.0.0/HIchain_Prototype_r1_0_0_x64.zip)
+
 ## 用語説明
 ![用語説明](https://raw.githubusercontent.com/hichain/HIchain-Prototype/master/terms%20discription.png)
 
