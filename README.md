@@ -4,11 +4,11 @@
 ![ゲームイメージ](https://github.com/hichain/HIchain-Prototype/blob/master/images/r1.0.0%20Game%20Image.png)
 
 ## HIchain とは
-  + 同人ボードゲームサークル｢HIchain Project｣が制作した配列ゲームです
+  + 同人ボードゲームサークル｢[HIchain Project](http://hichain.sokon.jp)｣が制作した配列ゲームです
   + ルールは[こちら](http://hichain.sokon.jp/rule.html)
 
 ## ダウンロード
-  + r1.0.0
+  + [r1.0.0](https://github.com/hichain/HIchain-Prototype/releases/tag/r1.0.0)
     + [Windows 32bit版](https://github.com/hichain/HIchain-Prototype/releases/download/r1.0.0/HIchain_Prototype_r1_0_0_winx86.zip)
     + [Windows 64bit版](https://github.com/hichain/HIchain-Prototype/releases/download/r1.0.0/HIchain_Prototype_r1_0_0_winx64.zip)
     + [Linux 32bit版](https://github.com/hichain/HIchain-Prototype/releases/download/r1.0.0/HIchain_Prototype_r1_0_0_linux32.zip)
