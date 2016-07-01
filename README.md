@@ -1,7 +1,7 @@
 # HIchain Prototype版
 
 ## オープンβリリース！
-![ゲームイメージ](https://github.com/hichain/HIchain-Prototype/blob/master/r1.0.0%20Game%20Image.png)
+![ゲームイメージ](https://github.com/hichain/HIchain-Prototype/blob/master/images/r1.0.0%20Game%20Image.png)
 
 ## HIchain とは
   + 同人ボードゲームサークル｢HIchain Project｣が制作した配列ゲームです
@@ -14,20 +14,20 @@
     + **現在ネットワーク対戦は実装しておりません**
 
 ## 用語説明
-![用語説明](https://raw.githubusercontent.com/hichain/HIchain-Prototype/master/terms%20discription.png)
+![用語説明](https://raw.githubusercontent.com/hichain/HIchain-Prototype/master/images/terms%20discription.png)
 
 ## 操作方法
 - 場内
   - **左クリック**: カードを持つ(ホールド)
 - 盤内
   - **ドラッグ**: 盤を移動 (ホールド中でも可能)
-  
+
 - ホールド中
   - **左クリック**: カードを置く: 左クリック
   - **右クリック**: キャンセル
   - **ホイールクリック/スペースキー**: カードの回転
   - **Cキー**: 盤を中心に戻す
-  
+
 - **DELETEキー**: リセット
 
 ## 制作者
