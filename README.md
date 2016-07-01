@@ -1,7 +1,7 @@
 # HIchain Prototype版
 
 ## オープンβリリース！
-![ゲームイメージ](https://github.com/hichain/HIchain-Prototype/blob/master/images/r1.0.0%20Game%20Image.png)
+![ゲームイメージ](https://github.com/hichain/HIchain-Prototype/blob/master/images/playing.gif)
 
 ## HIchain とは
   + 同人ボードゲームサークル｢[HIchain Project](http://hichain.sokon.jp)｣が制作した配列ゲームです
