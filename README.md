@@ -42,6 +42,15 @@
 + [うんの](https://github.com/funi)
 + ルキ
 
+## ライセンス
+HIchain Prototype版
+Copyright (C) 2016 Tokiwa
+Copyright (C) 2016 Unno
+Copyright (C) 2016 Ruk
+
+本ソフトウェアは個人利用のみ使用できる
+再配布､複製､改変を禁ずる
+
 ## リンク
 + [HP](http://hichain.sokon.jp/)
 + [Twitter](https://twitter.com/HIchain_game)
