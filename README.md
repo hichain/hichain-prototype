@@ -43,12 +43,12 @@
 + ルキ
 
 ## ライセンス
-HIchain Prototype版
-Copyright (C) 2016 Tokiwa
-Copyright (C) 2016 Unno
-Copyright (C) 2016 Ruk
+HIchain Prototype版  
+Copyright (C) 2016 Tokiwa  
+Copyright (C) 2016 Unno  
+Copyright (C) 2016 Ruk  
 
-本ソフトウェアは個人利用のみ使用できる
+本ソフトウェアは個人利用のみ使用できる  
 再配布､複製､改変を禁ずる
 
 ## リンク
