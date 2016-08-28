@@ -75,5 +75,3 @@ Copyright (C) 2016 Ruk
 + [HP](http://hichain.sokon.jp/)
 + [Twitter](https://twitter.com/HIchain_game)
   + 試合結果や出展イベントの情報などを呟きます
-
-<a class="twitter-timeline" data-link-color="#E81C4F" href="https://twitter.com/HIchain_game">Tweets by HIchain_game</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
