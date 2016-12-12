@@ -1,4 +1,4 @@
-package tokiwatools;
+package jp.hichain.prototype.basic;
 
 /**
  * 文字のchar、プレイヤー番号、文字の向き、絶対座標を保持する
@@ -86,6 +86,27 @@ public class BoardSign {
 	 */
 	public int getDir() {
 		return dir;
+	}
+
+	/**
+	 * 文字を置く
+	 * プレイヤー番号、文字、文字の向きを置き換える
+	 * @param _player プレイヤー番号
+	 * @param _ch 文字
+	 * @param _dir 文字の向き
+	 */
+	public void putSign(int _player, char _ch, int _dir) {
+		player = _player;
+		ch = _ch;
+		dir = _dir;
+	}
+
+	/**
+	 * 座標をオーバーライドする
+	 * @param _pos 座標
+	 */
+	public void setPos(int [] _pos) {
+		pos = _pos;
 	}
 
 	/**
@@ -204,7 +225,7 @@ public class BoardSign {
 	 * 棋譜を返す
 	 * @return 棋譜
 	 */
-	public String getRecode() {
-		return player + ":" + pos[0] + "," + pos[1] + ch + dir;
+	String getRecode() {
+		return ((getPlayer() == 1) ? "B" : "R") + getX() + "," + getY() + " " + getChar() + getDir();
 	}
 }
