@@ -34,9 +34,8 @@ public class Main {
 					continue;
 				}
 
-				for (String elem : data) {
+				char ch = data[0].toCharArray()[0];
 
-				}
 			}
 			brData.close();
 
