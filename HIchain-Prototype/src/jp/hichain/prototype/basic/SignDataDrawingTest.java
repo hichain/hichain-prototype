@@ -1,10 +1,14 @@
 package jp.hichain.prototype.basic;
 
-public class SignDataDrawingTest {
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
-	public static void main(String[] args) {
-		// TODO 自動生成されたメソッド・スタブ
+import javax.swing.JFrame;
 
+public class SignDataDrawingTest extends JFrame {
+
+	public void drawSign(BufferedImage _si, int _x, int _y, int _w, int _h) {
+		Graphics2D graphics2d = _si.createGraphics();
+		
 	}
-
 }
