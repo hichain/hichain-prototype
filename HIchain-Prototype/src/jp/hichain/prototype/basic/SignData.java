@@ -1,13 +1,14 @@
 package jp.hichain.prototype.basic;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 //文字データ (SN/PS/SI)
 public class SignData {
-	static private List <CompleteBS> signs;
+	static private List <CompleteBS> signs = new ArrayList<CompleteBS>();
 
 	/**
 	 * 指定の文字のデータが存在するか返す
