@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 
 public class Main {
 
@@ -35,6 +36,17 @@ public class Main {
 		Set <Character> signSet = getSignSet(fieldsigns);
 		signSet.add(' ');
 		loadSignData( signdataFile, signimageFile, signSet );
+
+		CompleteBS bs = SignData.get(1, 'A');
+		bs.resize(200);
+		bs.rotate(1);
+
+		JFrame frame = new JFrame();
+		frame.add( new SIPanel(bs) );
+		frame.setTitle("SI Frame");
+		frame.setSize(520, 540);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
 	}
 
 	private static Set <Character> getSignSet(char [][] _signs) {

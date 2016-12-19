@@ -1,7 +1,6 @@
 package jp.hichain.prototype.basic;
 
 import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 /**
@@ -14,6 +13,7 @@ public class CompleteBS extends BoardSign {
 	private int [] nums;  //SN
 	private int ps;       //PS
 	private BufferedImage image; //SI
+	private AffineTransform filter; //SIのフィルター
 
 	/**
 	 * 盤上の空のBS
@@ -23,6 +23,7 @@ public class CompleteBS extends BoardSign {
 	 */
 	public CompleteBS (int _x, int _y) {
 		super(_x, _y);
+		filter = new AffineTransform();
 	}
 
 	/**
@@ -33,10 +34,12 @@ public class CompleteBS extends BoardSign {
 	 */
 	public CompleteBS (int _player, char _ch, int _dir) {
 		super(_player, _ch, _dir);
+		filter = new AffineTransform();
 	}
 
 	public CompleteBS(int _player, char _ch, int _dir, int [] _nums, int _ps, BufferedImage _image) {
 		super(_player, _ch, _dir);
+		filter = new AffineTransform();
 		putSign(_player, _ch, _dir, _nums, _ps, _image);
 	}
 
@@ -74,6 +77,14 @@ public class CompleteBS extends BoardSign {
 	}
 
 	/**
+	 * SIのフィルターを返す
+	 * @return SIのフィルター
+	 */
+	public AffineTransform getFilter() {
+		return filter;
+	}
+
+	/**
 	 * 文字を置く
 	 * プレイヤー番号、文字、文字の向き、SN、PS、SIを代入 (座標は置換しない)
 	 * @param _player プレイヤー番号
@@ -104,9 +115,27 @@ public class CompleteBS extends BoardSign {
 	 * @param _dir 回転数(反時計回り)
 	 */
 	public void rotate(int _dir) {
+		_dir %= 4;
 		rotatePS(_dir);
 		rotateSN(_dir);
 		rotateSI(_dir);
+		setDir( (getDir() + _dir) % 4 );
+	}
+
+	/**
+	 * 反時計回りに90度文字を回転させる
+	 */
+	public void rotate() {
+		rotate(1);
+	}
+
+	/**
+	 * SIをリサイズする
+	 * @param _r 一辺の長さ
+	 */
+	public void resize(double _r) {
+		filter.setToScale( _r/image.getWidth(),_r/image.getHeight() );
+		rotateSI(getDir());	//画像の中心が移動するため再度フィルターに回転を加える
 	}
 
 	/**
@@ -128,7 +157,6 @@ public class CompleteBS extends BoardSign {
 	 * @param _dir 回転数(反時計回り)
 	 */
 	private void rotatePS(int _dir) {
-		_dir %= 4;
 		if (_dir <= 0) return;
 
 		int newPs = 0;
@@ -144,14 +172,10 @@ public class CompleteBS extends BoardSign {
 	}
 
 	/**
-	 * SIを回転する
+	 * SIのフィルターに回転を加える
 	 * @param _dir 回転数(反時計回り)
 	 */
-	private void rotateSI (int _dir) {
-		_dir %= 4;
-
-		AffineTransform tx = AffineTransform.getQuadrantRotateInstance(_dir);
-		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-		image = op.filter(image, null);
+	private void rotateSI(int _dir) {
+		filter.rotate(-_dir*Math.PI/2, image.getWidth()/2, image.getHeight()/2);
 	}
 }

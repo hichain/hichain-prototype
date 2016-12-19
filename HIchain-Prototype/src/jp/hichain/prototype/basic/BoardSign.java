@@ -110,6 +110,14 @@ public class BoardSign {
 	}
 
 	/**
+	 * 文字の向きをオーバーライドする
+	 * @param _dir 文字の向き
+	 */
+	public void setDir(int _dir) {
+		dir = _dir;
+	}
+
+	/**
 	 * プレイヤー番号が等しいか返す
 	 * @param _player プレイヤー番号
 	 * @return true/false
