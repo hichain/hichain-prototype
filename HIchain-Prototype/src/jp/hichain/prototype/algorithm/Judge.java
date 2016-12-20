@@ -13,7 +13,7 @@ public class Judge {
 	   * @param internalBS 置こうとしているBS
 	   * @return 判定結果(-2: 相手の点で接していない | -1: 辺と辺で接している | 1: 置ける)
 	   */
-	  static int canPut(Move targetMove, CompleteBS internalBS) {
+	  public static int canPut(Move targetMove, CompleteBS internalBS) {
 	    int holdingPS = internalBS.getPS(); //持っている文字のPS
 	    int aroundPS = getExternalPS(targetMove, internalBS);  //目標座標の外側のPS
 
@@ -40,7 +40,7 @@ public class Judge {
 	   * @param player 置こうとする文字のプレイヤー番号
 	   * @return 外側のPS
 	   */
-	  static int getExternalPS(Move targetMove, CompleteBS internalBS) {
+	  private static int getExternalPS(Move targetMove, CompleteBS internalBS) {
 	    int externalPS = 0; //生成する外側のPS
 	    int [] partPS = new int [8];  //externalPSの区画8つ
 	    int [] aroundPS = new int [8];//周りのPS

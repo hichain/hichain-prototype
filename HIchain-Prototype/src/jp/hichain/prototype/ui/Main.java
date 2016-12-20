@@ -11,7 +11,9 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
+import jp.hichain.prototype.algorithm.Judge;
 import jp.hichain.prototype.basic.CompleteBS;
+import jp.hichain.prototype.basic.Move;
 
 public class Main {
 
@@ -41,7 +43,7 @@ public class Main {
 
 		CompleteBS bs = SignData.get(1, 'A');
 		bs.resize(200);
-		bs.rotate(1);
+		bs.rotate(3);
 
 		SIPanel panel = new SIPanel(bs);
 		JFrame frame = new JFrame();
@@ -50,6 +52,15 @@ public class Main {
 		frame.setSize(520, 540);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+
+		Move rootMove = new Move(1, 1);
+		rootMove.putSign( SignData.get(1, 'A') );
+		rootMove.rotate(2);
+		System.out.println( Integer.toBinaryString(rootMove.getPS()) );
+
+		Move move = new Move(rootMove, 2);
+		CompleteBS holdingBS = new CompleteBS( SignData.get(2, 'A') );
+		System.out.println( Judge.canPut(move, holdingBS) );
 	}
 
 	private static Set <Character> getSignSet(char [][] _signs) {

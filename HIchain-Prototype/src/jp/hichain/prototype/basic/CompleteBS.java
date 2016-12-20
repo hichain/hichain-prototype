@@ -43,6 +43,12 @@ public class CompleteBS extends BoardSign {
 		putSign(_player, _ch, _dir, _nums, _ps, _image);
 	}
 
+	public CompleteBS(CompleteBS bs) {
+		super(bs.getPlayer(), bs.getChar(), bs.getChar());
+		filter = new AffineTransform();
+		putSign(bs);
+	}
+
 	/**
 	 * SNを返す
 	 * @param _dir 文字の向き
@@ -168,6 +174,7 @@ public class CompleteBS extends BoardSign {
 			newPs ^= (ps & (0x8 >>> i)) << 2+3*i;      //0000 0000 0000 1000
 		}
 
+		ps = newPs;
 		rotatePS(--_dir);
 	}
 
