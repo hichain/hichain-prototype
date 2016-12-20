@@ -1,4 +1,4 @@
-package jp.hichain.prototype.basic;
+package jp.hichain.prototype.ui;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -10,6 +10,8 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+
+import jp.hichain.prototype.basic.CompleteBS;
 
 public class Main {
 

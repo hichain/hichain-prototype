@@ -1,4 +1,4 @@
-package jp.hichain.prototype.basic;
+package jp.hichain.prototype.ui;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -6,6 +6,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
+
+import jp.hichain.prototype.basic.CompleteBS;
 
 public class SIPanel extends JPanel {
 

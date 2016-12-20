@@ -1,10 +1,12 @@
-package jp.hichain.prototype.basic;
+package jp.hichain.prototype.ui;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import jp.hichain.prototype.basic.CompleteBS;
 
 //文字データ (SN/PS/SI)
 public class SignData {
