@@ -41,8 +41,9 @@ public class Main {
 		bs.resize(200);
 		bs.rotate(1);
 
+		SIPanel panel = new SIPanel(bs);
 		JFrame frame = new JFrame();
-		frame.add( new SIPanel(bs) );
+		frame.add(panel);
 		frame.setTitle("SI Frame");
 		frame.setSize(520, 540);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
