@@ -1,5 +1,10 @@
 package jp.hichain.prototype.basic;
 
+/**
+ * 点・辺データ (Points/Sides)
+ * @author NT
+ *
+ */
 public enum PS {
 	NORTH(TYPE.POINT) {
 		@Override
@@ -19,35 +24,113 @@ public enum PS {
 			return SOUTHWEST;
 		}
 	},
-	EAST_NORTHEAST(TYPE.SIDE),
-	EAST(TYPE.POINT),
-	EAST_SOUTHEAST(TYPE.SIDE),
-	SOUTHEAST(TYPE.POINT),
-	SOUTH_SOUTHEAST(TYPE.SIDE),
-	SOUTH(TYPE.POINT),
-	SOUTH_SOUTHWEST(TYPE.SIDE),
-	SOUTHWEST(TYPE.POINT),
-	WEST_SOUTHWEST(TYPE.SIDE),
-	WEST(TYPE.POINT),
-	WEST_NORTHWEST(TYPE.SIDE),
-	NORTHWEST(TYPE.POINT),
-	NORTH_NORTHWEST(TYPE.SIDE);
+	EAST_NORTHEAST(TYPE.SIDE) {
+		@Override
+		public PS getOpposite() {
+			return WEST_NORTHWEST;
+		}
+	},
+	EAST(TYPE.POINT) {
+		@Override
+		public PS getOpposite() {
+			return WEST;
+		}
 
+	},
+	EAST_SOUTHEAST(TYPE.SIDE) {
+		@Override
+		public PS getOpposite() {
+			return WEST_SOUTHWEST;
+		}
+	},
+	SOUTHEAST(TYPE.POINT) {
+		@Override
+		public PS getOpposite() {
+			return NORTHWEST;
+		}
+	},
+	SOUTH_SOUTHEAST(TYPE.SIDE) {
+		@Override
+		public PS getOpposite() {
+			return NORTH_NORTHEAST;
+		}
+	},
+	SOUTH(TYPE.POINT) {
+		@Override
+		public PS getOpposite() {
+			return NORTH;
+		}
+	},
+	SOUTH_SOUTHWEST(TYPE.SIDE) {
+		@Override
+		public PS getOpposite() {
+			return PS.NORTH_NORTHWEST;
+		}
+	},
+	SOUTHWEST(TYPE.POINT) {
+		@Override
+		public PS getOpposite() {
+			return NORTHEAST;
+		}
+	},
+	WEST_SOUTHWEST(TYPE.SIDE) {
+		@Override
+		public PS getOpposite() {
+			return PS.EAST_SOUTHEAST;
+		}
+	},
+	WEST(TYPE.POINT) {
+		@Override
+		public PS getOpposite() {
+			return EAST;
+		}
+	},
+	WEST_NORTHWEST(TYPE.SIDE) {
+		@Override
+		public PS getOpposite() {
+			return PS.EAST_NORTHEAST;
+		}
+	},
+	NORTHWEST(TYPE.POINT) {
+		@Override
+		public PS getOpposite() {
+			return SOUTHEAST;
+		}
+	},
+	NORTH_NORTHWEST(TYPE.SIDE) {
+		@Override
+		public PS getOpposite() {
+			return SOUTH_SOUTHWEST;
+		}
+	};
+
+	/**
+	 * PSの種類 (点か辺か)
+	 * @author NT
+	 *
+	 */
 	public enum TYPE {
 		POINT,
 		SIDE;
 	}
 
 	private final TYPE type;
-	private final PS opposite;
 
 	private PS(final TYPE type) {
 		this.type = type;
 	}
 
+	/**
+	 * PSの種類を返す
+	 * @return PSの種類
+	 */
 	public TYPE getType() {
 		return type;
 	}
 
-	public abstract PS getOpposite();
+	/**
+	 * 反対側のPSを返す
+	 * @return 反対側のPS
+	 */
+	abstract PS getOpposite();
 }
