@@ -1,7 +1,8 @@
-package jp.hichain.prototype.basic;
+package jp.hichain.prototype.concept;
 
 /**
  * 点・辺データ (Points/Sides)
+ * 16方向
  * @author NT
  *
  */
@@ -116,7 +117,7 @@ public enum PS {
 
 	private final TYPE type;
 
-	private PS(final TYPE type) {
+	private PS(TYPE type) {
 		this.type = type;
 	}
 
@@ -132,5 +133,5 @@ public enum PS {
 	 * 反対側のPSを返す
 	 * @return 反対側のPS
 	 */
-	abstract PS getOpposite();
+	public abstract PS getOpposite();
 }
