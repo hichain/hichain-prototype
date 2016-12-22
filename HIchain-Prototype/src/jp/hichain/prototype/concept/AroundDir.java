@@ -57,4 +57,5 @@ public enum AroundDir {
 	};
 
 	public abstract AroundDir getOpposite();
+	
 }
