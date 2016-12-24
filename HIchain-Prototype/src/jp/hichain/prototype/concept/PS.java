@@ -115,7 +115,7 @@ public enum PS {
 		SIDE;
 	}
 
-	private final TYPE type;
+	private TYPE type;
 
 	private PS(TYPE type) {
 		this.type = type;
