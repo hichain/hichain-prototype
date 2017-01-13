@@ -39,10 +39,10 @@ public enum AroundDir {
 		どちらでも問題なく動く
 
 		sumの分解式(x, y) (交換法則は成り立たない):
+		-2 -> -1 + -1
+		-1 -> -1 + 0
 		0 -> -1 + 1
 		1 -> 1 + 0
-		-1 -> -1 + 0
-		-2 -> -1 + -1
 		2 -> 1 + 1
 
 		target:
@@ -88,7 +88,52 @@ public enum AroundDir {
 		this.dy = dy;
 	}
 
+	public int getDx() {
+		return dx;
+	}
+
+	public int getDy() {
+		return dy;
+	}
+
 	public abstract AroundDir getOpposite();
 
+	public AroundDir [] getRoute(AroundDir dir) {
+		AroundDir sum = get(dir.getDx() - this.dx, dir.getDy() - this.dy);
+		int targetDx = sum.getDx();
+		int targetDy = sum.getDy();
+		if (targetDx == 0 && targetDy == 0) {
+			return new AroundDir[] {this};
+		}
+		int [] formulaX = getFormula(targetDx);
+		int [] formulaY = getFormula(targetDy);
+		AroundDir [] dirs = new AroundDir [2];
+		dirs[0] = get(formulaX[0], formulaY[0]);
+		dirs[1] = get(formulaX[1], formulaY[1]);
+		return dirs;
+	}
 
+	public static int [] getFormula(int value) {
+		int [] result = new int [2];
+		if (value > 0) {
+			result[0] = value - 1;
+			result[1] -= result[0];
+		} else if (value < 0) {
+			result[0] = value + 1;
+			result[1] -= result[0];
+		} else {
+			result[0] = -1;
+			result[1] = 1;
+		}
+		return result;
+	}
+
+	public static AroundDir get(int dx, int dy) {
+		for (AroundDir dir : AroundDir.values()) {
+			if (dir.getDx() == dx && dir.getDy() == dy) {
+				return dir;
+			}
+		}
+		return null;
+	}
 }
