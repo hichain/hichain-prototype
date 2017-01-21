@@ -3,10 +3,48 @@ package jp.hichain.prototype.concept;
 /**
  * 文字の周り
  * 8方向
+ * [AroundDIr 種類]
+ * Anti-AroundDir: 反対の方角のAroundDir (北 <-> 南)
+ * center: 中心
+ * source: 始点 (center視点)
+ * target: 終点 (center視点)
+ * sum: source視点のtarget
+ * route: sourceからtargetに行くルート
  * @author NT
  *
  */
+
+/*
+ex)
+source = SOUTH(0, 1)
+
+target - source = sum -> route
+NORTH(0, -1) - SOUTH(0, 1) = (0, -2) -> NORTHWEST(-1, -1) + NORTHEAST(1, -1)
+NORTHEAST(1, -1) - SOUTH(0, 1) = (1, -2) -> NORTHEAST(1, -1) + NORTH(0, -1)
+NORTHWEST(-1, -1) - SOUTH(0, 1) = (-1, -2) -> NORTHWEST(-1, -1) + NORTH(0, -1)
+SOUTH(0, 1) - SOUTH(0, 1) = (0, 0) -> THIS(0, 0)
+SOUTHEAST(1, 1) - SOUTH(0, 1) = (1, 0) -> EAST(1, 0)
+SOUTHWEST(-1, 1) - SOUTH(0, 1) = (-1, 0) -> WEST(-1, 0)
+EAST(1, 0) - SOUTH(0, 1) = (1, -1) -> NORTHEAST(1, -1)
+WEST(-1, 0) - SOUTH(0, 1) = (-1, -1) -> NORTHWEST(-1, -1)
+
+sumがAroundDirの中になければ分解する (1段階広い方角)
+[sum分解式]
+-2 -> -1 + -1
+-1 -> -1 + 0
+0 -> -1 + 1
+1 -> 1 + 0
+2 -> 1 + 1
+*/
+
 public enum AroundDir {
+	//center
+	THIS(0, 0) {
+		@Override
+		public AroundDir getOpposite() {
+			return THIS;
+		}
+	},
 	NORTH(0, -1) {
 		@Override
 		public AroundDir getOpposite() {
@@ -32,30 +70,6 @@ public enum AroundDir {
 		}
 	},
 	SOUTH(0, 1) {
-		/*
-		source = SOUTH(0, 1)
-		sum = target - source
-		sum = (0, 0) は本来this(0, 0)だが、以下の分解式に当てはめるとsum = (-1, 1) + (1, -1)となる
-		どちらでも問題なく動く
-
-		sumの分解式(x, y) (交換法則は成り立たない):
-		-2 -> -1 + -1
-		-1 -> -1 + 0
-		0 -> -1 + 1
-		1 -> 1 + 0
-		2 -> 1 + 1
-
-		target:
-			centerからみて -> sourceからみて
-		NORTH(0, -1) -> NORTHWEST(-1, -1) + NORTHEAST(1, -1)
-		NORTHEAST(1, -1) -> NORTHEAST(1, -1) + NORTH(0, -1)
-		EAST(1, 0) -> NORTHEAST(1, -1)
-		SOUTHEAST(1, 1) -> EAST(1, 0)
-		SOUTH(0, 1) -> this(0, 0)
-		SOUTHWEST(-1, 1) -> WEST(-1, 0)
-		WEST(-1, 0) -> NORTHWEST(-1, -1)
-		NORTHWEST(-1, -1) -> NORTHWEST(-1, -1) + NORTH(0, -1)
-		*/
 		@Override
 		public AroundDir getOpposite() {
 			return NORTH;
@@ -80,54 +94,86 @@ public enum AroundDir {
 		}
 	};
 
-	private int dx;
-	private int dy;
+	private int dx;	//相対x座標
+	private int dy;	//相対y座標
 
+	/**
+	 * コンストラクタ
+	 * @param dx 相対x座標
+	 * @param dy 相対y座標
+	 */
 	private AroundDir(int dx, int dy) {
 		this.dx = dx;
 		this.dy = dy;
 	}
 
+	/**
+	 * 相対x座標を返す
+	 * @return 相対x座標
+	 */
 	public int getDx() {
 		return dx;
 	}
 
+	/**
+	 * 相対y座標を返す
+	 * @return 相対y座標
+	 */
 	public int getDy() {
 		return dy;
 	}
 
+	/**
+	 * 反対の方角を返す
+	 * @return Anti-AroundDir
+	 */
 	public abstract AroundDir getOpposite();
 
-	public AroundDir [] getRoute(AroundDir dir) {
-		AroundDir sum = get(dir.getDx() - this.dx, dir.getDy() - this.dy);
-		int targetDx = sum.getDx();
-		int targetDy = sum.getDy();
-		if (targetDx == 0 && targetDy == 0) {
-			return new AroundDir[] {this};
+	/**
+	 * routeを返す
+	 * @param aroundDir target
+	 * @return route
+	 */
+	public AroundDir [] getRoute(AroundDir aroundDir) {
+		AroundDir [] route = null;
+		int sumDx = aroundDir.getDx() - this.dx;
+		int sumDy = aroundDir.getDy() - this.dy;
+
+		AroundDir sum = get(sumDx, sumDy);
+		if (sum == null) {
+			int [] dirDx = getOutsideDir(sumDx);
+			int [] dirDy = getOutsideDir(sumDy);
+			route = new AroundDir [] {
+					get(dirDx[0], dirDy[0]),
+					get(dirDx[1], dirDy[1])
+			};
+		} else {
+			route = new AroundDir [] {sum	};
 		}
-		int [] formulaX = getFormula(targetDx);
-		int [] formulaY = getFormula(targetDy);
-		AroundDir [] dirs = new AroundDir [2];
-		dirs[0] = get(formulaX[0], formulaY[0]);
-		dirs[1] = get(formulaX[1], formulaY[1]);
-		return dirs;
+
+		return route;
 	}
 
-	public static int [] getFormula(int value) {
-		int [] result = new int [2];
-		if (value > 0) {
-			result[0] = value - 1;
-			result[1] -= result[0];
-		} else if (value < 0) {
-			result[0] = value + 1;
-			result[1] -= result[0];
-		} else {
-			result[0] = -1;
-			result[1] = 1;
-		}
+	/**
+	 * 範囲外のAroudDirの相対座標(x or y)を返す
+	 * sumからrouteに分解する
+	 * @param value 相対座標(x/y)
+	 * @return 相対座標(x/y)
+	 */
+	public static int [] getOutsideDir(int value) {
+		int [] result = {
+			(value > 0) ? 1 : -1,
+			(value % 2 == 0) ? ((value >= 0) ? 1 : -1) : 0
+		};
 		return result;
 	}
 
+	/**
+	 * 相対座標からAroudDirを返す
+	 * @param dx 相対x座標
+	 * @param dy 相対y座標
+	 * @return 条件を満たすAroudDir (該当なしはnull)
+	 */
 	public static AroundDir get(int dx, int dy) {
 		for (AroundDir dir : AroundDir.values()) {
 			if (dir.getDx() == dx && dir.getDy() == dy) {

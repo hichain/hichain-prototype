@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import jp.hichain.prototype.algorithm.Judge;
 import jp.hichain.prototype.basic.CompleteBS;
 import jp.hichain.prototype.basic.Move;
+import jp.hichain.prototype.concept.AroundDir;
 
 public class Main {
 
@@ -32,6 +33,29 @@ public class Main {
 	};
 
 	public static void main(String[] args) {
+		testAroundDir();
+	}
+
+	private static void testAroundDir() {
+		AroundDir rootDir = AroundDir.NORTH;
+		AroundDir [] dirs = rootDir.getRoute(AroundDir.SOUTH);
+		for (AroundDir dir : dirs) {
+			System.out.println(dir);
+		}
+	}
+
+	private static void testJudge() {
+		Move rootMove = new Move(1, 1);
+		rootMove.putSign( SignData.get(1, 'A') );
+		rootMove.rotate(2);
+		System.out.println( Integer.toBinaryString(rootMove.getPS()) );
+
+		Move move = new Move(rootMove, 2);
+		CompleteBS holdingBS = new CompleteBS( SignData.get(2, 'A') );
+		System.out.println( Judge.canPut(move, holdingBS) );
+	}
+
+	private static void testSign() {
 		File signdataFile = new File(SIGNDATAPATH);
 		File [] signimageFile = new File [SIGNIMAGEPATH.length];
 		for (int i = 0; i < SIGNIMAGEPATH.length; i++) {
@@ -52,15 +76,6 @@ public class Main {
 		frame.setSize(520, 540);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-
-		Move rootMove = new Move(1, 1);
-		rootMove.putSign( SignData.get(1, 'A') );
-		rootMove.rotate(2);
-		System.out.println( Integer.toBinaryString(rootMove.getPS()) );
-
-		Move move = new Move(rootMove, 2);
-		CompleteBS holdingBS = new CompleteBS( SignData.get(2, 'A') );
-		System.out.println( Judge.canPut(move, holdingBS) );
 	}
 
 	private static Set <Character> getSignSet(char [][] _signs) {
