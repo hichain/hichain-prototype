@@ -68,10 +68,10 @@ public class SignData {
 	static public CompleteBS get(int _player, char _ch) {
 		for (CompleteBS bs: signs) {
 			if (bs.getPlayer() == _player && bs.getChar() == _ch) {
-				return bs;
+				return new CompleteBS(bs);
 			}
 		}
-		return signs.get(' ');
+		return new CompleteBS(signs.get(' ') );
 	}
 
 	/**

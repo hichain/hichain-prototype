@@ -114,7 +114,6 @@ public class CompleteBS extends BoardSign {
 	 */
 	public void putSign(CompleteBS _bs) {
 		putSign( _bs.getPlayer(), _bs.getChar(), _bs.getDir(), _bs.getNums(), _bs.getPS(), _bs.getImage() );
-		rotate(_bs.getDir());
 	}
 
 	/**
@@ -122,11 +121,9 @@ public class CompleteBS extends BoardSign {
 	 * @param _dir 回転数(反時計回り)
 	 */
 	public void rotate(int _dir) {
-		_dir %= 4;
 		rotatePS(_dir);
 		rotateSN(_dir);
 		rotateSI(_dir);
-		setDir( (getDir() + _dir) % 4 );
 	}
 
 	/**
@@ -165,7 +162,6 @@ public class CompleteBS extends BoardSign {
 	 */
 	private void rotatePS(int _dir) {
 		if (_dir <= 0) return;
-		System.out.println(_dir);
 
 		int newPs = 0;
 

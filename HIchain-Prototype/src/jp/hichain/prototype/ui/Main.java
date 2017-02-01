@@ -33,7 +33,8 @@ public class Main {
 	};
 
 	public static void main(String[] args) {
-		testAroundDir();
+		testSign();
+		testJudge();
 	}
 
 	private static void testAroundDir() {
@@ -47,12 +48,13 @@ public class Main {
 	private static void testJudge() {
 		Move rootMove = new Move(1, 1);
 		rootMove.putSign( SignData.get(1, 'A') );
-		rootMove.rotate(2);
-		System.out.println( Integer.toBinaryString(rootMove.getPS()) );
+		rootMove.rotate(0);
 
 		Move move = new Move(rootMove, 2);
-		CompleteBS holdingBS = new CompleteBS( SignData.get(2, 'A') );
-		System.out.println( Judge.canPut(move, holdingBS) );
+		CompleteBS holdingBS = new CompleteBS( SignData.get(2, 'O') );
+
+		System.out.println( "rootPS: " + Integer.toBinaryString(rootMove.getPS()) );
+		System.out.println( "result: " + Judge.canPut(move, holdingBS) );
 	}
 
 	private static void testSign() {
@@ -67,7 +69,6 @@ public class Main {
 
 		CompleteBS bs = SignData.get(1, 'A');
 		bs.resize(200);
-		bs.rotate(3);
 
 		SIPanel panel = new SIPanel(bs);
 		JFrame frame = new JFrame();

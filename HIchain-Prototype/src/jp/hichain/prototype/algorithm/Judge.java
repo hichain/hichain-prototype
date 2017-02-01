@@ -17,8 +17,8 @@ public class Judge {
 	    int holdingPS = internalBS.getPS(); //持っている文字のPS
 	    int aroundPS = getExternalPS(targetMove, internalBS);  //目標座標の外側のPS
 
-	    System.out.println("holdingPS: " + Integer.toBinaryString(holdingPS));
-	    System.out.println("aroundPS: " + Integer.toBinaryString(aroundPS));
+	    //System.out.println("holdingPS: " + Integer.toBinaryString(holdingPS));
+	    //System.out.println("aroundPS: " + Integer.toBinaryString(aroundPS));
 
 	    int sum = holdingPS & aroundPS;
 	    int sides = sum & 0x566A;  //辺だけ取り出す
