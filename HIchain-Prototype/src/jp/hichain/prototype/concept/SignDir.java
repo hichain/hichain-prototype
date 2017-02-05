@@ -67,4 +67,14 @@ public enum SignDir {
 	public abstract SignDir getOpposite();
 	public abstract SignDir getLeft();
 	public abstract SignDir getRight();
+
+	public static SignDir getEnum(String str) {
+		SignDir [] dirs = SignDir.values();
+		for (SignDir signDir : dirs) {
+			if (str.equals(signDir.name())) {
+				return signDir;
+			}
+		}
+		return null;
+	}
 }

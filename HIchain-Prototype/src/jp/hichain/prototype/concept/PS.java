@@ -135,4 +135,14 @@ public enum PS {
 	 * @return 反対側のPS
 	 */
 	public abstract PS getOpposite();
+
+	public static PS getEnum(String str) {
+		PS [] pss = PS.values();
+		for (PS ps : pss) {
+			if (str.equals(ps.name())) {
+				return ps;
+			}
+		}
+		return null;
+	}
 }

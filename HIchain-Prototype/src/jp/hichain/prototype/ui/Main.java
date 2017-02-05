@@ -14,7 +14,11 @@ import javax.swing.JFrame;
 import jp.hichain.prototype.algorithm.Judge;
 import jp.hichain.prototype.basic.CompleteBS;
 import jp.hichain.prototype.basic.Move;
+import jp.hichain.prototype.basic.SignNum;
+import jp.hichain.prototype.basic.SignPS;
 import jp.hichain.prototype.concept.AroundDir;
+import jp.hichain.prototype.concept.PS;
+import jp.hichain.prototype.concept.SignDir;
 
 public class Main {
 
@@ -102,13 +106,24 @@ public class Main {
 		try {
 			brData = new BufferedReader( new FileReader(_dataPath) );
 
-			String line;
-			while ((line = brData.readLine()) != null) {
+			SignDir [] dirsHeader = new SignDir[4];
+			PS [] psHeader = new PS [16];
+
+			String line = brData.readLine();
+			line = brData.readLine();
+			String [] header = line.split(",", 0);
+			for (int i = 0; i < dirsHeader.length; i++) {
+				dirsHeader[i] = SignDir.getEnum(header[i+1]);
+			}
+			for (int i = 0; i < psHeader.length; i++) {
+				psHeader[i] = PS.getEnum(header[i+5]);
+			}
+
+			while ( (line = brData.readLine()) != null) {
+				SignNum signNum = new SignNum();
+				SignPS signPS = new SignPS();
+
 				String [] data = line.split(",", 0); // 行をカンマ区切りで配列に変換
-				//最初の行をスキップ
-				if (data[0].equals("Sign")) {
-					continue;
-				}
 
 				//文字データの分解
 				char ch = data[0].toCharArray()[0];	//文字
@@ -116,11 +131,14 @@ public class Main {
 				if (!_signs.contains(ch)) {
 					continue;
 				}
-				int [] nums = {	//文字番号
-						Integer.decode(data[1]),
-						Integer.decode(data[2]),
-						Integer.decode(data[3]),
-						Integer.decode(data[4])
+				for (int i = 0; i < 4; i++) {
+
+				}
+				char [] nums = {	//文字番号
+						data[1].toCharArray()[0],
+						data[2].toCharArray()[0],
+						data[3].toCharArray()[0],
+						data[4].toCharArray()[0],
 				};
 				int ps = Integer.decode(data[5]); //PS
 
