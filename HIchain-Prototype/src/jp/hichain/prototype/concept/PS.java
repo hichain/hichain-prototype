@@ -19,7 +19,7 @@ public enum PS {
 			return SOUTH_SOUTHEAST;
 		}
 	},
-	NORTHEAST(TYPE.POINT) {
+	NORTHEAST(TYPE.CORNER) {
 		@Override
 		public PS getOpposite() {
 			return SOUTHWEST;
@@ -44,7 +44,7 @@ public enum PS {
 			return WEST_SOUTHWEST;
 		}
 	},
-	SOUTHEAST(TYPE.POINT) {
+	SOUTHEAST(TYPE.CORNER) {
 		@Override
 		public PS getOpposite() {
 			return NORTHWEST;
@@ -68,7 +68,7 @@ public enum PS {
 			return PS.NORTH_NORTHWEST;
 		}
 	},
-	SOUTHWEST(TYPE.POINT) {
+	SOUTHWEST(TYPE.CORNER) {
 		@Override
 		public PS getOpposite() {
 			return NORTHEAST;
@@ -92,7 +92,7 @@ public enum PS {
 			return PS.EAST_NORTHEAST;
 		}
 	},
-	NORTHWEST(TYPE.POINT) {
+	NORTHWEST(TYPE.CORNER) {
 		@Override
 		public PS getOpposite() {
 			return SOUTHEAST;
@@ -112,7 +112,8 @@ public enum PS {
 	 */
 	public enum TYPE {
 		POINT,
-		SIDE;
+		SIDE,
+		CORNER;
 	}
 
 	private TYPE type;
