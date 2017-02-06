@@ -10,10 +10,9 @@ import java.awt.image.BufferedImage;
  * @see AdBoardSign
  */
 public class CompleteBS extends BoardSign {
-	private int [] nums;  //SN
-	private int ps;       //PS
-	private BufferedImage image; //SI
-	private AffineTransform filter; //SIのフィルター
+	private SignNum signNum;		//SN
+	private SignPS signPS;			//SignPS
+	private SignImage signImage;	//SI
 
 	/**
 	 * 盤上の空のBS

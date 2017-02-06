@@ -64,6 +64,11 @@ public enum SignDir {
 		}
 	};
 
+	public enum ROTATION {
+		LEFT,
+		RIGHT;
+	}
+
 	public abstract SignDir getOpposite();
 	public abstract SignDir getLeft();
 	public abstract SignDir getRight();
