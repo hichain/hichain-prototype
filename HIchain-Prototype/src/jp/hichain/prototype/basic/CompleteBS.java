@@ -22,7 +22,6 @@ public class CompleteBS extends BoardSign {
 	 */
 	public CompleteBS (int _x, int _y) {
 		super(_x, _y);
-		filter = new AffineTransform();
 	}
 
 	/**
