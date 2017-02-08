@@ -44,6 +44,14 @@ public class Square {
 	}
 
 	/**
+	 * 周囲Squareを全て返す
+	 * @return 周囲Square Map
+	 */
+	public Map <AroundDir, Square> getAroundAll() {
+		return around;
+	}
+
+	/**
 	 * ソースSquareを返す
 	 * @return Square
 	 */
