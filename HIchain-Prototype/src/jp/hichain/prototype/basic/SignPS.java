@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jp.hichain.prototype.concept.PS;
+import jp.hichain.prototype.concept.SignDir;
 
 /**
  * 文字のPS
@@ -33,6 +34,14 @@ public class SignPS {
 
 	public void remove(PS ps) {
 		psSet.remove(ps);
+	}
+
+	public void rotate(SignDir.RELATIVE dir) {
+		Set <PS> newSet = new HashSet<PS>(psSet);
+		psSet.clear();
+		for (PS ps : newSet) {
+			psSet.add(ps.getRelative(dir));
+		}
 	}
 
 	/**
@@ -70,6 +79,6 @@ public class SignPS {
 	 * @return ビットが1ならtrue, 0ならfalse
 	 */
 	public boolean containsOpposite(PS _kind) {
-		return psSet.contains(_kind.getOpposite());
+		return psSet.contains(_kind.getRelative(SignDir.RELATIVE.OPPOSITE));
 	}
 }

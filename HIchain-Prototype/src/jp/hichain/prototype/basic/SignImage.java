@@ -19,16 +19,25 @@ public class SignImage {
 		imageScale = scale;
 	}
 
-	public void rotate(SignDir.ROTATION dir) {
-		int plusminus;
-		if (dir == SignDir.ROTATION.LEFT) {
+	public void rotate(SignDir.RELATIVE dir) {
+		int plusminus = 0;
+		switch (dir) {
+		case LEFT:
 			plusminus = 1;
-		} else {
+			break;
+		case RIGHT:
 			plusminus = -1;
+			break;
+		case OPPOSITE:
+			plusminus = 2;
+			break;
+		default:
+			break;
 		}
+
 		filter.rotate(plusminus*Math.PI/2, signImage.getWidth()/2, signImage.getHeight()/2);
 	}
-
+/*
 	public void setToRotation(SignDir dir) {
 		int rotation;
 		switch (dir) {
@@ -48,4 +57,5 @@ public class SignImage {
 		filter.setToRotation(rotation*Math.PI/2, signImage.getWidth()/2, signImage.getHeight()/2);
 		setToScale(imageScale);
 	}
+*/
 }

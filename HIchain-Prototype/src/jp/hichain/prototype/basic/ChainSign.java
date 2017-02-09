@@ -25,12 +25,11 @@ public class ChainSign {
 		image = _image;
 	}
 
-	public void rotate(SignDir.ROTATION _dir) {
-
-	}
-
-	public void setToRotation(SignDir _dir) {
-
+	public void rotate(SignDir.RELATIVE _dir) {
+		direction = direction.getRelative(_dir);
+		ps.rotate(_dir);
+		number.rotate(_dir);
+		image.rotate(_dir);
 	}
 
 	/**

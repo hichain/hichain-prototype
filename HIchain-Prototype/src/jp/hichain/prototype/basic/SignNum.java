@@ -29,4 +29,11 @@ public class SignNum {
 	public char get(SignDir dir) {
 		return snMap.get(dir);
 	}
+
+	public void rotate(SignDir.RELATIVE _dir) {
+		Map <SignDir, Character> newMap = new HashMap<SignDir, Character>(snMap);
+		for (Map.Entry<SignDir, Character> e : snMap.entrySet()) {
+			newMap.put(e.getKey().getRelative(_dir), e.getValue());
+		}
+	}
 }
