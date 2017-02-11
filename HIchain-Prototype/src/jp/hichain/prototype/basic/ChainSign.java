@@ -3,11 +3,11 @@ package jp.hichain.prototype.basic;
 import jp.hichain.prototype.concept.SignDir;
 
 public class ChainSign {
-	char character;
-	SignDir direction;
-	SignPS ps;
-	SignNum number;
-	SignImage image;
+	private char character;
+	private SignDir direction;
+	private SignPS ps;
+	private SignNum number;
+	private SignImage image;
 
 	/**
 	 * コンストラクタ

@@ -11,8 +11,8 @@ import jp.hichain.prototype.concept.AroundDir;
  *
  */
 public class Square {
-	Square source;
-	Map <AroundDir, Square> around;
+	private Square source;
+	private Map <AroundDir, Square> around;
 
 	/**
 	 * コンストラクタ

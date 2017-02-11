@@ -5,7 +5,7 @@ public enum ScoredString {
 	IDENTICAL,	//ぞろ目
 	ROYAL;		//ロイヤル
 
-	public enum ChainState {
+	public enum Order {
 		ASCEND,	//昇順
 		DESCEND,	//降順
 		SAME;	//同一
