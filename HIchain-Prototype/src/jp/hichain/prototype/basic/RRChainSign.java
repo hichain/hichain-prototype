@@ -66,10 +66,6 @@ public class RRChainSign extends Square {
 			signDir = _sign;
 		}
 
-		public boolean equals(AroundDir _around, SignDir _sign) {
-			return (aroundDir == _around && signDir == _sign);
-		}
-
 		@Override
 		public boolean equals(Object obj) {
 			if (this == obj) return true;
