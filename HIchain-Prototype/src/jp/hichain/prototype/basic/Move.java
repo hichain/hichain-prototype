@@ -1,33 +1,30 @@
 package jp.hichain.prototype.basic;
 
-/**
- * 手を表すBS
- * AIにとって評価の基準となるデータが入る
- * AdBSにゲーム進行における前の手、次に取り得る手を持つ
- * 手の評価や深さ(=何ターン目か)を持つ
- * @author Tokiwa
- */
-public class Move extends AdBoardSign {
-	private Move parent;      //親の手
-	private Move [] children; //子どもの手
+import java.util.ArrayList;
+import java.util.List;
 
-	private int value;    //手の評価
-	private int depth;    //手の深さ
+import jp.hichain.prototype.concept.AroundDir;
 
-	/**
-	 * 盤上の空のBS
-	 * @see AdBoardSign#constructor(Move, int)
-	 */
-	public Move(Move _sourceBS, int _source) {
-		super(_sourceBS, _source);
+public class Move extends RRChainSign {
+	private Move parent;			//親の手
+	private List <Move> children;	//子どもの手
+
+	private int moveValue;    //手の評価
+	private int moveDepth;    //手の深さ
+
+	public Move(Move _source, AroundDir _dir) {
+		super(_source, _dir);
+		children = new ArrayList<Move>();
 	}
 
-	/**
-	 * 盤上の空のBS (ルート座標限定)
-	 * @see AdBoardSign#constructor(int, int)
-	 */
-	public Move(int _x, int _y) {
-		super(_x, _y);
+	public Move(Move _source, AroundDir _dir, ChainSign _sign) {
+		super(_source, _dir, _sign);
+		children = new ArrayList<Move>();
+	}
+
+	public Move(Move _source, AroundDir _dir, ChainSign _sign, Move _parent) {
+		this(_source, _dir, _sign);
+		parent = _parent;
 	}
 
 	/**
@@ -42,7 +39,7 @@ public class Move extends AdBoardSign {
 	 * 子どもの手を返す
 	 * @return 子どもの手
 	 */
-	public Move [] getChildren() {
+	public List <Move> getChildren() {
 		return children;
 	}
 
@@ -50,26 +47,32 @@ public class Move extends AdBoardSign {
 	 * 手の評価を返す
 	 * @return 手の評価
 	 */
-	public int getValue() {
-		return value;
+	public int getMoveValue() {
+		return moveValue;
 	}
 
 	/**
 	 * 手の深さを返す
 	 * @return 手の深さ
 	 */
-	public int getDepth() {
-		return depth;
+	public int getMoveDepth() {
+		return moveDepth;
 	}
 
 	/**
-	 * 親子の手をセットする
-	 * @param _parent 親の手
-	 * @param _children 子どもの手
+	 * 子の手を追加する
+	 * @param _parent 子の手
 	 */
-	public void setFamily(Move _parent, Move [] _children) {
+	public void addChildMove(Move _parent) {
+		children.add(_parent);
+	}
+
+	/**
+	 * 親の手をセットする
+	 * @param _parent 親の手
+	 */
+	public void setParentMove(Move _parent) {
 		parent = _parent;
-		children = _children;
 	}
 
 	/**
@@ -78,7 +81,7 @@ public class Move extends AdBoardSign {
 	 * @param _depth 手の深さ
 	 */
 	public void setValue(int _value, int _depth) {
-		value = _value;
-		depth = _depth;
+		moveValue = _value;
+		moveDepth = _depth;
 	}
 }

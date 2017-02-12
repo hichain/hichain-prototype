@@ -8,7 +8,7 @@ import jp.hichain.prototype.concept.SignDir;
 
 public class RRChainSign extends Square {
 	private ChainSign sign;
-	Map <Directions, Chain> chainMap;
+	private Map <Directions, Chain> chainMap;
 
 	public RRChainSign(Square _source, AroundDir _dir) {
 		super(_source, _dir);
