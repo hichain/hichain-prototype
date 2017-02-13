@@ -39,72 +39,88 @@ sumがAroundDirの中になければ分解する (1段階広い方角)
 
 public enum AroundDir {
 	//center
-	THIS(0, 0) {
+	THIS(TYPE.THIS, 0, 0) {
 		@Override
 		public AroundDir getOpposite() {
 			return THIS;
 		}
 	},
-	NORTH(0, -1) {
+	NORTH(TYPE.NEXT, 0, -1) {
 		@Override
 		public AroundDir getOpposite() {
 			return SOUTH;
 		}
 	},
-	NORTHEAST(1, -1) {
+	NORTHEAST(TYPE.CORNER, 1, -1) {
 		@Override
 		public AroundDir getOpposite() {
 			return SOUTHWEST;
 		}
 	},
-	EAST(1, 0) {
+	EAST(TYPE.NEXT, 1, 0) {
 		@Override
 		public AroundDir getOpposite() {
 			return WEST;
 		}
 	},
-	SOUTHEAST(1, 1) {
+	SOUTHEAST(TYPE.CORNER, 1, 1) {
 		@Override
 		public AroundDir getOpposite() {
 			return NORTHWEST;
 		}
 	},
-	SOUTH(0, 1) {
+	SOUTH(TYPE.NEXT, 0, 1) {
 		@Override
 		public AroundDir getOpposite() {
 			return NORTH;
 		}
 	},
-	SOUTHWEST(-1, 1) {
+	SOUTHWEST(TYPE.CORNER, -1, 1) {
 		@Override
 		public AroundDir getOpposite() {
 			return NORTHEAST;
 		}
 	},
-	WEST(-1, 0) {
+	WEST(TYPE.NEXT, -1, 0) {
 		@Override
 		public AroundDir getOpposite() {
 			return EAST;
 		}
 	},
-	NORTHWEST(-1, -1) {
+	NORTHWEST(TYPE.CORNER, -1, -1) {
 		@Override
 		public AroundDir getOpposite() {
 			return SOUTHEAST;
 		}
 	};
 
+	public enum TYPE {
+		THIS,
+		NEXT,
+		CORNER;
+	}
+
 	private int dx;	//相対x座標
 	private int dy;	//相対y座標
+	private TYPE type;	//タイプ (隣り合わせか角か)
 
 	/**
 	 * コンストラクタ
 	 * @param dx 相対x座標
 	 * @param dy 相対y座標
 	 */
-	private AroundDir(int dx, int dy) {
+	private AroundDir(TYPE type, int dx, int dy) {
+		this.type = type;
 		this.dx = dx;
 		this.dy = dy;
+	}
+
+	/**
+	 * タイプを返す
+	 * @return AroundDir.TYPE
+	 */
+	public TYPE getType() {
+		return type;
 	}
 
 	/**
