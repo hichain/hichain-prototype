@@ -14,7 +14,11 @@ import javax.swing.JFrame;
 import jp.hichain.prototype.algorithm.Judge;
 import jp.hichain.prototype.basic.CompleteBS;
 import jp.hichain.prototype.basic.Move;
+import jp.hichain.prototype.basic.SignNum;
+import jp.hichain.prototype.basic.SignPS;
 import jp.hichain.prototype.concept.AroundDir;
+import jp.hichain.prototype.concept.PS;
+import jp.hichain.prototype.concept.SignDir;
 
 public class Main {
 
@@ -103,29 +107,43 @@ public class Main {
 		try {
 			brData = new BufferedReader( new FileReader(_dataPath) );
 
-			String line;
-			while ((line = brData.readLine()) != null) {
+			SignDir [] dirsHeader = new SignDir[4];
+			PS [] psHeader = new PS [16];
+
+			String line = brData.readLine();
+			line = brData.readLine();
+			String [] header = line.split(",", 0);
+			for (int i = 0; i < dirsHeader.length; i++) {
+				dirsHeader[i] = SignDir.getEnum(header[i+1]);
+			}
+			for (int i = 0; i < psHeader.length; i++) {
+				psHeader[i] = PS.getEnum(header[i+5]);
+			}
+
+			while ( (line = brData.readLine()) != null) {
+				SignNum signNum = new SignNum();
+				SignPS signPS = new SignPS();
+
 				String [] data = line.split(",", 0); // 行をカンマ区切りで配列に変換
-				//最初の行をスキップ
-				if (data[0].equals("Sign")) {
-					continue;
-				}
 
 				//文字データの分解
-				char ch = data[0].toCharArray()[0];	//文字
+				char sc = data[0].toCharArray()[0];	//文字
 				//読み込む文字のリストになかったら次
-				if (!_signs.contains(ch)) {
+				if (!_signs.contains(sc)) {
 					continue;
 				}
-				int [] nums = {	//文字番号
-						Integer.decode(data[1]),
-						Integer.decode(data[2]),
-						Integer.decode(data[3]),
-						Integer.decode(data[4])
-				};
-				int ps = Integer.decode(data[5]); //PS
+				//SNを代入
+				for (int i = 0; i < 4; i++) {
+					signNum.add(dirsHeader[i], data[i+1].toCharArray()[0]);
+				}
+				//SignPSを代入
+				for (int i = 0; i < 16; i++) {
+					if (Integer.parseInt(data[i+5]) == 1) {						
+						signPS.add(psHeader[i]);
+					}
+				}
 
-				char fullwidthCh = getFullWidthChar(ch); //全角文字
+				char fullwidthCh = getFullWidthChar(sc); //全角文字
 
 				boolean success = true;	//画像の読み込みに成功したか
 				BufferedImage [] images = new BufferedImage [players]; //SI
@@ -136,7 +154,7 @@ public class Main {
 					try {
 						images[j] = ImageIO.read( imageFile );
 					} catch (IOException | IllegalArgumentException  e) {
-						System.out.println("'" + ch + "' Image was not found!");
+						System.out.println("'" + sc + "' Image was not found!");
 						success = false;
 						break;
 					}

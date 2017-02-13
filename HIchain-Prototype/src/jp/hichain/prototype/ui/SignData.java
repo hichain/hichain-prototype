@@ -47,15 +47,6 @@ public class SignData {
 		return signSet;
 	}
 
-	/**
-	 * 文字を追加する
-	 * @param _bs BS
-	 */
-	static public void add(int _player, char _ch, int [] _nums, int _ps, BufferedImage _image) {
-		CompleteBS bs = new CompleteBS(_player, _ch, 0, _nums, _ps, _image);
-		add(bs);
-	}
-
 	public static void add(CompleteBS _bs) {
 		signs.add(_bs);
 	}

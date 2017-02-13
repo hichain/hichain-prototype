@@ -7,64 +7,53 @@ package jp.hichain.prototype.concept;
  *
  */
 public enum SignDir {
-	NORTH {
-		@Override
-		public SignDir getOpposite() {
-			return SOUTH;
-		}
-		@Override
-		public SignDir getLeft() {
-			return WEST;
-		}
-		@Override
-		public SignDir getRight() {
-			return EAST;
-		}
-	},
-	EAST {
-		@Override
-		public SignDir getOpposite() {
-			return WEST;
-		}
-		@Override
-		public SignDir getLeft() {
-			return NORTH;
-		}
-		@Override
-		public SignDir getRight() {
-			return SOUTH;
-		}
-	},
-	SOUTH {
-		@Override
-		public SignDir getOpposite() {
-			return NORTH;
-		}
-		@Override
-		public SignDir getLeft() {
-			return EAST;
-		}
-		@Override
-		public SignDir getRight() {
-			return WEST;
-		}
-	},
-	WEST {
-		@Override
-		public SignDir getOpposite() {
-			return EAST;
-		}
-		@Override
-		public SignDir getLeft() {
-			return SOUTH;
-		}
-		@Override
-		public SignDir getRight() {
-			return NORTH;
-		}
-	};
+	NORTH,
+	EAST,
+	SOUTH,
+	WEST;
 
-	public abstract SignDir getOpposite();
-	public abstract SignDir getLeft();
-	public abstract SignDir getRight();
+	public enum RELATIVE {
+		LEFT,
+		RIGHT,
+		OPPOSITE;
+	}
+
+	private SignDir left, right, opposite;
+
+	static {
+		NORTH.left = WEST;
+		NORTH.right = EAST;
+		NORTH.opposite = SOUTH;
+		EAST.left = NORTH;
+		EAST.right = SOUTH;
+		EAST.opposite = WEST;
+		SOUTH.left = EAST;
+		SOUTH.right = WEST;
+		SOUTH.opposite = NORTH;
+		WEST.left = SOUTH;
+		WEST.right = NORTH;
+		WEST.opposite = EAST;
+	}
+
+	public SignDir getRelative(SignDir.RELATIVE dir) {
+		switch (dir) {
+		case LEFT:
+			return left;
+		case RIGHT:
+			return right;
+		case OPPOSITE:
+			return opposite;
+		}
+		return null;
+	}
+
+	public static SignDir getEnum(String str) {
+		SignDir [] dirs = SignDir.values();
+		for (SignDir signDir : dirs) {
+			if (str.equals(signDir.name())) {
+				return signDir;
+			}
+		}
+		return null;
+	}
 }
