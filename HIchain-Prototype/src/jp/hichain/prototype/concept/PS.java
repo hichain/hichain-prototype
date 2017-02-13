@@ -115,6 +115,32 @@ public enum PS {
 		CORNER;
 	}
 
+	/**
+	 * 接点の種類
+	 * @author NT
+	 *
+	 */
+	public enum CONTACT {
+		NONE(false),			//接点なし
+		POINT_POINT(true),	//点と点で接する
+		POINT_SIDE(true),		//点と辺で接する
+		SIDE_SIDE(false);		//辺と辺で接する
+
+		private boolean available;
+
+		private CONTACT(boolean _available) {
+			available = _available;
+		}
+
+		/**
+		 * 有効な接点か返す
+		 * @return true/false
+		 */
+		public boolean isAvailable() {
+			return available;
+		}
+	}
+
 	private TYPE type;
 	private PS left, right, opposite;
 
