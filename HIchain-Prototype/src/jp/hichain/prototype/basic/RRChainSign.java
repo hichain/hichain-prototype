@@ -7,6 +7,7 @@ import jp.hichain.prototype.concept.AroundDir;
 import jp.hichain.prototype.concept.SignDir;
 
 public class RRChainSign extends Square {
+	private Player player;
 	private ChainSign sign;
 	private Map <Directions, Chain> chainMap;
 
@@ -15,8 +16,9 @@ public class RRChainSign extends Square {
 		chainMap = new HashMap<Directions, Chain>();
 	}
 
-	public RRChainSign(Square _source, AroundDir _dir, ChainSign _sign) {
+	public RRChainSign(Square _source, AroundDir _dir, Player _player, ChainSign _sign) {
 		this(_source, _dir);
+		player = _player;
 		sign = _sign;
 	}
 
@@ -38,6 +40,26 @@ public class RRChainSign extends Square {
 		chainMap.put(new Directions(_aroundDir, _signDir), _chain);
 	}
 
+	/**
+	 * 空のマスか返す
+	 * @return true/false
+	 */
+	public boolean isEmpty() {
+		return (sign == null);
+	}
+
+	/**
+	 * プレイヤーを帰す
+	 * @return Player
+	 */
+	public Player getPlayer() {
+		return player;
+	}
+
+	/**
+	 * 文字を返す
+	 * @return ChainSign
+	 */
 	public ChainSign getSign() {
 		return sign;
 	}
