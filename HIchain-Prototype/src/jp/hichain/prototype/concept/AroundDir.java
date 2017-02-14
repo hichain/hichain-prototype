@@ -1,6 +1,7 @@
 package jp.hichain.prototype.concept;
 
-import java.util.Map;
+import jp.hichain.prototype.basic.DirComp;
+import jp.hichain.prototype.concept.Direction.Relative;
 
 /**
  * 文字の周り
@@ -41,60 +42,15 @@ sumがAroundDirの中になければ分解する (1段階広い方角)
 
 public enum AroundDir {
 	//center
-	THIS(TYPE.THIS, 0, 0) {
-		@Override
-		public AroundDir getOpposite() {
-			return THIS;
-		}
-	},
-	NORTH(TYPE.NEXT, 0, -1) {
-		@Override
-		public AroundDir getOpposite() {
-			return SOUTH;
-		}
-	},
-	NORTHEAST(TYPE.CORNER, 1, -1) {
-		@Override
-		public AroundDir getOpposite() {
-			return SOUTHWEST;
-		}
-	},
-	EAST(TYPE.NEXT, 1, 0) {
-		@Override
-		public AroundDir getOpposite() {
-			return WEST;
-		}
-	},
-	SOUTHEAST(TYPE.CORNER, 1, 1) {
-		@Override
-		public AroundDir getOpposite() {
-			return NORTHWEST;
-		}
-	},
-	SOUTH(TYPE.NEXT, 0, 1) {
-		@Override
-		public AroundDir getOpposite() {
-			return NORTH;
-		}
-	},
-	SOUTHWEST(TYPE.CORNER, -1, 1) {
-		@Override
-		public AroundDir getOpposite() {
-			return NORTHEAST;
-		}
-	},
-	WEST(TYPE.NEXT, -1, 0) {
-		@Override
-		public AroundDir getOpposite() {
-			return EAST;
-		}
-	},
-	NORTHWEST(TYPE.CORNER, -1, -1) {
-		@Override
-		public AroundDir getOpposite() {
-			return SOUTHEAST;
-		}
-	};
+	THIS(0, 0, 0, 0),
+	NORTH(1, 0, 0, 0),
+	NORTHEAST(1, 1, 0, 0),
+	EAST(0, 1, 0, 0),
+	SOUTHEAST(0, 1, 1, 0),
+	SOUTH(0, 0, 1, 0),
+	SOUTHWEST(0, 0, 1, 1),
+	WEST(0, 0, 0, 1),
+	NORTHWEST(1, 0, 0, 1);
 
 	public enum TYPE {
 		THIS,
@@ -102,18 +58,16 @@ public enum AroundDir {
 		CORNER;
 	}
 
-	private int dx;	//相対x座標
-	private int dy;	//相対y座標
-	private TYPE type;	//タイプ (隣り合わせか角か)
-	private Map <AroundDir, Integer> properties; //属性
+	private DirComp components;	//方角成分
+	private int dx, dy;	//相対座標
+	private TYPE type;	//タイプ
+	private AroundDir left, right, opposite;	//相対方角
 
-	/**
-	 * コンストラクタ
-	 * @param dx 相対x座標
-	 * @param dy 相対y座標
-	 */
 	private AroundDir(int north, int east, int south, int west) {
-
+		components = new DirComp(north, east, south, west);
+		setType();
+		setAbPos();
+		setRelative();
 	}
 
 	/**
@@ -125,26 +79,29 @@ public enum AroundDir {
 	}
 
 	/**
-	 * 相対x座標を返す
-	 * @return 相対x座標
+	 * 相対方角を返す
+	 * @param relative 相対方角
+	 * @return AroundDir
 	 */
-	public int getDx() {
-		return dx;
+	public AroundDir getRelative(Relative relative) {
+		switch (relative) {
+			case LEFT:
+				return left;
+			case RIGHT:
+				return right;
+			case OPPOSITE:
+				return opposite;
+		}
+		return null;
 	}
 
 	/**
-	 * 相対y座標を返す
-	 * @return 相対y座標
+	 * 方角の成分を返す
+	 * @return DirComp
 	 */
-	public int getDy() {
-		return dy;
+	public DirComp getComp() {
+		return components;
 	}
-
-	/**
-	 * 反対の方角を返す
-	 * @return Anti-AroundDir
-	 */
-	public abstract AroundDir getOpposite();
 
 	/**
 	 * routeを返す
@@ -153,8 +110,8 @@ public enum AroundDir {
 	 */
 	public AroundDir [] getRoute(AroundDir aroundDir) {
 		AroundDir [] route = null;
-		int sumDx = aroundDir.getDx() - this.dx;
-		int sumDy = aroundDir.getDy() - this.dy;
+		int sumDx = aroundDir.dx - this.dx;
+		int sumDy = aroundDir.dy - this.dy;
 
 		AroundDir sum = get(sumDx, sumDy);
 		if (sum == null) {
@@ -177,7 +134,7 @@ public enum AroundDir {
 	 * @param value 相対座標(x/y)
 	 * @return 相対座標(x/y)
 	 */
-	public static int [] getOutsideDir(int value) {
+	private static int [] getOutsideDir(int value) {
 		int [] result = {
 			(value > 0) ? 1 : -1,
 			(value % 2 == 0) ? ((value >= 0) ? 1 : -1) : 0
@@ -191,12 +148,50 @@ public enum AroundDir {
 	 * @param dy 相対y座標
 	 * @return 条件を満たすAroudDir (該当なしはnull)
 	 */
-	public static AroundDir get(int dx, int dy) {
+	private static AroundDir get(int dx, int dy) {
 		for (AroundDir dir : AroundDir.values()) {
-			if (dir.getDx() == dx && dir.getDy() == dy) {
+			if (dir.dx == dx && dir.dy == dy) {
 				return dir;
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * 方角成分からAroundDirを返す
+	 * @param comp 方角成分
+	 * @return AroundDir
+	 */
+	private static AroundDir getByComp(DirComp comp) {
+		for (AroundDir dir : AroundDir.values()) {
+			if (comp == dir.getComp()) {
+				return dir;
+			}
+		}
+		return null;
+	}
+
+	private void setType() {
+		switch (components.getDenominator()) {
+		case 4:
+			type = TYPE.NEXT;
+			break;
+		case 8:
+			type = TYPE.CORNER;
+		default:
+			type = TYPE.THIS;
+			break;
+		}
+	}
+
+	private void setAbPos() {
+		dx = components.get(Direction.EAST) - components.get(Direction.WEST);
+		dy = components.get(Direction.SOUTH) - components.get(Direction.NORTH);
+	}
+
+	private void setRelative() {
+		left = getByComp( components.getRelative(Relative.LEFT) );
+		right = getByComp( components.getRelative(Relative.RIGHT) );
+		opposite = getByComp( components.getRelative(Relative.OPPOSITE) );
 	}
 }
