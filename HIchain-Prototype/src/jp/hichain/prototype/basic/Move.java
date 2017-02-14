@@ -17,13 +17,13 @@ public class Move extends RRChainSign {
 		children = new ArrayList<Move>();
 	}
 
-	public Move(Move _source, AroundDir _dir, ChainSign _sign) {
-		super(_source, _dir, _sign);
+	public Move(Move _source, AroundDir _dir, Player player, ChainSign _sign) {
+		super(_source, _dir, player, _sign);
 		children = new ArrayList<Move>();
 	}
 
-	public Move(Move _source, AroundDir _dir, ChainSign _sign, Move _parent) {
-		this(_source, _dir, _sign);
+	public Move(Move _source, AroundDir _dir, Player player, ChainSign _sign, Move _parent) {
+		this(_source, _dir, player, _sign);
 		parent = _parent;
 	}
 
