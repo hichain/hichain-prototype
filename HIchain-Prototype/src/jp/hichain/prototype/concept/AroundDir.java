@@ -1,5 +1,7 @@
 package jp.hichain.prototype.concept;
 
+import java.util.Map;
+
 /**
  * 文字の周り
  * 8方向
@@ -103,16 +105,15 @@ public enum AroundDir {
 	private int dx;	//相対x座標
 	private int dy;	//相対y座標
 	private TYPE type;	//タイプ (隣り合わせか角か)
+	private Map <AroundDir, Integer> properties; //属性
 
 	/**
 	 * コンストラクタ
 	 * @param dx 相対x座標
 	 * @param dy 相対y座標
 	 */
-	private AroundDir(TYPE type, int dx, int dy) {
-		this.type = type;
-		this.dx = dx;
-		this.dy = dy;
+	private AroundDir(int north, int east, int south, int west) {
+
 	}
 
 	/**
