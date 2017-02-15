@@ -31,7 +31,7 @@ public enum PS {
 	NORTH_NORTHWEST(2, 0, 0, 1);
 
 	private DirComp components;
-	private TYPE type;
+	private Type type;
 	private PS left, right, opposite;
 
 	private PS(int north, int east, int south, int west) {
@@ -44,7 +44,7 @@ public enum PS {
 	 * PSの種類を返す
 	 * @return PSの種類
 	 */
-	public TYPE getType() {
+	public Type getType() {
 		return type;
 	}
 
@@ -61,7 +61,7 @@ public enum PS {
 	 * @param relative 相対方角
 	 * @return AroundDir
 	 */
-	public PS getRelative(SignDir.RELATIVE dir) {
+	public PS getRelative(Direction.Relative dir) {
 		switch (dir) {
 		case LEFT:
 			return left;
@@ -91,11 +91,11 @@ public enum PS {
 	private void setType() {
 		switch (components.getDenominator()) {
 			case 4:
-				type = TYPE.POINT;
+				type = Type.POINT;
 			case 8:
-				type = TYPE.CORNER;
+				type = Type.CORNER;
 			case 16:
-				type = TYPE.SIDE;
+				type = Type.SIDE;
 		}
 	}
 
@@ -150,7 +150,7 @@ public enum PS {
 	 * @author NT
 	 *
 	 */
-	public enum TYPE {
+	public enum Type {
 		POINT,
 		SIDE,
 		CORNER;
@@ -161,15 +161,14 @@ public enum PS {
 	 * @author NT
 	 *
 	 */
-	public enum CONTACT {
+	public enum Contact {
 		NONE(false),			//接点なし
 		POINT_POINT(true),	//点と点で接する
-		POINT_SIDE(true),		//点と辺で接する
 		SIDE_SIDE(false);		//辺と辺で接する
 
 		private boolean available;
 
-		private CONTACT(boolean _available) {
+		private Contact(boolean _available) {
 			available = _available;
 		}
 

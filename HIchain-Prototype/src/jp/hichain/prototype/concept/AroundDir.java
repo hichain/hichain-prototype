@@ -83,7 +83,7 @@ public enum AroundDir {
 	 * @param relative 相対方角
 	 * @return AroundDir
 	 */
-	public AroundDir getRelative(Relative relative) {
+	public AroundDir getRelative(Direction.Relative relative) {
 		switch (relative) {
 			case LEFT:
 				return left;

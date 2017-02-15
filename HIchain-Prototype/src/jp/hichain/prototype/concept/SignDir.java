@@ -42,7 +42,7 @@ public enum SignDir {
 	 * @param relative 相対方角
 	 * @return SignDir
 	 */
-	public SignDir getRelative(SignDir.RELATIVE dir) {
+	public SignDir getRelative(Direction.Relative dir) {
 		switch (dir) {
 		case LEFT:
 			return left;
