@@ -32,7 +32,7 @@ public class Square {
 	 * @param _dir _squareから見た自身(this)のAroundDir
 	 */
 	public void addAround(Square _square, AroundDir _dir) {
-		around.put(_dir.getRelative(Relative.OPPOSITE), _square);
+		around.put( AroundDir.get( _dir.getComp().getRelative(Relative.OPPOSITE) ), _square);
 	}
 
 	/**

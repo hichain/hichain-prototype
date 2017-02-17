@@ -1,7 +1,10 @@
 package jp.hichain.prototype.concept;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import jp.hichain.prototype.basic.DirComp;
-import jp.hichain.prototype.concept.Direction.Relative;
 
 /**
  * 文字の周り
@@ -61,13 +64,11 @@ public enum AroundDir {
 	private DirComp components;	//方角成分
 	private int dx, dy;	//相対座標
 	private TYPE type;	//タイプ
-	private AroundDir left, right, opposite;	//相対方角
 
 	private AroundDir(int north, int east, int south, int west) {
 		components = new DirComp(north, east, south, west);
 		setType();
 		setAbPos();
-		setRelative();
 	}
 
 	/**
@@ -79,23 +80,6 @@ public enum AroundDir {
 	}
 
 	/**
-	 * 相対方角を返す
-	 * @param relative 相対方角
-	 * @return AroundDir
-	 */
-	public AroundDir getRelative(Direction.Relative relative) {
-		switch (relative) {
-			case LEFT:
-				return left;
-			case RIGHT:
-				return right;
-			case OPPOSITE:
-				return opposite;
-		}
-		return null;
-	}
-
-	/**
 	 * 方角の成分を返す
 	 * @return DirComp
 	 */
@@ -103,12 +87,39 @@ public enum AroundDir {
 		return components;
 	}
 
+	public static List<AroundDir> breakup(AroundDir dir) {
+		List<AroundDir> dirs = new ArrayList<AroundDir>(2);
+		DirComp comp = dir.getComp();
+
+		if (comp.getDenominator() != 8) {
+			return null;
+		}
+
+		for (Map.Entry<Direction, Integer> entry : comp.getMap().entrySet()) {
+			if (entry.getValue() == 1) {
+				dirs.add( get( new DirComp(entry.getKey()) ) );
+			}
+		}
+
+		return dirs;
+	}
+
 	/**
 	 * 方角成分からAroundDirを返す
 	 * @param comp 方角成分
 	 * @return AroundDir
 	 */
-	public static AroundDir getByComp(DirComp comp) {
+	public static AroundDir get(DirComp comp) {
+		DirComp dirComp = comp;
+		if (comp.getDenominator() == 16) {
+			for (Direction dir : Direction.values()) {
+				int value = comp.get(dir);
+				if (value == 2) {
+					dirComp = new DirComp(dir);
+				}
+			}
+		}
+
 		for (AroundDir dir : AroundDir.values()) {
 			if (comp == dir.getComp()) {
 				return dir;
@@ -189,9 +200,4 @@ public enum AroundDir {
 		dy = components.get(Direction.SOUTH) - components.get(Direction.NORTH);
 	}
 
-	private void setRelative() {
-		left = getByComp( components.getRelative(Relative.LEFT) );
-		right = getByComp( components.getRelative(Relative.RIGHT) );
-		opposite = getByComp( components.getRelative(Relative.OPPOSITE) );
-	}
 }
