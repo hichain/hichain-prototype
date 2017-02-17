@@ -104,6 +104,20 @@ public enum AroundDir {
 	}
 
 	/**
+	 * 方角成分からAroundDirを返す
+	 * @param comp 方角成分
+	 * @return AroundDir
+	 */
+	public static AroundDir getByComp(DirComp comp) {
+		for (AroundDir dir : AroundDir.values()) {
+			if (comp == dir.getComp()) {
+				return dir;
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * routeを返す
 	 * @param aroundDir target
 	 * @return route
@@ -151,20 +165,6 @@ public enum AroundDir {
 	private static AroundDir get(int dx, int dy) {
 		for (AroundDir dir : AroundDir.values()) {
 			if (dir.dx == dx && dir.dy == dy) {
-				return dir;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * 方角成分からAroundDirを返す
-	 * @param comp 方角成分
-	 * @return AroundDir
-	 */
-	private static AroundDir getByComp(DirComp comp) {
-		for (AroundDir dir : AroundDir.values()) {
-			if (comp == dir.getComp()) {
 				return dir;
 			}
 		}

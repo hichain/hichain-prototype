@@ -3,7 +3,7 @@ package jp.hichain.prototype.basic;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
-import jp.hichain.prototype.concept.SignDir;
+import jp.hichain.prototype.concept.Direction;
 
 public class SignImage {
 	BufferedImage signImage;
@@ -19,7 +19,7 @@ public class SignImage {
 		imageScale = scale;
 	}
 
-	public void rotate(SignDir.RELATIVE dir) {
+	public void rotate(Direction.Relative dir) {
 		int plusminus = 0;
 		switch (dir) {
 		case LEFT:

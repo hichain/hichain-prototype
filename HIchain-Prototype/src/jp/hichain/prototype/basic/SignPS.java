@@ -3,8 +3,8 @@ package jp.hichain.prototype.basic;
 import java.util.HashSet;
 import java.util.Set;
 
+import jp.hichain.prototype.concept.Direction;
 import jp.hichain.prototype.concept.PS;
-import jp.hichain.prototype.concept.SignDir;
 
 /**
  * 文字のPS
@@ -28,6 +28,15 @@ public class SignPS {
 		psSet = _psSet;
 	}
 
+	/**
+	 * 指定のPSを返す
+	 * @param _ps PS
+	 * @return ビットが1ならtrue, 0ならfalse
+	 */
+	public boolean get(PS ps) {
+		return psSet.contains(ps);
+	}
+
 	public void add(PS ps) {
 		psSet.add(ps);
 	}
@@ -36,7 +45,7 @@ public class SignPS {
 		psSet.remove(ps);
 	}
 
-	public void rotate(SignDir.RELATIVE dir) {
+	public void rotate(Direction.Relative dir) {
 		Set <PS> newSet = new HashSet<PS>(psSet);
 		psSet.clear();
 		for (PS ps : newSet) {
@@ -50,7 +59,7 @@ public class SignPS {
 	 * @param _type PSのタイプ
 	 * @return SignPS
 	 */
-	public static SignPS getOnlyType(SignPS _signPS, PS.TYPE _type) {
+	public static SignPS getOnlyType(SignPS _signPS, PS.Type _type) {
 		SignPS signPS = new SignPS();
 		for (PS ps : _signPS.getSetPS()) {
 			if (ps.getType() == _type) {
@@ -65,20 +74,12 @@ public class SignPS {
 	}
 
 	/**
-	 * 指定のPSのビットを返す
+	 * 指定のPSの相対方向のビットを返す
 	 * @param _kind PS
+	 * @param _relative 相対方向
 	 * @return ビットが1ならtrue, 0ならfalse
 	 */
-	public boolean contains(PS _kind) {
-		return psSet.contains(_kind);
-	}
-
-	/**
-	 * 指定のPSの反対側のビットを返す
-	 * @param _kind PS
-	 * @return ビットが1ならtrue, 0ならfalse
-	 */
-	public boolean containsOpposite(PS _kind) {
-		return psSet.contains(_kind.getRelative(SignDir.RELATIVE.OPPOSITE));
+	public boolean contains(PS _kind, Direction.Relative _relative) {
+		return psSet.contains(_kind.getRelative(_relative));
 	}
 }

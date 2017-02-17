@@ -1,7 +1,6 @@
 package jp.hichain.prototype.concept;
 
 import jp.hichain.prototype.basic.DirComp;
-import jp.hichain.prototype.concept.Direction.Relative;
 
 /**
  * 文字の向き
@@ -14,12 +13,6 @@ public enum SignDir {
 	EAST(0, 1, 0, 0),
 	SOUTH(0, 0, 1, 0),
 	WEST(0, 0, 0, 1);
-
-	public enum RELATIVE {
-		LEFT,
-		RIGHT,
-		OPPOSITE;
-	}
 
 	private SignDir left, right, opposite;
 	private DirComp components;
@@ -70,9 +63,9 @@ public enum SignDir {
 	}
 
 	private void setRelative() {
-		left = getByComp( components.getRelative(Relative.LEFT) );
-		right = getByComp( components.getRelative(Relative.RIGHT) );
-		opposite = getByComp( components.getRelative(Relative.OPPOSITE) );
+		left = getByComp( components.getRelative(Direction.Relative.LEFT) );
+		right = getByComp( components.getRelative(Direction.Relative.RIGHT) );
+		opposite = getByComp( components.getRelative(Direction.Relative.OPPOSITE) );
 	}
 
 	private static SignDir getByComp(DirComp comp) {

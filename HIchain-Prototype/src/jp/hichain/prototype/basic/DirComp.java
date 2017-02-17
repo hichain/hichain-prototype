@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import jp.hichain.prototype.concept.Direction;
-import jp.hichain.prototype.concept.Direction.Relative;
 
 public class DirComp {
 	private Map<Direction, Integer> components;
@@ -38,7 +37,7 @@ public class DirComp {
 		return 4 * (int)Math.pow(2, sum-1);
 	}
 
-	public DirComp getRelative(Relative relative) {
+	public DirComp getRelative(Direction.Relative relative) {
 		Map <Direction, Integer> newMap = new HashMap<Direction, Integer>();
 		for (Map.Entry<Direction, Integer> entry : components.entrySet()) {
 			newMap.put(entry.getKey().getRelative(relative), entry.getValue());
@@ -46,22 +45,12 @@ public class DirComp {
 		return new DirComp(newMap);
 	}
 
-	public boolean isToward(Direction dir) {
-		Direction [] maxDir = new Direction [2];
-		int max = 0;
-		for (Map.Entry<Direction, Integer> entry : components.entrySet()) {
-			if (entry.getValue() > max) {
-				maxDir[0] = entry.getKey();
-				max = entry.getValue();
-			} else if (entry.getValue() == max) {
-				maxDir[1] = entry.getKey();
-			}
-		}
-		return (maxDir[0] == dir) || (maxDir[1] == dir);
-	}
-
 	public int get(Direction dir) {
 		return components.get(dir);
+	}
+
+	private void put(Direction dir, Integer value) {
+		components.put(dir, value);
 	}
 
 	@Override
@@ -70,6 +59,16 @@ public class DirComp {
 		if (obj == null) return false;
 		if (getClass() != obj.getClass()) return false;
 		DirComp comp = (DirComp)obj;
+
+		if (comp.getDenominator() == 16) {
+			for (Direction dir : Direction.values()) {
+				int value = comp.get(dir);
+				if (value != 0) {
+					comp.put(dir, --value);
+				}
+			}
+		}
+
 		return components.equals(comp);
 	}
 }
