@@ -94,6 +94,15 @@ public enum Direction {
 		return denominator;
 	}
 
+	public static Direction get(Direction direction, Relation relation, int denom) {
+		for (Direction dir : Direction.values()) {
+			if (dir.getSquareSide() == direction && dir.getDenominator() == denom && dir.getSquareSidePos() == relation) {
+				return dir;
+			}
+		}
+		return null;
+	}
+
 	public static EnumSet<Direction> getEnumSet(int denom) {
 		EnumSet<Direction> set = EnumSet.noneOf(Direction.class);
 		for (Direction direction : Direction.values()) {

@@ -7,20 +7,21 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-import jp.hichain.prototype.basic.CompleteBS;
+import jp.hichain.prototype.basic.ChainSign;
+import jp.hichain.prototype.concept.CardColor;
 
 public class SIPanel extends JPanel {
 
-	private CompleteBS bs;
+	private ChainSign sign;
 
-	public SIPanel(CompleteBS _bs) {
-		bs = _bs;
+	public SIPanel(ChainSign _sign) {
+		sign = _sign;
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
-		BufferedImage image = bs.getImage();
-		AffineTransform af = bs.getFilter();
+		BufferedImage image = sign.getSI(CardColor.BLACK).get();
+		AffineTransform af = sign.getSI(CardColor.BLACK).getFilter();
 
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.drawImage(image, af, this);

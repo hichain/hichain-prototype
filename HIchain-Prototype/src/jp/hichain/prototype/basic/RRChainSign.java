@@ -11,9 +11,16 @@ public class RRChainSign extends Square {
 	private ChainSign sign;
 	private Map <Directions, Chain> chainMap;
 
+	public RRChainSign(Player _player, ChainSign _sign) {
+		super();
+		player = _player;
+		sign = _sign;
+		chainMap = new HashMap<>();
+	}
+
 	public RRChainSign(Square _source, Direction _dir) {
 		super(_source, _dir);
-		chainMap = new HashMap<Directions, Chain>();
+		chainMap = new HashMap<>();
 	}
 
 	public RRChainSign(Square _source, Direction _dir, Player _player, ChainSign _sign) {

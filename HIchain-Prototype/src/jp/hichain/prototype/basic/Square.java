@@ -15,23 +15,29 @@ public class Square {
 	private EnumMap <Direction, Square> around;
 
 	/**
-	 * コンストラクタ
+	 * ルートマス
+	 */
+	public Square() {
+	}
+
+	/**
+	 * 通常のマス
 	 * @param _source ソースSquare
 	 * @param _dir  ソースからみた自身(this)のAroundDir
 	 */
 	public Square(Square _source, Direction _dir) {
 		source = _source;
 		around = new EnumMap<Direction, Square>(Direction.class);
-		addAround(_source, _dir);
+		setAroundAll(_dir.getRelation(Relation.LEFT, 2), _source);
 	}
 
 	/**
 	 * 周囲Squareを追加
 	 * @param _square Square
-	 * @param _dir _squareから見た自身(this)のAroundDir
+	 * @param _dir 自身(this)からみた_squareの方向
 	 */
-	public void addAround(Square _square, Direction _dir) {
-		around.put(_dir.getRelation(Relation.LEFT, 2), _square);
+	public void addAround(Direction _dir, Square _square) {
+		around.put(_dir, _square);
 	}
 
 	/**
@@ -57,5 +63,10 @@ public class Square {
 	 */
 	public Square getSource() {
 		return source;
+	}
+
+	private void setAroundAll(Direction _dir, Square _square) {
+		addAround(_dir, _square);
+
 	}
 }

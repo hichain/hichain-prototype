@@ -1,5 +1,8 @@
 package jp.hichain.prototype.basic;
 
+import java.util.Map;
+
+import jp.hichain.prototype.concept.CardColor;
 import jp.hichain.prototype.concept.Direction;
 
 public class ChainSign {
@@ -7,7 +10,7 @@ public class ChainSign {
 	private Direction direction;
 	private SignPS ps;
 	private SignNum number;
-	private SignImage image;
+	private Map<CardColor, SignImage> images;
 
 	/**
 	 * コンストラクタ
@@ -17,19 +20,27 @@ public class ChainSign {
 	 * @param _num Sign Number (SN)
 	 * @param _image Sign Image (SI)
 	 */
-	public ChainSign(char _ch, Direction _dir, SignPS _ps, SignNum _num, SignImage _image) {
+	public ChainSign(char _ch, SignPS _ps, SignNum _num, Map<CardColor, SignImage> _images) {
 		character = _ch;
-		direction = _dir;
+		direction = Direction.NORTH;
 		ps = _ps;
 		number = _num;
-		image = _image;
+		images = _images;
 	}
 
 	public void rotate(Direction.Relation _dir) {
 		direction = direction.getRelation(_dir);
 		ps.rotate(_dir);
 		number.rotate(_dir);
-		image.rotate(_dir);
+		for (SignImage signImage : images.values()) {
+			signImage.rotate(_dir);
+		}
+	}
+
+	public void resize(double scale) {
+		for (SignImage signImage : images.values()) {
+			signImage.setToScale(scale);
+		}
 	}
 
 	/**
@@ -38,14 +49,6 @@ public class ChainSign {
 	 */
 	public char getSC() {
 		return character;
-	}
-
-	/**
-	 * SDを返す
-	 * @return SD
-	 */
-	public Direction getSD() {
-		return direction;
 	}
 
 	/**
@@ -68,7 +71,7 @@ public class ChainSign {
 	 * SIを返す
 	 * @return SI
 	 */
-	public SignImage getSI() {
-		return image;
+	public SignImage getSI(CardColor color) {
+		return images.get(color);
 	}
 }

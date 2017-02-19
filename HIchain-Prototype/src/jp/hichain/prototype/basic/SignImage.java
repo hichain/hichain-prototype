@@ -14,6 +14,18 @@ public class SignImage {
 		signImage = image;
 	}
 
+	public BufferedImage get() {
+		return signImage;
+	}
+
+	public AffineTransform getFilter() {
+		return filter;
+	}
+
+	public double getImageScale() {
+		return imageScale;
+	}
+
 	public void setToScale(double scale) {
 		filter.setToScale(scale, scale);
 		imageScale = scale;

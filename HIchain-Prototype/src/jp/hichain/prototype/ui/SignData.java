@@ -1,30 +1,39 @@
 package jp.hichain.prototype.ui;
 
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
-import jp.hichain.prototype.basic.CompleteBS;
+import jp.hichain.prototype.basic.ChainSign;
+import jp.hichain.prototype.basic.SignImage;
+import jp.hichain.prototype.basic.SignNum;
+import jp.hichain.prototype.basic.SignPS;
+import jp.hichain.prototype.concept.CardColor;
 
 //文字データ (SN/PS/SI)
 public class SignData {
-	static private List <CompleteBS> signs = new ArrayList<CompleteBS>();
+	static private Map<Character, ChainSign> signs;
+
+	static {
+		signs = new HashMap<>();
+	}
 
 	/**
 	 * 指定の文字のデータが存在するか返す
-	 * @param _player プレイヤー番号
 	 * @param _ch 文字のchar
 	 * @return true/false
 	 */
-	static public boolean contains(int _player, char _ch) {
-		for (CompleteBS bs : signs) {
-			if (bs.getPlayer() == _player && bs.getChar() == _ch) {
-				return true;
-			}
-		}
-		return false;
+	static public boolean contains(char _ch) {
+		return signs.containsKey(_ch);
+	}
+
+	/**
+	 * BSを取得する
+	 * @param _ch 文字のchar
+	 * @return BS
+	 */
+	static public ChainSign get(char _ch) {
+		return signs.get(_ch);
 	}
 
 	/**
@@ -39,30 +48,12 @@ public class SignData {
 	 * 文字のSetを返す
 	 * @return 文字のSet
 	 */
-	static public Set <Character> getSignSet() {
-		Set <Character> signSet = new HashSet<Character>();
-		for (CompleteBS bs : signs) {
-			signSet.add(bs.getChar());
-		}
-		return signSet;
+	static public Set <Character> getSigns() {
+		return signs.keySet();
 	}
 
-	public static void add(CompleteBS _bs) {
-		signs.add(_bs);
-	}
-
-	/**
-	 * BSを取得する
-	 * @param _ch 文字のchar
-	 * @return BS
-	 */
-	static public CompleteBS get(int _player, char _ch) {
-		for (CompleteBS bs: signs) {
-			if (bs.getPlayer() == _player && bs.getChar() == _ch) {
-				return new CompleteBS(bs);
-			}
-		}
-		return new CompleteBS(signs.get(' ') );
+	public static void add(ChainSign _sign) {
+		signs.put(_sign.getSC(), _sign);
 	}
 
 	/**
@@ -70,13 +61,8 @@ public class SignData {
 	 * @param _ch 文字のchar
 	 * @return SN
 	 */
-	static public int [] getSN(char _ch) {
-		for (CompleteBS bs : signs) {
-			if (bs.getChar() == _ch) {
-				return bs.getNums();
-			}
-		}
-		return signs.get(' ').getNums();
+	static public SignNum getSN(char _ch) {
+		return signs.get(_ch).getSN();
 	}
 
 	/**
@@ -84,13 +70,8 @@ public class SignData {
 	 * @param _ch 文字のchar
 	 * @return PS
 	 */
-	static public int getPS(char _ch) {
-		for (CompleteBS bs : signs) {
-			if (bs.getChar() == _ch) {
-				return bs.getPS();
-			}
-		}
-		return signs.get(' ').getPS();
+	static public SignPS getSPS(char _ch) {
+		return signs.get(_ch).getSPS();
 	}
 
 	/**
@@ -98,12 +79,7 @@ public class SignData {
 	 * @param _ch 文字のchar
 	 * @return SI
 	 */
-	static public BufferedImage getSI(int _player, char _ch) {
-		for (CompleteBS bs : signs) {
-			if (bs.getChar() == _ch && bs.getPlayer() == _player) {
-				return bs.getImage();
-			}
-		}
-		return signs.get(' ').getImage();
+	static public SignImage getSI(CardColor color, char _ch) {
+		return signs.get(_ch).getSI(color);
 	}
 }

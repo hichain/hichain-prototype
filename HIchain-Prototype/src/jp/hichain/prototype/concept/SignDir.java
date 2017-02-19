@@ -14,7 +14,7 @@ public enum SignDir {
 	SOUTH(0, 0, 1, 0),
 	WEST(0, 0, 0, 1);
 
-	private SignDir left, right, opposite;
+	private SignDir left, right;
 	private DirComp components;
 
 	private SignDir(int north, int east, int south, int west) {
@@ -35,14 +35,12 @@ public enum SignDir {
 	 * @param relative 相対方角
 	 * @return SignDir
 	 */
-	public SignDir getRelative(Direction.Relative dir) {
+	public SignDir getRelative(Direction.Relation dir) {
 		switch (dir) {
 		case LEFT:
 			return left;
 		case RIGHT:
 			return right;
-		case OPPOSITE:
-			return opposite;
 		}
 		return null;
 	}
@@ -63,9 +61,8 @@ public enum SignDir {
 	}
 
 	private void setRelative() {
-		left = getByComp( components.getRelative(Direction.Relative.LEFT) );
-		right = getByComp( components.getRelative(Direction.Relative.RIGHT) );
-		opposite = getByComp( components.getRelative(Direction.Relative.OPPOSITE) );
+		left = getByComp( components.getRelative(Direction.Relation.LEFT) );
+		right = getByComp( components.getRelative(Direction.Relation.RIGHT) );
 	}
 
 	private static SignDir getByComp(DirComp comp) {

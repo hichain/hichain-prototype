@@ -32,8 +32,11 @@ public class SignPS {
 		return map.get(type).map;
 	}
 
-	public void set(PS.Type type, Direction dir) {
-		map.get(type).add(dir);
+	public void add(Direction dir) {
+		EnumSet<PS.Type> set = PS.getType(dir);
+		for (PS.Type type : set) {
+			map.get(type).add(dir);
+		}
 	}
 
 	public void rotate(Direction.Relation rel) {

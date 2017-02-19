@@ -1,5 +1,7 @@
 package jp.hichain.prototype.concept;
 
+import java.util.EnumSet;
+
 /**
  * 点・辺データ (Points/Sides)
  * 16方向
@@ -28,5 +30,23 @@ public class PS {
 		POINT_POINT,	//点と点で接する
 		SIDE_SIDE;	//辺と辺で接する
 
+	}
+
+	public static EnumSet<Type> getType(Direction dir) {
+		EnumSet<Type> set = EnumSet.noneOf(Type.class);
+		int denom = dir.getDenominator();
+		switch (denom) {
+		case 4:
+			set.add(Type.POINT);
+			break;
+		case 8:
+			set.add(Type.POINT);
+			set.add(Type.CORNER);
+			break;
+		case 16:
+			set.add(Type.SIDE);
+			break;
+		}
+		return set;
 	}
 }

@@ -5,74 +5,87 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 
 import jp.hichain.prototype.algorithm.Judge;
-import jp.hichain.prototype.basic.CompleteBS;
+import jp.hichain.prototype.basic.ChainSign;
 import jp.hichain.prototype.basic.Move;
+import jp.hichain.prototype.basic.Player;
+import jp.hichain.prototype.basic.SignImage;
 import jp.hichain.prototype.basic.SignNum;
 import jp.hichain.prototype.basic.SignPS;
-import jp.hichain.prototype.concept.AroundDir;
+import jp.hichain.prototype.concept.CardColor;
+import jp.hichain.prototype.concept.Direction;
 import jp.hichain.prototype.concept.PS;
-import jp.hichain.prototype.concept.SignDir;
 
 public class Main {
 
-	public static final String SIGNDATAPATH = ".\\data\\SignData.csv";	//文字データのパス
-	public static final String [] SIGNIMAGEPATH = {	//SIのパス (色の数分)
-			".\\data\\cards\\D",
-			".\\data\\cards\\R"
+	//文字データのパス
+	public static final String SIGNDATAPATH = ".\\data\\SignData.csv";
+	//SIのパス (色別)
+	public static final Map<CardColor, String> SIGNIMAGEPATH = new HashMap<CardColor, String>() {{
+		put(CardColor.BLACK, ".\\data\\cards\\D");
+		put(CardColor.RED, ".\\data\\cards\\R");
+	}};
+	//読み込む文字
+	public static char [] LOADINGSIGNS = {
+		'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '*'
 	};
-	public static char [][] fieldsigns = {	//場の文字 (プレイヤー別)
-		{
-			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '*'
-		},
-		{
-			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '*'
-		}
-	};
+	public static Map<String, Player> players;
 
 	public static void main(String[] args) {
-		testSign();
+		init();
+		createPlayers();
 		testJudge();
 	}
 
-	private static void testAroundDir() {
-		AroundDir rootDir = AroundDir.NORTH;
-		AroundDir [] dirs = rootDir.getRoute(AroundDir.SOUTH);
-		for (AroundDir dir : dirs) {
-			System.out.println(dir);
-		}
-	}
-
 	private static void testJudge() {
-		Move rootMove = new Move(1, 1);
-		rootMove.putSign( SignData.get(1, 'A') );
-		rootMove.rotate(0);
+		Move root = new Move(
+			players.get("1P"), SignData.get('H')
+		);
+		Move sign = new Move(
+			root, Direction.SOUTH
+		);
+		//rootの下にsignがある
 
-		Move move = new Move(rootMove, 2);
-		CompleteBS holdingBS = new CompleteBS( SignData.get(2, 'O') );
+		System.out.println(root.getAround(Direction.SOUTH));
 
-		System.out.println( "rootPS: " + Integer.toBinaryString(rootMove.getPS()) );
-		System.out.println( "result: " + Judge.canPut(move, holdingBS) );
+		ChainSign holdingSign = SignData.get('I');
+
+		PS.Contact result = Judge.getContact(
+			players.get("2P"), holdingSign, sign
+		);
+
+		System.out.println(result);
 	}
 
-	private static void testSign() {
-		File signdataFile = new File(SIGNDATAPATH);
-		File [] signimageFile = new File [SIGNIMAGEPATH.length];
-		for (int i = 0; i < SIGNIMAGEPATH.length; i++) {
-			signimageFile[i] = new File(SIGNIMAGEPATH[i]);
-		}
-		Set <Character> signSet = getSignSet(fieldsigns);
-		signSet.add(' ');
-		loadSignData( signdataFile, signimageFile, signSet );
+	private static void createPlayers() {
+		players = new HashMap<String, Player>() {{
+			put("1P", new Player("1P", CardColor.BLACK));
+			put("2P", new Player("2P", CardColor.RED));
+		}};
+	}
 
-		CompleteBS bs = SignData.get(1, 'A');
-		bs.resize(200);
+	private static void init() {
+		File signdataFile = new File(SIGNDATAPATH);
+		Map<CardColor, File> signImageFiles = new HashMap<>();
+		for (Map.Entry<CardColor, String> entry : SIGNIMAGEPATH.entrySet()) {
+			signImageFiles.put(
+				entry.getKey(), new File( entry.getValue() )
+			);
+		}
+		Set <Character> signSet = getSignSet(LOADINGSIGNS);
+		signSet.add(' ');
+
+		loadSignData( signdataFile, signImageFiles, signSet );
+/*
+		ChainSign sign = SignData.get('A');
+		sign.resize(0.8);
 
 		SIPanel panel = new SIPanel(bs);
 		JFrame frame = new JFrame();
@@ -81,14 +94,13 @@ public class Main {
 		frame.setSize(520, 540);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+*/
 	}
 
-	private static Set <Character> getSignSet(char [][] _signs) {
+	private static Set <Character> getSignSet(char [] _signs) {
 		Set <Character> signSet = new HashSet<Character>();
-		for (char [] chs : _signs) {
-			for (char ch : chs) {
-				signSet.add(ch);
-			}
+		for (char ch : _signs) {
+			signSet.add(ch);
 		}
 		return signSet;
 	}
@@ -99,37 +111,37 @@ public class Main {
 	 * @param _imagePath SIのパス (色の数分)
 	 * @param _signs ロードする文字
 	 */
-	private static void loadSignData(File _dataPath, File [] _imagePath, Set <Character> _signs) {
+	private static void loadSignData(File _dataPath, Map<CardColor, File> _imagePath, Set <Character> _signs) {
 		System.out.println("Loading SignData: ");
-		int players = _imagePath.length;	//プレイヤー数
 
 		BufferedReader brData = null;
 		try {
 			brData = new BufferedReader( new FileReader(_dataPath) );
 
-			SignDir [] dirsHeader = new SignDir[4];
-			PS [] psHeader = new PS [16];
+			Direction [] dirsHeader = new Direction[4];
+			Direction [] psHeader = new Direction[16];
 
 			String line = brData.readLine();
 			line = brData.readLine();
 			String [] header = line.split(",", 0);
 			for (int i = 0; i < dirsHeader.length; i++) {
-				dirsHeader[i] = SignDir.getEnum(header[i+1]);
+				dirsHeader[i] = Direction.valueOf(header[i+1]);
 			}
 			for (int i = 0; i < psHeader.length; i++) {
-				psHeader[i] = PS.getEnum(header[i+5]);
+				psHeader[i] = Direction.valueOf(header[i+5]);
 			}
 
 			while ( (line = brData.readLine()) != null) {
 				SignNum signNum = new SignNum();
 				SignPS signPS = new SignPS();
+				Map<CardColor, SignImage> signImages = new HashMap<>();
 
 				String [] data = line.split(",", 0); // 行をカンマ区切りで配列に変換
 
 				//文字データの分解
-				char sc = data[0].toCharArray()[0];	//文字
+				char signChar = data[0].toCharArray()[0];	//文字
 				//読み込む文字のリストになかったら次
-				if (!_signs.contains(sc)) {
+				if (!_signs.contains(signChar)) {
 					continue;
 				}
 				//SNを代入
@@ -138,23 +150,23 @@ public class Main {
 				}
 				//SignPSを代入
 				for (int i = 0; i < 16; i++) {
-					if (Integer.parseInt(data[i+5]) == 1) {						
+					if (Integer.parseInt(data[i+5]) == 1) {
 						signPS.add(psHeader[i]);
 					}
 				}
 
-				char fullwidthCh = getFullWidthChar(sc); //全角文字
+				char fullwidthCh = getFullWidthChar(signChar); //全角文字
 
 				boolean success = true;	//画像の読み込みに成功したか
-				BufferedImage [] images = new BufferedImage [players]; //SI
 
 				//画像をプレイヤー数分読み込む
-				for (int j = 0; j < players; j++) {
-					File imageFile = new File(_imagePath[j].getPath() + "\\" + fullwidthCh + ".png");
+				for (Map.Entry<CardColor, File> entry : _imagePath.entrySet()) {
+					File imageFile = new File(entry.getValue().getPath() + "\\" + fullwidthCh + ".png");
 					try {
-						images[j] = ImageIO.read( imageFile );
+						BufferedImage image = ImageIO.read( imageFile );
+						signImages.put(entry.getKey(), new SignImage(image) );
 					} catch (IOException | IllegalArgumentException  e) {
-						System.out.println("'" + sc + "' Image was not found!");
+						System.out.println("'" + signChar + "' Image was not found!");
 						success = false;
 						break;
 					}
@@ -165,15 +177,13 @@ public class Main {
 				}
 
 				//SignDataへ文字データを追加
-				for (int j = 0; j < players; j++) {
-					SignData.add(j+1, ch, nums, ps, images[j]);
-				}
+				SignData.add( new ChainSign(signChar, signPS, signNum, signImages) );
 
-				System.out.println( "'" + ch  + "' {SN:(" + data[1] + "," + data[2] + "," + data[3] + "," + data[4] + ") PS:" + data[5] + "}" );
+				System.out.print("'" + signChar + "' ");
 			}
 
 			brData.close();
-			System.out.println("SignData Loaded");
+			System.out.println("\nSignData Loaded");
 		} catch (IOException e) {
 			System.out.println("Wrong Path of SignData");
 		}
