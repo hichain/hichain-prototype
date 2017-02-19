@@ -1,11 +1,10 @@
 package jp.hichain.prototype.basic;
 
 import jp.hichain.prototype.concept.Direction;
-import jp.hichain.prototype.concept.SignDir;
 
 public class ChainSign {
 	private char character;
-	private SignDir direction;
+	private Direction direction;
 	private SignPS ps;
 	private SignNum number;
 	private SignImage image;
@@ -18,7 +17,7 @@ public class ChainSign {
 	 * @param _num Sign Number (SN)
 	 * @param _image Sign Image (SI)
 	 */
-	public ChainSign(char _ch, SignDir _dir, SignPS _ps, SignNum _num, SignImage _image) {
+	public ChainSign(char _ch, Direction _dir, SignPS _ps, SignNum _num, SignImage _image) {
 		character = _ch;
 		direction = _dir;
 		ps = _ps;
@@ -26,8 +25,8 @@ public class ChainSign {
 		image = _image;
 	}
 
-	public void rotate(Direction.Relative _dir) {
-		direction = direction.getRelative(_dir);
+	public void rotate(Direction.Relation _dir) {
+		direction = direction.getRelation(_dir);
 		ps.rotate(_dir);
 		number.rotate(_dir);
 		image.rotate(_dir);
@@ -45,7 +44,7 @@ public class ChainSign {
 	 * SDを返す
 	 * @return SD
 	 */
-	public SignDir getSD() {
+	public Direction getSD() {
 		return direction;
 	}
 

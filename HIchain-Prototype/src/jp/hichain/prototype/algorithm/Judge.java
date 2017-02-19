@@ -1,14 +1,13 @@
 package jp.hichain.prototype.algorithm;
 
-import java.util.List;
-
 import jp.hichain.prototype.basic.ChainSign;
 import jp.hichain.prototype.basic.Player;
 import jp.hichain.prototype.basic.RRChainSign;
 import jp.hichain.prototype.basic.SignPS;
-import jp.hichain.prototype.concept.AroundDir;
-import jp.hichain.prototype.concept.Direction.Relative;
+import jp.hichain.prototype.concept.Direction;
+import jp.hichain.prototype.concept.Direction.Relation;
 import jp.hichain.prototype.concept.PS;
+import jp.hichain.prototype.concept.PS.Contact;
 import jp.hichain.prototype.concept.PS.Type;
 
 public class Judge {
@@ -16,92 +15,67 @@ public class Judge {
 	public static PS.Contact getContact(Player player, ChainSign holding, RRChainSign target) {
 		SignPS holdingSPS = holding.getSPS();
 
-		//辺と辺の判定
-		if ( getSideJudge(holdingSPS, target) ) {
-			return PS.Contact.SIDE_SIDE;
+		//辺判定
+		if (getSideJudge(holdingSPS, target)) {
+			return Contact.SIDE_SIDE;
 		}
-		//点と点の判定
-		if ( getPointJudge(player, holdingSPS, target) ) {
-			return PS.Contact.POINT_POINT;
+		//点判定
+		if (getPointJudge(player, holdingSPS, target)) {
+			return Contact.POINT_POINT;
 		}
-		//角と角の判定
-		if ( getCornerJudge(player, holdingSPS, target) ) {
-			return PS.Contact.POINT_POINT;
+		//角判定
+		if (getCornerJudge(player, holdingSPS, target)) {
+			return Contact.POINT_POINT;
 		}
-		return PS.Contact.NONE;
+
+		return Contact.NONE;
 	}
 
 	private static boolean getSideJudge(SignPS holdingSPS, RRChainSign target) {
-		SignPS signPS = SignPS.getOnlyType(holdingSPS, Type.SIDE);
-
-		for (PS ps : signPS.getSetPS()) {
-			RRChainSign around = (RRChainSign)target.getAround( AroundDir.get( ps.getComp() ) );
-			if (around == null) {
+		for (Direction direction : holdingSPS.get(Type.SIDE)) {
+			RRChainSign aroundSign = (RRChainSign)target.getAround( direction.getSquareSide() );
+			if (aroundSign == null) {
 				continue;
 			}
-			boolean existAntiPS = around.getSign().getSPS().get( ps.getRelative(Relative.OPPOSITE) );
-			if (existAntiPS) {
+			SignPS antiSPS = aroundSign.getSign().getSPS();
+			Relation rightleft = direction.getSquareSidePos();
+			boolean flag = antiSPS.exist( Type.SIDE, direction.getRelation(rightleft, 3) );
+			if (flag) {
 				return true;
 			}
 		}
-
 		return false;
 	}
 
 	private static boolean getPointJudge(Player player, SignPS holdingSPS, RRChainSign target) {
-		SignPS signPS = SignPS.getOnlyType(holdingSPS, Type.POINT);
-
-		for (PS ps : signPS.getSetPS()) {
-			RRChainSign around = (RRChainSign)target.getAround( AroundDir.get( ps.getComp() ) );
-			if (around == null || around.getPlayer() == player) {
+		for (Direction direction : holdingSPS.get(Type.POINT)) {
+			RRChainSign aroundSign = (RRChainSign)target.getAround( direction );
+			if (aroundSign == null || player == aroundSign.getPlayer()) {
 				continue;
 			}
-			boolean existAntiPS = around.getSign().getSPS().get( ps.getRelative(Relative.OPPOSITE) );
-			if (existAntiPS) {
+			SignPS antiSPS = aroundSign.getSign().getSPS();
+			Relation rightleft = direction.getSquareSidePos();
+			int times = (direction.getDenominator() == 8) ? 1 : 2;
+			boolean flag = antiSPS.exist( Type.POINT, direction.getRelation(rightleft, times) );
+			if (flag) {
 				return true;
 			}
 		}
-
 		return false;
 	}
 
 	private static boolean getCornerJudge(Player player, SignPS holdingSPS, RRChainSign target) {
-		SignPS signPS = SignPS.getOnlyType(holdingSPS, Type.CORNER);
-
-		for (PS ps : signPS.getSetPS()) {
-			boolean [] existAntiPS = new boolean [3];
-			RRChainSign [] arounds = new RRChainSign [3];
-
-			List<AroundDir> dirs = AroundDir.breakup( AroundDir.get( ps.getComp() ) );
-			dirs.add(0, AroundDir.get( ps.getComp() ));
-
-			for (int i = 0; i < 3; i++) {
-				arounds[i] = (RRChainSign)target.getAround( dirs.get(i) );
+		for (Direction direction : holdingSPS.get(Type.CORNER)) {
+			RRChainSign aroundSign = (RRChainSign)target.getAround(direction);
+			if (aroundSign == null || player == aroundSign.getPlayer()) {
+				continue;
 			}
-
-			Relative [] relatives = new Relative [3];
-			relatives[0] = Relative.OPPOSITE;
-
-			AroundDir left = AroundDir.get( dirs.get(1).getComp().getRelative(Relative.LEFT) );
-			if (dirs.get(2) == left) {
-				relatives[1] = Relative.LEFT;
-				relatives[2] = Relative.RIGHT;
-			} else {
-				relatives[1] = Relative.RIGHT;
-				relatives[2] = Relative.LEFT;
-			}
-
-			for (int i = 0; i < 3; i++) {
-				if (arounds[i] == null || arounds[i].getPlayer() == player) {
-					continue;
-				}
-				existAntiPS[i] = arounds[i].getSign().getSPS().get( ps.getRelative(relatives[i]) );
-				if (existAntiPS[i]) {
-					return true;
-				}
+			SignPS antiSPS = aroundSign.getSign().getSPS();
+			boolean flag = antiSPS.exist( Type.CORNER, direction.getRelation(Relation.LEFT, 2) );
+			if (flag) {
+				return true;
 			}
 		}
-
 		return false;
 	}
 }

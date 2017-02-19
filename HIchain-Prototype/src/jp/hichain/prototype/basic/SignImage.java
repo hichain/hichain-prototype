@@ -19,7 +19,7 @@ public class SignImage {
 		imageScale = scale;
 	}
 
-	public void rotate(Direction.Relative dir) {
+	public void rotate(Direction.Relation dir) {
 		int plusminus = 0;
 		switch (dir) {
 		case LEFT:
@@ -27,9 +27,6 @@ public class SignImage {
 			break;
 		case RIGHT:
 			plusminus = -1;
-			break;
-		case OPPOSITE:
-			plusminus = 2;
 			break;
 		default:
 			break;

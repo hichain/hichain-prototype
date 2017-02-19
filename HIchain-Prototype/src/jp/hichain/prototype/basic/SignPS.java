@@ -1,10 +1,11 @@
 package jp.hichain.prototype.basic;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.EnumMap;
+import java.util.EnumSet;
 
 import jp.hichain.prototype.concept.Direction;
 import jp.hichain.prototype.concept.PS;
+import jp.hichain.prototype.concept.PS.Type;
 
 /**
  * 文字のPS
@@ -13,73 +14,59 @@ import jp.hichain.prototype.concept.PS;
  *
  */
 public class SignPS {
-	//データ構造によらないenum"PS"を用いた新構造 (セット型SignPS)
-	Set <PS> psSet;
+	private EnumMap<PS.Type, Part> map;
 
-	/**
-	 * セット型から生成
-	 * @param _psSet セット型SignPS
-	 */
 	public SignPS() {
-		psSet = new HashSet<PS>();
+		map = new EnumMap<PS.Type, Part>(PS.Type.class) {{
+			put(PS.Type.POINT, new Part());
+			put(PS.Type.SIDE, new Part());
+			put(PS.Type.CORNER, new Part());
+		}};
 	}
 
-	public SignPS(Set <PS> _psSet) {
-		psSet = _psSet;
+	public boolean exist(PS.Type type, Direction dir) {
+		return map.get(type).get(dir);
 	}
 
-	/**
-	 * 指定のPSを返す
-	 * @param _ps PS
-	 * @return ビットが1ならtrue, 0ならfalse
-	 */
-	public boolean get(PS ps) {
-		return psSet.contains(ps);
+	public EnumSet<Direction> get(PS.Type type) {
+		return map.get(type).map;
 	}
 
-	public void add(PS ps) {
-		psSet.add(ps);
+	public void set(PS.Type type, Direction dir) {
+		map.get(type).add(dir);
 	}
 
-	public void remove(PS ps) {
-		psSet.remove(ps);
-	}
-
-	public void rotate(Direction.Relative dir) {
-		Set <PS> newSet = new HashSet<PS>(psSet);
-		psSet.clear();
-		for (PS ps : newSet) {
-			psSet.add(ps.getRelative(dir));
-		}
-	}
-
-	/**
-	 * 指定のタイプだけ抽出したSignPSを返す
-	 * @param _signPS 元SignPS
-	 * @param _type PSのタイプ
-	 * @return SignPS
-	 */
-	public static SignPS getOnlyType(SignPS _signPS, PS.Type _type) {
-		SignPS signPS = new SignPS();
-		for (PS ps : _signPS.getSetPS()) {
-			if (ps.getType() == _type) {
-				signPS.add(ps);
+	public void rotate(Direction.Relation rel) {
+		for (PS.Type type : map.keySet()) {
+			int times;
+			if (type == Type.POINT || type == Type.CORNER) {
+				times = 1;
+			} else {
+				times = 2;
 			}
+
+			Part part = new Part();
+			for (Direction dir : part.map) {
+				part.add( dir.getRelation(rel, times) );
+			}
+
+			map.put(type, part);
 		}
-		return signPS;
 	}
 
-	public Set<PS> getSetPS() {
-		return psSet;
-	}
+	private class Part {
+		private EnumSet<Direction> map;
 
-	/**
-	 * 指定のPSの相対方向のビットを返す
-	 * @param _kind PS
-	 * @param _relative 相対方向
-	 * @return ビットが1ならtrue, 0ならfalse
-	 */
-	public boolean contains(PS _kind, Direction.Relative _relative) {
-		return psSet.contains(_kind.getRelative(_relative));
+		public Part() {
+			map = EnumSet.noneOf(Direction.class);
+		}
+
+		public boolean get(Direction dir) {
+			return map.contains(dir);
+		}
+
+		public void add(Direction dir) {
+			map.add(dir);
+		}
 	}
 }

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import jp.hichain.prototype.concept.Direction;
-import jp.hichain.prototype.concept.SignDir;
 
 /**
  * 文字番号
@@ -13,28 +12,28 @@ import jp.hichain.prototype.concept.SignDir;
  *
  */
 public class SignNum {
-	Map <SignDir, Character> snMap;
+	Map <Direction, Character> snMap;
 
 	public SignNum() {
-		snMap = new HashMap<SignDir, Character>(4);
+		snMap = new HashMap<Direction, Character>(4);
 	}
 
-	public SignNum(Map <SignDir, Character> map) {
+	public SignNum(Map <Direction, Character> map) {
 		snMap = map;
 	}
 
-	public void add(SignDir dir, char sc) {
+	public void add(Direction dir, char sc) {
 		snMap.put(dir, sc);
 	}
 
-	public char get(SignDir dir) {
+	public char get(Direction dir) {
 		return snMap.get(dir);
 	}
 
-	public void rotate(Direction.Relative _dir) {
-		Map <SignDir, Character> newMap = new HashMap<SignDir, Character>(snMap);
-		for (Map.Entry<SignDir, Character> e : snMap.entrySet()) {
-			newMap.put(e.getKey().getRelative(_dir), e.getValue());
+	public void rotate(Direction.Relation _dir) {
+		Map <Direction, Character> newMap = new HashMap<Direction, Character>(snMap);
+		for (Map.Entry<Direction, Character> e : snMap.entrySet()) {
+			newMap.put(e.getKey().getRelation(_dir), e.getValue());
 		}
 	}
 }
