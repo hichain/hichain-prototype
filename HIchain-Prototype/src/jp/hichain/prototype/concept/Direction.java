@@ -38,6 +38,7 @@ public enum Direction {
 
 	private Direction(int denom) {
 		denominator = denom;
+		squareSide = this;
 	}
 
 	private Direction(int denom, Direction dir, Relation rel) {

@@ -18,6 +18,7 @@ public class Square {
 	 * ルートマス
 	 */
 	public Square() {
+		around = new EnumMap<Direction, Square>(Direction.class);
 	}
 
 	/**
@@ -28,7 +29,8 @@ public class Square {
 	public Square(Square _source, Direction _dir) {
 		source = _source;
 		around = new EnumMap<Direction, Square>(Direction.class);
-		setAroundAll(_dir.getRelation(Relation.LEFT, 2), _source);
+		_source.addAround(_dir, this);
+		addAround(_dir.getRelation(Relation.LEFT, 2), _source);
 	}
 
 	/**

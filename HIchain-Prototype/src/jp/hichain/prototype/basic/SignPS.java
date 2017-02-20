@@ -57,6 +57,19 @@ public class SignPS {
 		}
 	}
 
+	@Override
+	public String toString() {
+		String string = "[POINTS] ";
+		for (Direction direction : get(Type.POINT)) {
+			string += direction + " ";
+		}
+		string += "\n[SIDES] ";
+		for (Direction direction : get(Type.SIDE)) {
+			string += direction + " ";
+		}
+		return string;
+	}
+
 	private class Part {
 		private EnumSet<Direction> map;
 

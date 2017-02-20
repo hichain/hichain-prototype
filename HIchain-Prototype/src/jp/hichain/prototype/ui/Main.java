@@ -41,27 +41,31 @@ public class Main {
 	public static void main(String[] args) {
 		init();
 		createPlayers();
-		testJudge();
+
+		long start = System.currentTimeMillis();
+		testJudge(Direction.SOUTH, "1P", 'X', "2P", 'H');
+		long end = System.currentTimeMillis();
+		System.out.println((end-start) + " ms");
 	}
 
-	private static void testJudge() {
+	private static void testJudge(final Direction root_target, final String rootPL, final char rootSC, final String holdingPL, final char holdingSC) {
 		Move root = new Move(
-			players.get("1P"), SignData.get('H')
+			players.get(rootPL), SignData.get(rootSC)
 		);
 		Move sign = new Move(
-			root, Direction.SOUTH
+			root, root_target
 		);
 		//rootの下にsignがある
 
-		System.out.println(root.getAround(Direction.SOUTH));
+		ChainSign holdingSign = SignData.get(holdingSC);
 
-		ChainSign holdingSign = SignData.get('I');
+		System.out.println("\nStart Judging...\n");
 
 		PS.Contact result = Judge.getContact(
-			players.get("2P"), holdingSign, sign
+			players.get(holdingPL), holdingSign, sign
 		);
 
-		System.out.println(result);
+		System.out.println("\nFinal Result: " + result + "\n");
 	}
 
 	private static void createPlayers() {
