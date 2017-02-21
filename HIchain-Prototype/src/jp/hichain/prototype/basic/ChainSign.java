@@ -3,11 +3,11 @@ package jp.hichain.prototype.basic;
 import java.util.Map;
 
 import jp.hichain.prototype.concept.CardColor;
-import jp.hichain.prototype.concept.Direction;
+import jp.hichain.prototype.concept.SignDir;
 
 public class ChainSign {
 	private char character;
-	private Direction direction;
+	private SignDir direction;
 	private SignPS ps;
 	private SignNum number;
 	private Map<CardColor, SignImage> images;
@@ -22,14 +22,14 @@ public class ChainSign {
 	 */
 	public ChainSign(char _ch, SignPS _ps, SignNum _num, Map<CardColor, SignImage> _images) {
 		character = _ch;
-		direction = Direction.NORTH;
+		direction = SignDir.NORTH;
 		ps = _ps;
 		number = _num;
 		images = _images;
 	}
 
-	public void rotate(Direction.Relation _dir) {
-		direction = direction.getRelation(_dir);
+	public void rotate(SignDir.Rotation _dir) {
+		direction = direction.get(_dir);
 		ps.rotate(_dir);
 		number.rotate(_dir);
 		for (SignImage signImage : images.values()) {
@@ -49,6 +49,14 @@ public class ChainSign {
 	 */
 	public char getSC() {
 		return character;
+	}
+
+	/**
+	 * SDを返す
+	 * @return SD
+	 */
+	public SignDir getSD() {
+		return direction;
 	}
 
 	/**

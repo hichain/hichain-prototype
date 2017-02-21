@@ -2,8 +2,8 @@ package jp.hichain.prototype.basic;
 
 import java.util.EnumMap;
 
+import jp.hichain.prototype.concept.AroundDir;
 import jp.hichain.prototype.concept.Direction;
-import jp.hichain.prototype.concept.Direction.Relation;
 
 /**
  * 相対マス
@@ -12,13 +12,13 @@ import jp.hichain.prototype.concept.Direction.Relation;
  */
 public class Square {
 	private Square source;
-	private EnumMap <Direction, Square> around;
+	private EnumMap <AroundDir, Square> around;
 
 	/**
 	 * ルートマス
 	 */
 	public Square() {
-		around = new EnumMap<Direction, Square>(Direction.class);
+		around = new EnumMap<>(AroundDir.class);
 	}
 
 	/**
@@ -26,11 +26,19 @@ public class Square {
 	 * @param _source ソースSquare
 	 * @param _dir  ソースからみた自身(this)のAroundDir
 	 */
-	public Square(Square _source, Direction _dir) {
+	public Square(Square _source, AroundDir _dir) {
 		source = _source;
-		around = new EnumMap<Direction, Square>(Direction.class);
+		around = new EnumMap<>(AroundDir.class);
 		_source.addAround(_dir, this);
-		addAround(_dir.getRelation(Relation.LEFT, 2), _source);
+		addAround(_dir.get(Direction.Relation.OPPOSITE), _source);
+	}
+
+	/**
+	 * ソースSquareを返す
+	 * @return Square
+	 */
+	public Square getSource() {
+		return source;
 	}
 
 	/**
@@ -38,7 +46,7 @@ public class Square {
 	 * @param _square Square
 	 * @param _dir 自身(this)からみた_squareの方向
 	 */
-	public void addAround(Direction _dir, Square _square) {
+	public void addAround(AroundDir _dir, Square _square) {
 		around.put(_dir, _square);
 	}
 
@@ -55,20 +63,7 @@ public class Square {
 	 * 周囲Squareを全て返す
 	 * @return 周囲Square Map
 	 */
-	public EnumMap <Direction, Square> getAroundAll() {
+	public EnumMap <AroundDir, Square> getAroundAll() {
 		return around;
-	}
-
-	/**
-	 * ソースSquareを返す
-	 * @return Square
-	 */
-	public Square getSource() {
-		return source;
-	}
-
-	private void setAroundAll(Direction _dir, Square _square) {
-		addAround(_dir, _square);
-
 	}
 }

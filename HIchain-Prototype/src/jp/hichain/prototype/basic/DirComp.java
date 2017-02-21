@@ -47,7 +47,7 @@ public class DirComp implements Cloneable {
 	public DirComp getRelative(Direction.Relation relative) {
 		Map <Direction, Integer> newMap = new HashMap<Direction, Integer>();
 		for (Map.Entry<Direction, Integer> entry : components.entrySet()) {
-			newMap.put(entry.getKey().getRelation(relative), entry.getValue());
+			newMap.put(entry.getKey().get(relative), entry.getValue());
 		}
 		return new DirComp(newMap);
 	}

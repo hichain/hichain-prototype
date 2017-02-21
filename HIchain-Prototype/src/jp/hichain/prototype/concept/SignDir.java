@@ -1,76 +1,50 @@
 package jp.hichain.prototype.concept;
 
-import jp.hichain.prototype.basic.DirComp;
+import java.util.EnumMap;
 
 /**
- * 文字の向き
- * 4方向
+ * 文字の向き (4方向)
  * @author NT
  *
  */
 public enum SignDir {
-	NORTH(1, 0, 0, 0),
-	EAST(0, 1, 0, 0),
-	SOUTH(0, 0, 1, 0),
-	WEST(0, 0, 0, 1);
+	NORTH(Direction.NORTH),
+	EAST(Direction.EAST),
+	SOUTH(Direction.SOUTH),
+	WEST(Direction.WEST);
 
-	private SignDir left, right;
-	private DirComp components;
-
-	private SignDir(int north, int east, int south, int west) {
-		components = new DirComp(north, east, south, west);
-		setRelative();
+	public enum Rotation {
+		LEFT,
+		RIGHT;
 	}
 
-	/**
-	 * 方角の成分を返す
-	 * @return DirComp
-	 */
-	public DirComp getComp() {
-		return components;
+	private Direction commonDir;
+	private EnumMap<Rotation, SignDir> rotations;
+
+	private SignDir(Direction direction) {
+		commonDir = direction;
 	}
 
-	/**
-	 * 相対方角を返す
-	 * @param relative 相対方角
-	 * @return SignDir
-	 */
-	public SignDir getRelative(Direction.Relation dir) {
-		switch (dir) {
-		case LEFT:
-			return left;
-		case RIGHT:
-			return right;
+	static {
+		set( new SignDir [] {
+			NORTH, EAST, SOUTH, WEST
+		});
+	}
+
+	public Direction getCommonDir() {
+		return commonDir;
+	}
+
+	public SignDir get(Rotation relation) {
+		return rotations.get(relation);
+	}
+
+	private static void set(SignDir [] dirs) {
+		for (int i = 0; i < dirs.length; i++) {
+			int l = (i == 0) ? dirs.length-1 : i-1;
+			int r = (i == dirs.length-1) ? 0 : i+1;
+			dirs[i].rotations.put( SignDir.Rotation.LEFT, dirs[l] );
+			dirs[i].rotations.put( SignDir.Rotation.RIGHT, dirs[r] );
 		}
-		return null;
-	}
-
-	/**
-	 * 文字列からそれに該当するenumを返す
-	 * @param str 文字列
-	 * @return SignDir
-	 */
-	public static SignDir getEnum(String str) {
-		SignDir [] dirs = SignDir.values();
-		for (SignDir signDir : dirs) {
-			if (str.equals(signDir.name())) {
-				return signDir;
-			}
-		}
-		return null;
-	}
-
-	private void setRelative() {
-		left = getByComp( components.getRelative(Direction.Relation.LEFT) );
-		right = getByComp( components.getRelative(Direction.Relation.RIGHT) );
-	}
-
-	private static SignDir getByComp(DirComp comp) {
-		for (SignDir dir : SignDir.values()) {
-			if (comp == dir.getComp()) {
-				return dir;
-			}
-		}
-		return null;
 	}
 }

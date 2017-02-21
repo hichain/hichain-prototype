@@ -3,7 +3,7 @@ package jp.hichain.prototype.basic;
 import java.util.HashMap;
 import java.util.Map;
 
-import jp.hichain.prototype.concept.Direction;
+import jp.hichain.prototype.concept.AroundDir;
 import jp.hichain.prototype.concept.SignDir;
 
 public class RRChainSign extends Square {
@@ -18,12 +18,12 @@ public class RRChainSign extends Square {
 		chainMap = new HashMap<>();
 	}
 
-	public RRChainSign(Square _source, Direction _dir) {
+	public RRChainSign(Square _source, AroundDir _dir) {
 		super(_source, _dir);
 		chainMap = new HashMap<>();
 	}
 
-	public RRChainSign(Square _source, Direction _dir, Player _player, ChainSign _sign) {
+	public RRChainSign(Square _source, AroundDir _dir, Player _player, ChainSign _sign) {
 		this(_source, _dir);
 		player = _player;
 		sign = _sign;
@@ -43,7 +43,7 @@ public class RRChainSign extends Square {
 	 * @param _aroundDir ArounDir
 	 * @param _signDir SignDir
 	 */
-	public void addChain(Chain _chain, Direction _aroundDir, SignDir _signDir) {
+	public void addChain(Chain _chain, AroundDir _aroundDir, SignDir _signDir) {
 		chainMap.put(new Directions(_aroundDir, _signDir), _chain);
 	}
 
@@ -77,7 +77,7 @@ public class RRChainSign extends Square {
 	 * @param _signDir SignDir
 	 * @return Chain
 	 */
-	public Chain getChain(Direction _aroundDir, SignDir _signDir) {
+	public Chain getChain(AroundDir _aroundDir, SignDir _signDir) {
 		return chainMap.get( new Directions(_aroundDir, _signDir) );
 	}
 
@@ -87,10 +87,10 @@ public class RRChainSign extends Square {
 	 *
 	 */
 	private class Directions {
-		private Direction aroundDir;
+		private AroundDir aroundDir;
 		private SignDir signDir;
 
-		public Directions(Direction _around, SignDir _sign) {
+		public Directions(AroundDir _around, SignDir _sign) {
 			aroundDir = _around;
 			signDir = _sign;
 		}

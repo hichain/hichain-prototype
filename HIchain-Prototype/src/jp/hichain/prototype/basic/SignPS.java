@@ -3,9 +3,9 @@ package jp.hichain.prototype.basic;
 import java.util.EnumMap;
 import java.util.EnumSet;
 
-import jp.hichain.prototype.concept.Direction;
 import jp.hichain.prototype.concept.PS;
 import jp.hichain.prototype.concept.PS.Type;
+import jp.hichain.prototype.concept.SignDir;
 
 /**
  * 文字のPS
@@ -24,33 +24,26 @@ public class SignPS {
 		}};
 	}
 
-	public boolean exist(PS.Type type, Direction dir) {
+	public boolean exist(PS.Type type, PS dir) {
 		return map.get(type).get(dir);
 	}
 
-	public EnumSet<Direction> get(PS.Type type) {
+	public EnumSet<PS> get(PS.Type type) {
 		return map.get(type).map;
 	}
 
-	public void add(Direction dir) {
-		EnumSet<PS.Type> set = PS.getType(dir);
+	public void add(PS dir) {
+		EnumSet<PS.Type> set = dir.getTypes();
 		for (PS.Type type : set) {
 			map.get(type).add(dir);
 		}
 	}
 
-	public void rotate(Direction.Relation rel) {
+	public void rotate(SignDir.Rotation rel) {
 		for (PS.Type type : map.keySet()) {
-			int times;
-			if (type == Type.POINT || type == Type.CORNER) {
-				times = 1;
-			} else {
-				times = 2;
-			}
-
 			Part part = new Part();
-			for (Direction dir : part.map) {
-				part.add( dir.getRelation(rel, times) );
+			for (PS dir : part.map) {
+				part.add( dir.get(rel) );
 			}
 
 			map.put(type, part);
@@ -60,28 +53,28 @@ public class SignPS {
 	@Override
 	public String toString() {
 		String string = "[POINTS] ";
-		for (Direction direction : get(Type.POINT)) {
+		for (PS direction : get(Type.POINT)) {
 			string += direction + " ";
 		}
 		string += "\n[SIDES] ";
-		for (Direction direction : get(Type.SIDE)) {
+		for (PS direction : get(Type.SIDE)) {
 			string += direction + " ";
 		}
 		return string;
 	}
 
 	private class Part {
-		private EnumSet<Direction> map;
+		private EnumSet<PS> map;
 
 		public Part() {
-			map = EnumSet.noneOf(Direction.class);
+			map = EnumSet.noneOf(PS.class);
 		}
 
-		public boolean get(Direction dir) {
+		public boolean get(PS dir) {
 			return map.contains(dir);
 		}
 
-		public void add(Direction dir) {
+		public void add(PS dir) {
 			map.add(dir);
 		}
 	}

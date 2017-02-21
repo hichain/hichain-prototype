@@ -19,9 +19,10 @@ import jp.hichain.prototype.basic.Player;
 import jp.hichain.prototype.basic.SignImage;
 import jp.hichain.prototype.basic.SignNum;
 import jp.hichain.prototype.basic.SignPS;
+import jp.hichain.prototype.concept.AroundDir;
 import jp.hichain.prototype.concept.CardColor;
-import jp.hichain.prototype.concept.Direction;
 import jp.hichain.prototype.concept.PS;
+import jp.hichain.prototype.concept.SignDir;
 
 public class Main {
 
@@ -43,12 +44,12 @@ public class Main {
 		createPlayers();
 
 		long start = System.currentTimeMillis();
-		testJudge(Direction.SOUTH, "1P", 'X', "2P", 'H');
+		testJudge(AroundDir.SOUTH, "1P", 'X', "2P", 'H');
 		long end = System.currentTimeMillis();
 		System.out.println((end-start) + " ms");
 	}
 
-	private static void testJudge(final Direction root_target, final String rootPL, final char rootSC, final String holdingPL, final char holdingSC) {
+	private static void testJudge(final AroundDir root_target, final String rootPL, final char rootSC, final String holdingPL, final char holdingSC) {
 		Move root = new Move(
 			players.get(rootPL), SignData.get(rootSC)
 		);
@@ -122,17 +123,17 @@ public class Main {
 		try {
 			brData = new BufferedReader( new FileReader(_dataPath) );
 
-			Direction [] dirsHeader = new Direction[4];
-			Direction [] psHeader = new Direction[16];
+			SignDir [] dirsHeader = new SignDir[4];
+			PS [] psHeader = new PS[16];
 
 			String line = brData.readLine();
 			line = brData.readLine();
 			String [] header = line.split(",", 0);
 			for (int i = 0; i < dirsHeader.length; i++) {
-				dirsHeader[i] = Direction.valueOf(header[i+1]);
+				dirsHeader[i] = SignDir.valueOf(header[i+1]);
 			}
 			for (int i = 0; i < psHeader.length; i++) {
-				psHeader[i] = Direction.valueOf(header[i+5]);
+				psHeader[i] = PS.valueOf(header[i+5]);
 			}
 
 			while ( (line = brData.readLine()) != null) {

@@ -36,7 +36,7 @@ public class Judge {
 	}
 
 	private static boolean getSideJudge(SignPS holdingSPS, RRChainSign target) {
-		for (Direction direction : holdingSPS.get(Type.SIDE)) {
+		for (PS direction : holdingSPS.get(Type.SIDE)) {
 			RRChainSign aroundSign = (RRChainSign)target.getAround( direction.getSquareSide() );
 			if (aroundSign == null) {
 				continue;

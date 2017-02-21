@@ -3,7 +3,7 @@ package jp.hichain.prototype.basic;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.hichain.prototype.concept.Direction;
+import jp.hichain.prototype.concept.AroundDir;
 
 public class Move extends RRChainSign {
 	private Move parent;			//親の手
@@ -17,17 +17,17 @@ public class Move extends RRChainSign {
 		children = new ArrayList<>();
 	}
 
-	public Move(Move _source, Direction _dir) {
+	public Move(Move _source, AroundDir _dir) {
 		super(_source, _dir);
 		children = new ArrayList<>();
 	}
 
-	public Move(Move _source, Direction _dir, Player player, ChainSign _sign) {
+	public Move(Move _source, AroundDir _dir, Player player, ChainSign _sign) {
 		super(_source, _dir, player, _sign);
 		children = new ArrayList<>();
 	}
 
-	public Move(Move _source, Direction _dir, Player player, ChainSign _sign, Move _parent) {
+	public Move(Move _source, AroundDir _dir, Player player, ChainSign _sign, Move _parent) {
 		this(_source, _dir, player, _sign);
 		parent = _parent;
 	}
