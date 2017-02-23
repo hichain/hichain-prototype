@@ -4,6 +4,7 @@ package jp.hichain.prototype.basic;
 import java.util.HashMap;
 import java.util.Map;
 
+import jp.hichain.prototype.concept.Direction;
 import jp.hichain.prototype.concept.SignDir;
 
 /**
@@ -30,7 +31,7 @@ public class SignNum {
 		return snMap.get(dir);
 	}
 
-	public void rotate(SignDir.Rotation _dir) {
+	public void rotate(Direction.Relation _dir) {
 		Map <SignDir, Character> newMap = new HashMap<>(snMap);
 		for (Map.Entry<SignDir, Character> e : snMap.entrySet()) {
 			newMap.put(e.getKey().get(_dir), e.getValue());

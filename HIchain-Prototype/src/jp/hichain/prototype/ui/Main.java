@@ -44,7 +44,7 @@ public class Main {
 		createPlayers();
 
 		long start = System.currentTimeMillis();
-		testJudge(AroundDir.SOUTH, "1P", 'X', "2P", 'H');
+		testJudge(AroundDir.NORTH, "1P", 'H', "2P", 'I');
 		long end = System.currentTimeMillis();
 		System.out.println((end-start) + " ms");
 	}

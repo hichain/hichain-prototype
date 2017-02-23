@@ -3,6 +3,7 @@ package jp.hichain.prototype.basic;
 import java.util.Map;
 
 import jp.hichain.prototype.concept.CardColor;
+import jp.hichain.prototype.concept.Direction;
 import jp.hichain.prototype.concept.SignDir;
 
 public class ChainSign {
@@ -28,7 +29,7 @@ public class ChainSign {
 		images = _images;
 	}
 
-	public void rotate(SignDir.Rotation _dir) {
+	public void rotate(Direction.Relation _dir) {
 		direction = direction.get(_dir);
 		ps.rotate(_dir);
 		number.rotate(_dir);

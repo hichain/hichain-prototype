@@ -2,10 +2,12 @@ package jp.hichain.prototype.basic;
 
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.Map;
+import java.util.Set;
 
+import jp.hichain.prototype.concept.AroundDir;
 import jp.hichain.prototype.concept.Direction;
 import jp.hichain.prototype.concept.PS;
-import jp.hichain.prototype.concept.SignDir;
 
 /**
  * 文字のPS
@@ -20,9 +22,9 @@ public class SignPS {
 	public SignPS() {
 		oldSet = EnumSet.noneOf(PS.class);
 		typeparts = new EnumMap<PS.Type, TypePart>(PS.Type.class) {{
-			put(PS.Type.SIDE, new TypePart(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST));
-			put(PS.Type.POINT, new TypePart(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST));
-			put(PS.Type.CORNER, new TypePart(Direction.NORTHEAST, Direction.SOUTHEAST, Direction.SOUTHWEST, Direction.NORTHWEST));
+			put(PS.Type.SIDE, new TypePart(AroundDir.NORTH, AroundDir.EAST, AroundDir.SOUTH, AroundDir.WEST));
+			put(PS.Type.POINT, new TypePart(AroundDir.NORTH, AroundDir.EAST, AroundDir.SOUTH, AroundDir.WEST));
+			put(PS.Type.CORNER, new TypePart(AroundDir.NORTHEAST, AroundDir.SOUTHEAST, AroundDir.SOUTHWEST, AroundDir.NORTHWEST));
 		}};
 	}
 
@@ -33,15 +35,26 @@ public class SignPS {
 
 	public void add(PS ps) {
 		oldSet.add(ps);
-		for ( Direction squareside : ps.getSquareSides() ) {
+		for ( AroundDir squareside : ps.getSquareSides() ) {
 			PS.Block block = ps.getBlock(squareside);
 			PS.Type type = ps.getType(squareside);
 			typeparts.get(type).get(squareside).add(block);
+			//System.out.println("[" + squareside + "] add " + block + " (" + type + ")");
 		}
 	}
 
-	public void rotate(SignDir.Rotation rel) {
+	public void rotate(Direction.Relation rel) {
+		EnumSet<PS> newSet = EnumSet.copyOf(oldSet);
+		for (PS ps : oldSet) {
+			newSet.add(ps.get(rel));
+		}
 
+		for (Map.Entry<PS.Type, TypePart> entry : typeparts.entrySet()) {
+			TypePart typePart = entry.getValue();
+			for (AroundDir dir : typePart.keySet()) {
+				typePart.put(dir, typePart.get( dir.get(rel) ));
+			}
+		}
 	}
 
 	@Override
@@ -54,10 +67,10 @@ public class SignPS {
 	}
 
 	public class TypePart {
-		private EnumMap<Direction, Block> blocks;
+		private EnumMap<AroundDir, Block> blocks;
 
-		private TypePart(Direction dir1, Direction dir2, Direction dir3, Direction dir4) {
-			this.blocks = new EnumMap<Direction, Block>(Direction.class) {{
+		private TypePart(AroundDir dir1, AroundDir dir2, AroundDir dir3, AroundDir dir4) {
+			this.blocks = new EnumMap<AroundDir, Block>(AroundDir.class) {{
 				put(dir1, new Block());
 				put(dir2, new Block());
 				put(dir3, new Block());
@@ -65,12 +78,20 @@ public class SignPS {
 			}};
 		}
 
-		public boolean contains(Direction dir, PS.Block block) {
+		public boolean contains(AroundDir dir, PS.Block block) {
 			return blocks.get(dir).get(block);
 		}
 
-		private Block get(Direction dir) {
+		private Block get(AroundDir dir) {
 			return blocks.get(dir);
+		}
+
+		private void put(AroundDir dir, Block block) {
+			blocks.put(dir, block);
+		}
+
+		public Set<AroundDir> keySet() {
+			return blocks.keySet();
 		}
 	}
 

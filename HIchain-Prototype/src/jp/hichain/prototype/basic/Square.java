@@ -55,7 +55,7 @@ public class Square {
 	 * @param _dir 自身(this)からみたAroudDir
 	 * @return 周囲Square
 	 */
-	public Square getAround(Direction _dir) {
+	public Square getAround(AroundDir _dir) {
 		return around.get(_dir);
 	}
 

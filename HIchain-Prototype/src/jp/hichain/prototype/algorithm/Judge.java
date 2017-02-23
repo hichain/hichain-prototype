@@ -4,7 +4,7 @@ import jp.hichain.prototype.basic.ChainSign;
 import jp.hichain.prototype.basic.Player;
 import jp.hichain.prototype.basic.RRChainSign;
 import jp.hichain.prototype.basic.SignPS;
-import jp.hichain.prototype.concept.Direction;
+import jp.hichain.prototype.concept.AroundDir;
 import jp.hichain.prototype.concept.Direction.Relation;
 import jp.hichain.prototype.concept.PS;
 import jp.hichain.prototype.concept.PS.Contact;
@@ -36,60 +36,94 @@ public class Judge {
 	}
 
 	private static boolean getSideJudge(SignPS holdingSPS, RRChainSign target) {
-		for (PS direction : holdingSPS.get(Type.SIDE)) {
-			RRChainSign aroundSign = (RRChainSign)target.getAround( direction.getSquareSide() );
+		SignPS.TypePart typePart = holdingSPS.getTypePart(Type.SIDE);
+
+		for (AroundDir dir : typePart.keySet()) {
+			System.out.println("[" + dir + "]");
+
+			RRChainSign aroundSign = (RRChainSign)target.getAround(dir);
 			if (aroundSign == null) {
 				continue;
 			}
+
 			SignPS antiSPS = aroundSign.getSign().getSPS();
-			System.out.println("AroundSPS[" + direction + "]:\n" + antiSPS.toString());
-			Relation rightleft = direction.getSquareSidePos();
-			boolean flag = antiSPS.exist( Type.SIDE, direction.getRelation(rightleft, 3) );
-			if (flag) {
+			SignPS.TypePart antiTypePart = antiSPS.getTypePart(Type.SIDE);
+
+			System.out.println("AroundSPS[" + dir + "]:\n" + antiSPS.toString());
+
+			boolean me1 = typePart.contains(dir, PS.Block.LEFT);
+			boolean you1 = antiTypePart.contains(dir.get(Relation.OPPOSITE), PS.Block.RIGHT);
+			boolean me2 = typePart.contains(dir, PS.Block.RIGHT);
+			boolean you2 = antiTypePart.contains(dir.get(Relation.OPPOSITE), PS.Block.LEFT);
+
+			if (me1 && you1 || me2 && you2) {
 				System.out.println(" Result: true");
 				return true;
 			}
+
 			System.out.println(" Result: false");
 		}
+
 		return false;
 	}
 
 	private static boolean getPointJudge(Player player, SignPS holdingSPS, RRChainSign target) {
-		for (Direction direction : holdingSPS.get(Type.POINT)) {
-			System.out.println("[[" + direction + "]]");
-			RRChainSign aroundSign = (RRChainSign)target.getAround( direction.getSquareSide() );
+		SignPS.TypePart typePart = holdingSPS.getTypePart(Type.POINT);
+
+		for (AroundDir dir : typePart.keySet()) {
+			System.out.println("[" + dir + "]");
+
+			RRChainSign aroundSign = (RRChainSign)target.getAround(dir);
 			if (aroundSign == null || player == aroundSign.getPlayer()) {
 				continue;
 			}
+
 			SignPS antiSPS = aroundSign.getSign().getSPS();
-			System.out.println("AroundSPS[" + direction + "]:\n" + antiSPS.toString());
-			Relation rightleft = direction.getSquareSidePos();
-			int times = (direction.getDenominator() == 8) ? 1 : 2;
-			boolean flag = antiSPS.exist( Type.POINT, direction.getRelation(rightleft, times) );
-			if (flag) {
-				System.out.println(" Result: true");
-				return true;
+			SignPS.TypePart antiTypePart = antiSPS.getTypePart(Type.POINT);
+
+			System.out.println("AroundSPS[" + dir + "]:\n" + antiSPS.toString());
+
+			for (PS.Block block : PS.Block.values()) {
+				boolean me = typePart.contains(dir, block);
+				boolean you = antiTypePart.contains(dir.get(Relation.OPPOSITE), block);
+				if (me && you) {
+					System.out.println(" Result: true");
+					return true;
+				}
 			}
+
 			System.out.println(" Result: false");
 		}
+
 		return false;
 	}
 
 	private static boolean getCornerJudge(Player player, SignPS holdingSPS, RRChainSign target) {
-		for (Direction direction : holdingSPS.get(Type.CORNER)) {
-			RRChainSign aroundSign = (RRChainSign)target.getAround(direction);
+		SignPS.TypePart typePart = holdingSPS.getTypePart(Type.CORNER);
+
+		for (AroundDir dir : typePart.keySet()) {
+			System.out.println("[" + dir + "]");
+
+			RRChainSign aroundSign = (RRChainSign)target.getAround(dir);
 			if (aroundSign == null || player == aroundSign.getPlayer()) {
 				continue;
 			}
+
 			SignPS antiSPS = aroundSign.getSign().getSPS();
-			System.out.println("AroundSPS[" + direction + "]:\n" + antiSPS.toString());
-			boolean flag = antiSPS.exist( Type.CORNER, direction.getRelation(Relation.LEFT, 2) );
-			if (flag) {
+			SignPS.TypePart antiTypePart = antiSPS.getTypePart(Type.CORNER);
+
+			System.out.println("AroundSPS[" + dir + "]:\n" + antiSPS.toString());
+
+			boolean me = typePart.contains(dir, PS.Block.CENTER);
+			boolean you = antiTypePart.contains(dir.get(Relation.OPPOSITE), PS.Block.CENTER);
+			if (me && you) {
 				System.out.println(" Result: true");
 				return true;
 			}
+
 			System.out.println(" Result: false");
 		}
+
 		return false;
 	}
 }

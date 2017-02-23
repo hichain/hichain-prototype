@@ -1,7 +1,7 @@
 package jp.hichain.prototype.concept;
 
 import java.util.EnumMap;
-import java.util.EnumSet;
+import java.util.Set;
 
 /**
  * 点・辺データ (Points/Sides)
@@ -10,22 +10,22 @@ import java.util.EnumSet;
  *
  */
 public enum PS {
-	NORTH(Direction.NORTH, Block.CENTER, Type.POINT),
-	EAST(Direction.EAST, Block.CENTER, Type.POINT),
-	SOUTH(Direction.SOUTH, Block.CENTER, Type.POINT),
-	WEST(Direction.WEST, Block.CENTER, Type.POINT),
-	NORTHEAST(Direction.NORTH, Block.RIGHT, Type.POINT, Direction.EAST, Block.LEFT, Type.POINT, Direction.NORTHEAST, Block.CENTER, Type.CORNER),
-	NORTHWEST(Direction.NORTH, Block.LEFT, Type.POINT, Direction.WEST, Block.RIGHT, Type.POINT, Direction.NORTHWEST, Block.CENTER, Type.CORNER),
-	SOUTHEAST(Direction.SOUTH, Block.LEFT, Type.POINT, Direction.EAST, Block.RIGHT, Type.POINT, Direction.SOUTHEAST, Block.CENTER, Type.CORNER),
-	SOUTHWEST(Direction.SOUTH, Block.RIGHT, Type.POINT, Direction.WEST, Block.LEFT, Type.POINT, Direction.SOUTHWEST, Block.CENTER, Type.CORNER),
-	NORTH_NORTHEAST(Direction.NORTH, Block.RIGHT, Type.SIDE),
-	NORTH_NORTHWEST(Direction.NORTH, Block.LEFT, Type.SIDE),
-	EAST_NORTHEAST(Direction.EAST, Block.LEFT, Type.SIDE),
-	EAST_SOUTHEAST(Direction.EAST, Block.RIGHT, Type.SIDE),
-	SOUTH_SOUTHEAST(Direction.SOUTH, Block.LEFT, Type.SIDE),
-	SOUTH_SOUTHWEST(Direction.SOUTH, Block.RIGHT, Type.SIDE),
-	WEST_NORTHWEST(Direction.WEST, Block.RIGHT, Type.SIDE),
-	WEST_SOUTHWEST(Direction.WEST, Block.LEFT, Type.SIDE);
+	NORTH(AroundDir.NORTH, Block.CENTER, Type.POINT),
+	EAST(AroundDir.EAST, Block.CENTER, Type.POINT),
+	SOUTH(AroundDir.SOUTH, Block.CENTER, Type.POINT),
+	WEST(AroundDir.WEST, Block.CENTER, Type.POINT),
+	NORTHEAST(AroundDir.NORTH, Block.RIGHT, Type.POINT, AroundDir.EAST, Block.LEFT, Type.POINT, AroundDir.NORTHEAST, Block.CENTER, Type.CORNER),
+	NORTHWEST(AroundDir.NORTH, Block.LEFT, Type.POINT, AroundDir.WEST, Block.RIGHT, Type.POINT, AroundDir.NORTHWEST, Block.CENTER, Type.CORNER),
+	SOUTHEAST(AroundDir.SOUTH, Block.LEFT, Type.POINT, AroundDir.EAST, Block.RIGHT, Type.POINT, AroundDir.SOUTHEAST, Block.CENTER, Type.CORNER),
+	SOUTHWEST(AroundDir.SOUTH, Block.RIGHT, Type.POINT, AroundDir.WEST, Block.LEFT, Type.POINT, AroundDir.SOUTHWEST, Block.CENTER, Type.CORNER),
+	NORTH_NORTHEAST(AroundDir.NORTH, Block.RIGHT, Type.SIDE),
+	NORTH_NORTHWEST(AroundDir.NORTH, Block.LEFT, Type.SIDE),
+	EAST_NORTHEAST(AroundDir.EAST, Block.LEFT, Type.SIDE),
+	EAST_SOUTHEAST(AroundDir.EAST, Block.RIGHT, Type.SIDE),
+	SOUTH_SOUTHEAST(AroundDir.SOUTH, Block.LEFT, Type.SIDE),
+	SOUTH_SOUTHWEST(AroundDir.SOUTH, Block.RIGHT, Type.SIDE),
+	WEST_NORTHWEST(AroundDir.WEST, Block.RIGHT, Type.SIDE),
+	WEST_SOUTHWEST(AroundDir.WEST, Block.LEFT, Type.SIDE);
 
 	public enum Block {
 		LEFT,
@@ -56,9 +56,8 @@ public enum PS {
 
 	}
 
-	private Direction commonDir;
-	private EnumMap<SignDir.Rotation, PS> rotations;
-	private EnumMap<Direction, Part> blocktypes;
+	private EnumMap<Direction.Relation, PS> rotations;
+	private EnumMap<AroundDir, Part> blocktypes;
 
 	static {
 		set( new PS [] {
@@ -72,44 +71,54 @@ public enum PS {
 		});
 	}
 
-	private PS(Direction direction, Block block, Type type) {
-		commonDir = Direction.valueOf(this.toString());
-		blocktypes = new EnumMap<>(Direction.class);
+	private PS(AroundDir direction, Block block, Type type) {
+		rotations = new EnumMap<>(Direction.Relation.class);
+		blocktypes = new EnumMap<>(AroundDir.class);
 		blocktypes.put( direction, new Part(block, type) );
 	}
 
-	private PS(Direction direction1, Block block1, Type type1, Direction direction2, Block block2, Type type2, Direction direction3, Block block3, Type type3) {
+	private PS(AroundDir direction1, Block block1, Type type1, AroundDir direction2, Block block2, Type type2, AroundDir direction3, Block block3, Type type3) {
 		this(direction1, block1, type1);
 		blocktypes.put( direction2, new Part(block2, type2) );
 		blocktypes.put( direction3, new Part(block3, type3) );
 	}
 
 	public Direction getCommonDir() {
-		return commonDir;
+		return Direction.valueOf(this.name());
 	}
 
-	public EnumSet<Direction> getSquareSides() {
-		return (EnumSet<Direction>) blocktypes.keySet();
+	public Set<AroundDir> getSquareSides() {
+		return blocktypes.keySet();
 	}
 
-	public Block getBlock(Direction dir) {
+	public Block getBlock(AroundDir dir) {
 		return blocktypes.get(dir).block;
 	}
 
-	public Type getType(Direction dir) {
+	public Type getType(AroundDir dir) {
 		return blocktypes.get(dir).type;
 	}
 
-	public PS get(SignDir.Rotation relation) {
+	public PS get(Direction.Relation relation) {
 		return rotations.get(relation);
+	}
+
+	public static PS getEnum(Direction dir) {
+		for (PS ps : PS.values()) {
+			if (ps.getCommonDir() == dir) {
+				return ps;
+			}
+		}
+		return null;
 	}
 
 	private static void set(PS [] dirs) {
 		for (int i = 0; i < dirs.length; i++) {
 			int l = (i == 0) ? dirs.length-1 : i-1;
 			int r = (i == dirs.length-1) ? 0 : i+1;
-			dirs[i].rotations.put( SignDir.Rotation.LEFT, dirs[l] );
-			dirs[i].rotations.put( SignDir.Rotation.RIGHT, dirs[r] );
+			int o = ( (dirs.length == 2) ? (i+2) : (i+3) ) % dirs.length;
+			dirs[i].rotations.put( Direction.Relation.LEFT, dirs[l] );
+			dirs[i].rotations.put( Direction.Relation.RIGHT, dirs[r] );
 		}
 	}
 

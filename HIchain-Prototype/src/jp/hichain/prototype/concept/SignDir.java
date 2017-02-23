@@ -8,21 +8,15 @@ import java.util.EnumMap;
  *
  */
 public enum SignDir {
-	NORTH(Direction.NORTH),
-	EAST(Direction.EAST),
-	SOUTH(Direction.SOUTH),
-	WEST(Direction.WEST);
+	NORTH,
+	EAST,
+	SOUTH,
+	WEST;
 
-	public enum Rotation {
-		LEFT,
-		RIGHT;
-	}
+	private EnumMap<Direction.Relation, SignDir> rotations;
 
-	private Direction commonDir;
-	private EnumMap<Rotation, SignDir> rotations;
-
-	private SignDir(Direction direction) {
-		commonDir = direction;
+	private SignDir() {
+		rotations = new EnumMap<>(Direction.Relation.class);
 	}
 
 	static {
@@ -32,10 +26,10 @@ public enum SignDir {
 	}
 
 	public Direction getCommonDir() {
-		return commonDir;
+		return Direction.valueOf(this.name());
 	}
 
-	public SignDir get(Rotation relation) {
+	public SignDir get(Direction.Relation relation) {
 		return rotations.get(relation);
 	}
 
@@ -43,8 +37,10 @@ public enum SignDir {
 		for (int i = 0; i < dirs.length; i++) {
 			int l = (i == 0) ? dirs.length-1 : i-1;
 			int r = (i == dirs.length-1) ? 0 : i+1;
-			dirs[i].rotations.put( SignDir.Rotation.LEFT, dirs[l] );
-			dirs[i].rotations.put( SignDir.Rotation.RIGHT, dirs[r] );
+			int o = (i+2) % dirs.length;
+			dirs[i].rotations.put( Direction.Relation.LEFT, dirs[l] );
+			dirs[i].rotations.put( Direction.Relation.RIGHT, dirs[r] );
+			dirs[i].rotations.put( Direction.Relation.OPPOSITE, dirs[o] );
 		}
 	}
 }

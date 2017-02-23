@@ -14,18 +14,18 @@ public enum Direction {
 	EAST,
 	SOUTH,
 	WEST,
-	NORTHEAST(NORTH, EAST),
-	NORTHWEST(NORTH, WEST),
-	SOUTHEAST(SOUTH, EAST),
-	SOUTHWEST(SOUTH, WEST),
-	NORTH_NORTHEAST(NORTH),
-	NORTH_NORTHWEST(NORTH),
-	EAST_NORTHEAST(EAST),
-	EAST_SOUTHEAST(EAST),
-	SOUTH_SOUTHEAST(SOUTH),
-	SOUTH_SOUTHWEST(SOUTH),
-	WEST_NORTHWEST(WEST),
-	WEST_SOUTHWEST(WEST);
+	NORTHEAST,
+	NORTHWEST,
+	SOUTHEAST,
+	SOUTHWEST,
+	NORTH_NORTHEAST,
+	NORTH_NORTHWEST,
+	EAST_NORTHEAST,
+	EAST_SOUTHEAST,
+	SOUTH_SOUTHEAST,
+	SOUTH_SOUTHWEST,
+	WEST_NORTHWEST,
+	WEST_SOUTHWEST;
 
 	public enum Relation {
 		LEFT,
@@ -38,17 +38,6 @@ public enum Direction {
 
 	private Direction() {
 		relations = new EnumMap<>(Relation.class);
-		squareSides = EnumSet.of(this);
-	}
-
-	private Direction(Direction squareSide) {
-		relations = new EnumMap<>(Relation.class);
-		squareSides = EnumSet.of(squareSide);
-	}
-
-	private Direction(Direction squareSide1, Direction squareSide2) {
-		relations = new EnumMap<>(Relation.class);
-		squareSides = EnumSet.of(squareSide1, squareSide2);
 	}
 
 	static {
@@ -58,6 +47,22 @@ public enum Direction {
 			SOUTH, SOUTH_SOUTHWEST, SOUTHWEST, WEST_SOUTHWEST,
 			WEST, WEST_NORTHWEST, NORTHWEST, NORTH_NORTHWEST
 		});
+		NORTH.setSquareSides(NORTH);
+		EAST.setSquareSides(EAST);
+		SOUTH.setSquareSides(SOUTH);
+		WEST.setSquareSides(WEST);
+		NORTHEAST.setSquareSides(NORTH, EAST);
+		NORTHWEST.setSquareSides(NORTH, WEST);
+		SOUTHEAST.setSquareSides(SOUTH, EAST);
+		SOUTHWEST.setSquareSides(SOUTH, WEST);
+		NORTH_NORTHEAST.setSquareSides(NORTH);
+		NORTH_NORTHWEST.setSquareSides(NORTH);
+		EAST_NORTHEAST.setSquareSides(EAST);
+		EAST_SOUTHEAST.setSquareSides(EAST);
+		SOUTH_SOUTHEAST.setSquareSides(SOUTH);
+		SOUTH_SOUTHWEST.setSquareSides(SOUTH);
+		WEST_NORTHWEST.setSquareSides(WEST);
+		WEST_SOUTHWEST.setSquareSides(WEST);
 	}
 
 	public Direction get(Relation relation) {
@@ -74,6 +79,14 @@ public enum Direction {
 
 	public EnumSet<Direction> getSquareSides() {
 		return squareSides;
+	}
+
+	private void setSquareSides(Direction dir) {
+		squareSides = EnumSet.of(dir);
+	}
+
+	private void setSquareSides(Direction dir1, Direction dir2) {
+		squareSides = EnumSet.of(dir1, dir2);
 	}
 
 	private static void set(Direction [] dirs) {
