@@ -1,6 +1,7 @@
 package jp.hichain.prototype.concept;
 
 import java.util.EnumMap;
+import java.util.EnumSet;
 
 /**
  * 方角 (16方向)
@@ -13,18 +14,18 @@ public enum Direction {
 	EAST,
 	SOUTH,
 	WEST,
-	NORTHEAST,
-	NORTHWEST,
-	SOUTHEAST,
-	SOUTHWEST,
-	NORTH_NORTHEAST,
-	NORTH_NORTHWEST,
-	EAST_NORTHEAST,
-	EAST_SOUTHEAST,
-	SOUTH_SOUTHEAST,
-	SOUTH_SOUTHWEST,
-	WEST_NORTHWEST,
-	WEST_SOUTHWEST;
+	NORTHEAST(NORTH, EAST),
+	NORTHWEST(NORTH, WEST),
+	SOUTHEAST(SOUTH, EAST),
+	SOUTHWEST(SOUTH, WEST),
+	NORTH_NORTHEAST(NORTH),
+	NORTH_NORTHWEST(NORTH),
+	EAST_NORTHEAST(EAST),
+	EAST_SOUTHEAST(EAST),
+	SOUTH_SOUTHEAST(SOUTH),
+	SOUTH_SOUTHWEST(SOUTH),
+	WEST_NORTHWEST(WEST),
+	WEST_SOUTHWEST(WEST);
 
 	public enum Relation {
 		LEFT,
@@ -33,9 +34,21 @@ public enum Direction {
 	}
 
 	private EnumMap<Relation, Direction> relations;
+	private EnumSet<Direction> squareSides;
 
 	private Direction() {
 		relations = new EnumMap<>(Relation.class);
+		squareSides = EnumSet.of(this);
+	}
+
+	private Direction(Direction squareSide) {
+		relations = new EnumMap<>(Relation.class);
+		squareSides = EnumSet.of(squareSide);
+	}
+
+	private Direction(Direction squareSide1, Direction squareSide2) {
+		relations = new EnumMap<>(Relation.class);
+		squareSides = EnumSet.of(squareSide1, squareSide2);
 	}
 
 	static {
@@ -57,6 +70,10 @@ public enum Direction {
 			dir = dir.get(relation);
 		}
 		return dir;
+	}
+
+	public EnumSet<Direction> getSquareSides() {
+		return squareSides;
 	}
 
 	private static void set(Direction [] dirs) {

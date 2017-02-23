@@ -3,8 +3,8 @@ package jp.hichain.prototype.basic;
 import java.util.EnumMap;
 import java.util.EnumSet;
 
+import jp.hichain.prototype.concept.Direction;
 import jp.hichain.prototype.concept.PS;
-import jp.hichain.prototype.concept.PS.Type;
 import jp.hichain.prototype.concept.SignDir;
 
 /**
@@ -14,67 +14,78 @@ import jp.hichain.prototype.concept.SignDir;
  *
  */
 public class SignPS {
-	private EnumMap<PS.Type, Part> map;
+	private EnumSet<PS> oldSet;
+	private EnumMap<PS.Type, TypePart> typeparts;
 
 	public SignPS() {
-		map = new EnumMap<PS.Type, Part>(PS.Type.class) {{
-			put(PS.Type.POINT, new Part());
-			put(PS.Type.SIDE, new Part());
-			put(PS.Type.CORNER, new Part());
+		oldSet = EnumSet.noneOf(PS.class);
+		typeparts = new EnumMap<PS.Type, TypePart>(PS.Type.class) {{
+			put(PS.Type.SIDE, new TypePart(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST));
+			put(PS.Type.POINT, new TypePart(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST));
+			put(PS.Type.CORNER, new TypePart(Direction.NORTHEAST, Direction.SOUTHEAST, Direction.SOUTHWEST, Direction.NORTHWEST));
 		}};
 	}
 
-	public boolean exist(PS.Type type, PS dir) {
-		return map.get(type).get(dir);
+
+	public TypePart getTypePart(PS.Type type) {
+		return typeparts.get(type);
 	}
 
-	public EnumSet<PS> get(PS.Type type) {
-		return map.get(type).map;
-	}
-
-	public void add(PS dir) {
-		EnumSet<PS.Type> set = dir.getTypes();
-		for (PS.Type type : set) {
-			map.get(type).add(dir);
+	public void add(PS ps) {
+		oldSet.add(ps);
+		for ( Direction squareside : ps.getSquareSides() ) {
+			PS.Block block = ps.getBlock(squareside);
+			PS.Type type = ps.getType(squareside);
+			typeparts.get(type).get(squareside).add(block);
 		}
 	}
 
 	public void rotate(SignDir.Rotation rel) {
-		for (PS.Type type : map.keySet()) {
-			Part part = new Part();
-			for (PS dir : part.map) {
-				part.add( dir.get(rel) );
-			}
 
-			map.put(type, part);
-		}
 	}
 
 	@Override
 	public String toString() {
-		String string = "[POINTS] ";
-		for (PS direction : get(Type.POINT)) {
-			string += direction + " ";
-		}
-		string += "\n[SIDES] ";
-		for (PS direction : get(Type.SIDE)) {
-			string += direction + " ";
+		String string = "";
+		for (PS ps : oldSet) {
+			string += ps + " ";
 		}
 		return string;
 	}
 
-	private class Part {
-		private EnumSet<PS> map;
+	public class TypePart {
+		private EnumMap<Direction, Block> blocks;
 
-		public Part() {
-			map = EnumSet.noneOf(PS.class);
+		private TypePart(Direction dir1, Direction dir2, Direction dir3, Direction dir4) {
+			this.blocks = new EnumMap<Direction, Block>(Direction.class) {{
+				put(dir1, new Block());
+				put(dir2, new Block());
+				put(dir3, new Block());
+				put(dir4, new Block());
+			}};
 		}
 
-		public boolean get(PS dir) {
+		public boolean contains(Direction dir, PS.Block block) {
+			return blocks.get(dir).get(block);
+		}
+
+		private Block get(Direction dir) {
+			return blocks.get(dir);
+		}
+	}
+
+	private class Block {
+		private EnumSet<PS.Block> map;
+
+		private Block() {
+			map = EnumSet.noneOf(PS.Block.class);
+		}
+
+		private boolean get(PS.Block dir) {
 			return map.contains(dir);
 		}
 
-		public void add(PS dir) {
+		private void add(PS.Block dir) {
 			map.add(dir);
 		}
 	}
