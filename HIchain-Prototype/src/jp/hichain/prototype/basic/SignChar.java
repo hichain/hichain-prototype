@@ -7,7 +7,7 @@ import java.util.Map;
 import jp.hichain.prototype.concept.ScoredString;
 
 public class SignChar {
-	private static Map<Character, SignChar> signs;
+	private static Map<Character, SignChar> signs = new HashMap<>();;
 
 	private char signChar;
 	private EnumMap<ScoredString.Order, SignChar> nextMap;
@@ -23,11 +23,13 @@ public class SignChar {
 				'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
 			})
 		);
-		signs.putAll(
-			getAllSC(new char [] {
-				'*'
-			})
-		);
+
+		signs.put( ' ', new SignChar(' ') );
+		SignChar asterisk = new SignChar('*');
+		for (ScoredString.Order order : ScoredString.Order.values()) {
+			asterisk.nextMap.put(order, asterisk);
+		}
+		signs.put(asterisk.get(), asterisk);
 
 	}
 
