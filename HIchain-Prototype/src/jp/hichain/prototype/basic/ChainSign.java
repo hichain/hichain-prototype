@@ -7,7 +7,7 @@ import jp.hichain.prototype.concept.Direction;
 import jp.hichain.prototype.concept.SignDir;
 
 public class ChainSign {
-	private char character;
+	private SignChar character;
 	private SignDir direction;
 	private SignPS ps;
 	private SignNum number;
@@ -21,7 +21,7 @@ public class ChainSign {
 	 * @param _num Sign Number (SN)
 	 * @param _image Sign Image (SI)
 	 */
-	public ChainSign(char _ch, SignPS _ps, SignNum _num, Map<CardColor, SignImage> _images) {
+	public ChainSign(SignChar _ch, SignPS _ps, SignNum _num, Map<CardColor, SignImage> _images) {
 		character = _ch;
 		direction = SignDir.NORTH;
 		ps = _ps;
@@ -48,7 +48,7 @@ public class ChainSign {
 	 * SCを返す
 	 * @return SC
 	 */
-	public char getSC() {
+	public SignChar getSC() {
 		return character;
 	}
 

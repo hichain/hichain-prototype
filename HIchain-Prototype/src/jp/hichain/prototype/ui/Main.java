@@ -16,6 +16,7 @@ import jp.hichain.prototype.algorithm.Judge;
 import jp.hichain.prototype.basic.ChainSign;
 import jp.hichain.prototype.basic.Move;
 import jp.hichain.prototype.basic.Player;
+import jp.hichain.prototype.basic.SignChar;
 import jp.hichain.prototype.basic.SignImage;
 import jp.hichain.prototype.basic.SignNum;
 import jp.hichain.prototype.basic.SignPS;
@@ -144,9 +145,9 @@ public class Main {
 				String [] data = line.split(",", 0); // 行をカンマ区切りで配列に変換
 
 				//文字データの分解
-				char signChar = data[0].toCharArray()[0];	//文字
+				SignChar signChar = SignChar.get( data[0].toCharArray()[0] );	//文字
 				//読み込む文字のリストになかったら次
-				if (!_signs.contains(signChar)) {
+				if (!_signs.contains(signChar.get())) {
 					continue;
 				}
 				//SNを代入
@@ -160,7 +161,7 @@ public class Main {
 					}
 				}
 
-				char fullwidthCh = getFullWidthChar(signChar); //全角文字
+				char fullwidthCh = getFullWidthChar(signChar.get()); //全角文字
 
 				boolean success = true;	//画像の読み込みに成功したか
 
@@ -171,7 +172,7 @@ public class Main {
 						BufferedImage image = ImageIO.read( imageFile );
 						signImages.put(entry.getKey(), new SignImage(image) );
 					} catch (IOException | IllegalArgumentException  e) {
-						System.out.println("'" + signChar + "' Image was not found!");
+						System.out.println("'" + signChar.get() + "' Image was not found!");
 						success = false;
 						break;
 					}
@@ -184,7 +185,7 @@ public class Main {
 				//SignDataへ文字データを追加
 				SignData.add( new ChainSign(signChar, signPS, signNum, signImages) );
 
-				System.out.print("'" + signChar + "' ");
+				System.out.print("'" + signChar.get() + "' ");
 			}
 
 			brData.close();

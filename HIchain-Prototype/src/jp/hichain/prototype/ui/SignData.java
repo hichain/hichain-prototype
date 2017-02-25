@@ -53,7 +53,7 @@ public class SignData {
 	}
 
 	public static void add(ChainSign _sign) {
-		signs.put(_sign.getSC(), _sign);
+		signs.put(_sign.getSC().get(), _sign);
 	}
 
 	/**
