@@ -1,4 +1,4 @@
-## r1.0.1リリース！
+### [develop-preai](https://github.com/hichain/HIchain-Prototype/tree/develop-preai)でAI用にアルゴリズムを全て書き換え中
 # HIchain Prototype版
 
 ![ゲームイメージ](https://github.com/hichain/HIchain-Prototype/blob/master/images/playing3.gif)
