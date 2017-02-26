@@ -12,10 +12,12 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 
+import jp.hichain.prototype.algorithm.ChainSearcher;
 import jp.hichain.prototype.algorithm.Judge;
 import jp.hichain.prototype.basic.ChainSign;
 import jp.hichain.prototype.basic.Move;
 import jp.hichain.prototype.basic.Player;
+import jp.hichain.prototype.basic.RRChainSign;
 import jp.hichain.prototype.basic.SignChar;
 import jp.hichain.prototype.basic.SignImage;
 import jp.hichain.prototype.basic.SignNum;
@@ -34,26 +36,35 @@ public class Main {
 		put(CardColor.BLACK, ".\\data\\cards\\D");
 		put(CardColor.RED, ".\\data\\cards\\R");
 	}};
-	//読み込む文字
-	public static char [] LOADINGSIGNS = {
-		'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '*'
-	};
-	public static Map<String, Player> players;
 
 	public static void main(String[] args) {
 		init();
 		createPlayers();
 
+		//testJudge(AroundDir.NORTH, "1P", 'H', "2P", 'I');
 		long start = System.currentTimeMillis();
-		testJudge(AroundDir.NORTH, "1P", 'H', "2P", 'I');
+		testChainSearch(Move.ROOT, AroundDir.NORTH);
 		long end = System.currentTimeMillis();
 		System.out.println((end-start) + " ms");
 	}
 
-	private static void testJudge(final AroundDir root_target, final String rootPL, final char rootSC, final String holdingPL, final char holdingSC) {
-		Move root = new Move(
-			players.get(rootPL), SignData.get(rootSC)
+	private static void testChainSearch(RRChainSign center, AroundDir aroundDir) {
+		Move root = Move.ROOT;
+		root.make(Player.get("1P"), SignData.get('L'));
+		Move around = new Move(
+			root, AroundDir.NORTH, Player.get("1P"), SignData.get('M')
 		);
+
+		System.out.println("\nStart ChainSearching...\n");
+
+		int hits = ChainSearcher.search(center, aroundDir);
+
+		System.out.println("\nFinal Result: " + hits + " chains hit");
+	}
+
+	private static void testJudge(final AroundDir root_target, final String rootPL, final char rootSC, final String holdingPL, final char holdingSC) {
+		Move root = Move.ROOT;
+		root.make(Player.get(rootPL), SignData.get(rootSC));
 		Move sign = new Move(
 			root, root_target
 		);
@@ -64,17 +75,15 @@ public class Main {
 		System.out.println("\nStart Judging...\n");
 
 		PS.Contact result = Judge.getContact(
-			players.get(holdingPL), holdingSign, sign
+			Player.get(holdingPL), holdingSign, sign
 		);
 
 		System.out.println("\nFinal Result: " + result + "\n");
 	}
 
 	private static void createPlayers() {
-		players = new HashMap<String, Player>() {{
-			put("1P", new Player("1P", CardColor.BLACK));
-			put("2P", new Player("2P", CardColor.RED));
-		}};
+		Player.add( new Player("1P", CardColor.BLACK) );
+		Player.add( new Player("2P", CardColor.RED) );
 	}
 
 	private static void init() {
@@ -85,10 +94,9 @@ public class Main {
 				entry.getKey(), new File( entry.getValue() )
 			);
 		}
-		Set <Character> signSet = getSignSet(LOADINGSIGNS);
-		signSet.add(' ');
 
-		loadSignData( signdataFile, signImageFiles, signSet );
+		loadSignData( signdataFile, signImageFiles);
+		Move.createRoot();
 /*
 		ChainSign sign = SignData.get('A');
 		sign.resize(0.8);
@@ -117,7 +125,7 @@ public class Main {
 	 * @param _imagePath SIのパス (色の数分)
 	 * @param _signs ロードする文字
 	 */
-	private static void loadSignData(File _dataPath, Map<CardColor, File> _imagePath, Set <Character> _signs) {
+	private static void loadSignData(File _dataPath, Map<CardColor, File> _imagePath) {
 		System.out.println("Loading SignData: ");
 
 		BufferedReader brData = null;
@@ -144,15 +152,19 @@ public class Main {
 
 				String [] data = line.split(",", 0); // 行をカンマ区切りで配列に変換
 
-				//文字データの分解
-				SignChar signChar = SignChar.get( data[0].toCharArray()[0] );	//文字
+				char ch = data[0].charAt(0);
 				//読み込む文字のリストになかったら次
-				if (!_signs.contains(signChar.get())) {
+				if (!SignChar.contains(ch)) {
 					continue;
 				}
+
+				//文字データの分解
+				SignChar signChar = SignChar.get(ch);	//文字
 				//SNを代入
 				for (int i = 0; i < 4; i++) {
-					signNum.add(dirsHeader[i], data[i+1].toCharArray()[0]);
+					char partSN = data[i+1].charAt(0);
+					if (partSN == ' ') continue;
+					signNum.put(dirsHeader[i], SignChar.get(partSN));
 				}
 				//SignPSを代入
 				for (int i = 0; i < 16; i++) {
