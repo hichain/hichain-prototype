@@ -1,13 +1,28 @@
 package jp.hichain.prototype.concept;
 
 public enum ScoredString {
-	ALPHABETICAL,	//連番
-	IDENTICAL,	//ぞろ目
-	ROYAL;		//ロイヤル
+	//アルファベット順
+	ALPHABETICAL(
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	),
+	//ロイヤル順
+	ROYAL(
+		"CHAIN"
+	);
 
 	public enum Order {
 		ASCEND,	//昇順
 		DESCEND,	//降順
 		SAME;	//同一
+	}
+
+	private String orderString;
+
+	private ScoredString(String str) {
+		orderString = str;
+	}
+
+	public String getOrderString() {
+		return orderString;
 	}
 }

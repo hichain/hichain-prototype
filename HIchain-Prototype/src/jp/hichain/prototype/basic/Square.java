@@ -11,13 +11,14 @@ import jp.hichain.prototype.concept.Direction;
  *
  */
 public class Square {
+	public static Square ROOT;
 	private Square source;
 	private EnumMap <AroundDir, Square> around;
 
 	/**
 	 * ルートマス
 	 */
-	public Square() {
+	protected Square() {
 		around = new EnumMap<>(AroundDir.class);
 	}
 
@@ -31,6 +32,10 @@ public class Square {
 		around = new EnumMap<>(AroundDir.class);
 		_source.addAround(_dir, this);
 		addAround(_dir.get(Direction.Relation.OPPOSITE), _source);
+	}
+
+	public static void createRoot() {
+		ROOT = new Square();
 	}
 
 	/**

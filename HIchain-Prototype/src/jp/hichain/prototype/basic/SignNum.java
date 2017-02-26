@@ -1,7 +1,7 @@
 package jp.hichain.prototype.basic;
 
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 import jp.hichain.prototype.concept.Direction;
@@ -13,27 +13,27 @@ import jp.hichain.prototype.concept.SignDir;
  *
  */
 public class SignNum {
-	Map <SignDir, Character> snMap;
+	EnumMap<SignDir, SignChar> snMap;
 
 	public SignNum() {
-		snMap = new HashMap<>(4);
+		snMap = new EnumMap<>(SignDir.class);
 	}
 
-	public SignNum(Map <SignDir, Character> map) {
+	public SignNum(EnumMap<SignDir, SignChar> map) {
 		snMap = map;
 	}
 
-	public void add(SignDir dir, char sc) {
+	public void put(SignDir dir, SignChar sc) {
 		snMap.put(dir, sc);
 	}
 
-	public char get(SignDir dir) {
+	public SignChar get(SignDir dir) {
 		return snMap.get(dir);
 	}
 
 	public void rotate(Direction.Relation _dir) {
-		Map <SignDir, Character> newMap = new HashMap<>(snMap);
-		for (Map.Entry<SignDir, Character> e : snMap.entrySet()) {
+		EnumMap<SignDir, SignChar> newMap = new EnumMap<>(snMap);
+		for (Map.Entry<SignDir, SignChar> e : snMap.entrySet()) {
 			newMap.put(e.getKey().get(_dir), e.getValue());
 		}
 	}

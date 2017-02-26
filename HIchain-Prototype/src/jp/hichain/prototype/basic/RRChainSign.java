@@ -1,26 +1,22 @@
 package jp.hichain.prototype.basic;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import jp.hichain.prototype.concept.AroundDir;
-import jp.hichain.prototype.concept.SignDir;
 
 public class RRChainSign extends Square {
+	public static RRChainSign ROOT;
+
 	private Player player;
 	private ChainSign sign;
-	private Map <Directions, Chain> chainMap;
+	private ChainMap chainMap;
 
-	public RRChainSign(Player _player, ChainSign _sign) {
+	protected RRChainSign() {
 		super();
-		player = _player;
-		sign = _sign;
-		chainMap = new HashMap<>();
+		chainMap = new ChainMap();
 	}
 
 	public RRChainSign(Square _source, AroundDir _dir) {
 		super(_source, _dir);
-		chainMap = new HashMap<>();
+		chainMap = new ChainMap();
 	}
 
 	public RRChainSign(Square _source, AroundDir _dir, Player _player, ChainSign _sign) {
@@ -29,22 +25,17 @@ public class RRChainSign extends Square {
 		sign = _sign;
 	}
 
+	public static void createRoot() {
+		ROOT = new RRChainSign();
+	}
+
 	/**
 	 * 手を打つ
 	 * @param _sign ChainSign
 	 */
-	public void make(ChainSign _sign) {
+	public void make(Player _player, ChainSign _sign) {
+		player = _player;
 		sign = _sign;
-	}
-
-	/**
-	 * Chainを追加する
-	 * @param _chain Chain
-	 * @param _aroundDir ArounDir
-	 * @param _signDir SignDir
-	 */
-	public void addChain(Chain _chain, AroundDir _aroundDir, SignDir _signDir) {
-		chainMap.put(new Directions(_aroundDir, _signDir), _chain);
 	}
 
 	/**
@@ -72,39 +63,10 @@ public class RRChainSign extends Square {
 	}
 
 	/**
-	 * 指定のChainを返す
-	 * @param _aroundDir Direction
-	 * @param _signDir SignDir
-	 * @return Chain
+	 * ChainMapを返す
+	 * @return ChainMap
 	 */
-	public Chain getChain(AroundDir _aroundDir, SignDir _signDir) {
-		return chainMap.get( new Directions(_aroundDir, _signDir) );
-	}
-
-	/**
-	 * ArounDirとSignDir
-	 * @author NT
-	 *
-	 */
-	private class Directions {
-		private AroundDir aroundDir;
-		private SignDir signDir;
-
-		public Directions(AroundDir _around, SignDir _sign) {
-			aroundDir = _around;
-			signDir = _sign;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj) return true;
-			if (obj == null) return false;
-			if (getClass() != obj.getClass()) return false;
-			Directions dirs = (Directions)obj;
-			if (aroundDir == dirs.aroundDir && signDir == dirs.signDir) {
-				return true;
-			}
-			return false;
-		}
+	public ChainMap getChainMap() {
+		return chainMap;
 	}
 }

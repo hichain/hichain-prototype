@@ -23,7 +23,7 @@ public class SignData {
 	 * @param _ch 文字のchar
 	 * @return true/false
 	 */
-	static public boolean contains(char _ch) {
+	public static boolean contains(char _ch) {
 		return signs.containsKey(_ch);
 	}
 
@@ -32,7 +32,7 @@ public class SignData {
 	 * @param _ch 文字のchar
 	 * @return BS
 	 */
-	static public ChainSign get(char _ch) {
+	public static ChainSign get(char _ch) {
 		return signs.get(_ch);
 	}
 
@@ -40,7 +40,7 @@ public class SignData {
 	 * 文字数を返す (' 'も含む)
 	 * @return 文字数
 	 */
-	static public int size() {
+	public static int size() {
 		return signs.size();
 	}
 
@@ -48,7 +48,7 @@ public class SignData {
 	 * 文字のSetを返す
 	 * @return 文字のSet
 	 */
-	static public Set <Character> getSigns() {
+	public static Set <Character> getSigns() {
 		return signs.keySet();
 	}
 
@@ -61,7 +61,7 @@ public class SignData {
 	 * @param _ch 文字のchar
 	 * @return SN
 	 */
-	static public SignNum getSN(char _ch) {
+	public static SignNum getSN(char _ch) {
 		return signs.get(_ch).getSN();
 	}
 
@@ -70,7 +70,7 @@ public class SignData {
 	 * @param _ch 文字のchar
 	 * @return PS
 	 */
-	static public SignPS getSPS(char _ch) {
+	public static SignPS getSPS(char _ch) {
 		return signs.get(_ch).getSPS();
 	}
 
@@ -79,7 +79,7 @@ public class SignData {
 	 * @param _ch 文字のchar
 	 * @return SI
 	 */
-	static public SignImage getSI(CardColor color, char _ch) {
+	public static SignImage getSI(CardColor color, char _ch) {
 		return signs.get(_ch).getSI(color);
 	}
 }

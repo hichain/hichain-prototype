@@ -7,63 +7,84 @@ import java.util.Map;
 import jp.hichain.prototype.concept.ScoredString;
 
 public class SignChar {
-	private static Map<Character, SignChar> signs = new HashMap<>();;
+	private static Map<Character, SignChar> signs = new HashMap<>();
 
 	private char signChar;
-	private EnumMap<ScoredString.Order, SignChar> nextMap;
+	private EnumMap<ScoredString, EnumMap<ScoredString.Order, SignChar>> nextMap;
 
 	private SignChar(char ch) {
 		signChar = ch;
-		nextMap = new EnumMap<>(ScoredString.Order.class);
+		nextMap = new EnumMap<>(ScoredString.class);
 	}
 
 	static {
-		signs.putAll(
-			getAllSC(new char [] {
-				'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
-			})
-		);
-
-		signs.put( ' ', new SignChar(' ') );
-		SignChar asterisk = new SignChar('*');
-		for (ScoredString.Order order : ScoredString.Order.values()) {
-			asterisk.nextMap.put(order, asterisk);
-		}
-		signs.put(asterisk.get(), asterisk);
-
+		init();
 	}
 
 	public char get() {
 		return signChar;
 	}
 
-	public SignChar getNext(ScoredString.Order order) {
-		return nextMap.get(order);
+	public SignChar getNext(ScoredString kind, ScoredString.Order order) {
+		if (!nextMap.containsKey(kind)) {
+			return null;
+		}
+		return nextMap.get(kind).get(order);
+	}
+
+	public static boolean contains(char ch) {
+		return signs.containsKey(ch);
 	}
 
 	public static SignChar get(char ch) {
 		return signs.get(ch);
 	}
 
-	private static Map<Character, SignChar> getAllSC(char [] chs) {
-		Map<Character, SignChar> map = new HashMap<>();
+	private static void init() {
+		signs.put( ' ', new SignChar(' ') );
 
-		for (char ch : chs) {
-			map.put( ch, new SignChar(ch) );
+		for (ScoredString kind : ScoredString.values()) {
+			String orderString = kind.getOrderString();
+			char [] chs = orderString.toCharArray();
+			//signs生成
+			for (char ch : chs) {
+				if (signs.containsKey(ch)) {
+					continue;
+				}
+				signs.put( ch, new SignChar(ch) );
+			}
+
+			//nextMap生成
+			for (int i = 0; i < chs.length; i++) {
+				int l = (i == 0) ? chs.length-1 : i-1;
+				int r = (i == chs.length-1) ? 0 : i+1;
+
+				SignChar sc = signs.get(chs[i]);
+				SignChar lsc = signs.get(chs[l]);
+				SignChar rsc = signs.get(chs[r]);
+
+				EnumMap<ScoredString.Order, SignChar> map = new EnumMap<>(ScoredString.Order.class);
+				map.put( ScoredString.Order.ASCEND, rsc );
+				map.put( ScoredString.Order.DESCEND, lsc );
+				map.put( ScoredString.Order.SAME, sc );
+
+				sc.nextMap.put(kind, map);
+			}
 		}
 
-		for (int i = 0; i < chs.length; i++) {
-			int l = (i == 0) ? chs.length-1 : i-1;
-			int r = (i == chs.length-1) ? 0 : i+1;
+		signs.put( '*', new SignChar('*') );
+	}
 
-			SignChar sc = map.get(chs[i]);
-			SignChar lsc = map.get(chs[l]);
-			SignChar rsc = map.get(chs[r]);
-			sc.nextMap.put( ScoredString.Order.ASCEND, rsc );
-			sc.nextMap.put( ScoredString.Order.DESCEND, lsc );
-			sc.nextMap.put( ScoredString.Order.SAME, sc );
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
 		}
 
-		return map;
+		SignChar that = (SignChar)obj;
+		return signChar == that.signChar;
 	}
 }

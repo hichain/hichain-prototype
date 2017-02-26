@@ -6,14 +6,16 @@ import java.util.List;
 import jp.hichain.prototype.concept.AroundDir;
 
 public class Move extends RRChainSign {
+	public static Move ROOT;
+
 	private Move parent;			//親の手
 	private List <Move> children;	//子どもの手
 
 	private int moveValue;    //手の評価
 	private int moveDepth;    //手の深さ
 
-	public Move(Player _player, ChainSign _sign) {
-		super(_player, _sign);
+	private Move() {
+		super();
 		children = new ArrayList<>();
 	}
 
@@ -30,6 +32,10 @@ public class Move extends RRChainSign {
 	public Move(Move _source, AroundDir _dir, Player player, ChainSign _sign, Move _parent) {
 		this(_source, _dir, player, _sign);
 		parent = _parent;
+	}
+
+	public static void createRoot() {
+		ROOT = new Move();
 	}
 
 	/**
