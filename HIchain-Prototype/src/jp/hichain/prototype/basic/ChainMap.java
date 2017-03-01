@@ -1,64 +1,38 @@
 package jp.hichain.prototype.basic;
 
-import java.util.EnumMap;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import jp.hichain.prototype.concept.AroundDir;
 import jp.hichain.prototype.concept.ScoredString;
 import jp.hichain.prototype.concept.SignDir;
 
 public class ChainMap {
-	EnumMap
-		<AroundDir, EnumMap
-			<SignDir, EnumMap
-				<ScoredString, ScoredString.Order>
-			>
-		>
-	chainMap;
+	Map<Chain, List<AroundDir>> chainMap;
 
 	public ChainMap() {
-		chainMap = new EnumMap<>(AroundDir.class);
+		chainMap = new HashMap<>();
 	}
 
-	public boolean contains(AroundDir aroundDir) {
-		return chainMap.containsKey(aroundDir);
+	public Map<Chain, List<AroundDir>> get() {
+		return chainMap;
 	}
 
-	public EnumMap<SignDir, EnumMap<ScoredString, ScoredString.Order>> get(AroundDir aroundDir) {
-		return chainMap.get(aroundDir);
+	public List<AroundDir> get(Chain chain) {
+		return chainMap.get(chain);
 	}
 
 	public void put(AroundDir aroundDir, SignDir signDir, ScoredString kind, ScoredString.Order order) {
-		if (!chainMap.containsKey(aroundDir)) {
-			chainMap.put(aroundDir, new EnumMap<>(SignDir.class) );
+		Chain chain = new Chain(signDir, kind, order);
+		List<AroundDir> list;
+		if (chainMap.containsKey(chain)) {
+			list = chainMap.get(chain);
+		} else {
+			list = new ArrayList<>();
 		}
-		EnumMap<SignDir, EnumMap<ScoredString, ScoredString.Order>> signDirMap
-		= chainMap.get(aroundDir);
-
-		if (!signDirMap.containsKey(signDir)) {
-			signDirMap.put(signDir, new EnumMap<>(ScoredString.class));
-		}
-		EnumMap<ScoredString, ScoredString.Order> ssMap = signDirMap.get(signDir);
-
-		if (ssMap.containsKey(kind)) {
-			System.out.println("!Overwrite ChainMap");
-		}
-
-		ssMap.put(kind, order);
-	}
-
-	@Override
-	public String toString() {
-		String string = "";
-		for (AroundDir aroundDir : chainMap.keySet()){
-			string += "[" + aroundDir + "]\n";
-			for (SignDir signDir : chainMap.get(aroundDir).keySet()) {
-				string += " :" + signDir + "\n";
-				for (ScoredString kind : chainMap.get(aroundDir).get(signDir).keySet()) {
-					ScoredString.Order order = chainMap.get(aroundDir).get(signDir).get(kind);
-					string += "  <" + kind + "> " + order + "\n";
-				}
-			}
-		}
-		return string;
+		list.add(aroundDir);
+		chainMap.put(chain, list);
 	}
 }
