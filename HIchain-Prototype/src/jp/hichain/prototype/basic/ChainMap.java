@@ -24,6 +24,13 @@ public class ChainMap {
 		return chainMap.get(chain);
 	}
 
+	public int getSize(Chain chain) {
+		if (!chainMap.containsKey(chain)) {
+			return 0;
+		}
+		return chainMap.get(chain).size();
+	}
+
 	public void put(AroundDir aroundDir, SignDir signDir, ScoredString kind, ScoredString.Order order) {
 		Chain chain = new Chain(signDir, kind, order);
 		List<AroundDir> list;
