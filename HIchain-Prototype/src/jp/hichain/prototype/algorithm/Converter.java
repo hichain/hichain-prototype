@@ -1,15 +1,7 @@
 package jp.hichain.prototype.algorithm;
 
-import java.util.List;
-import java.util.Map;
-
-import jp.hichain.prototype.basic.Chain;
-import jp.hichain.prototype.basic.ChainMap;
-import jp.hichain.prototype.basic.RRChainSign;
-import jp.hichain.prototype.concept.AroundDir;
-
 public class Converter {
-	public static int getAdditionalPoints(RRChainSign root) {
+/*	public static int getAdditionalPoints(RRChainSign root) {
 		int points = 0;
 		ChainMap chainMap = root.getChainMap();
 
@@ -33,4 +25,5 @@ public class Converter {
 	private static int getChainLength(RRChainSign root, Chain chain) {
 
 	}
+*/
 }

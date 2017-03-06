@@ -42,4 +42,18 @@ public class ChainMap {
 		list.add(aroundDir);
 		chainMap.put(chain, list);
 	}
+
+	@Override
+	public String toString() {
+		String string = "";
+		for (Map.Entry<Chain, List<AroundDir>> entry : chainMap.entrySet()) {
+			string += entry.getKey().toString() + "\n";
+			string += "[AroundDir] ";
+			for (AroundDir dir : entry.getValue()) {
+				string += dir + " ";
+			}
+			string += "\n";
+		}
+		return string;
+	}
 }

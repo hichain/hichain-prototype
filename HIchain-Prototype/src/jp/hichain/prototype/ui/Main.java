@@ -41,8 +41,8 @@ public class Main {
 		init();
 		createPlayers();
 
-		//testJudge(AroundDir.NORTH, "1P", 'H', "2P", 'I');
 		long start = System.currentTimeMillis();
+		//testJudge(AroundDir.NORTH, "1P", 'H', "2P", 'I');
 		testChainSearch(Move.ROOT, AroundDir.NORTH);
 		long end = System.currentTimeMillis();
 		System.out.println((end-start) + " ms");
@@ -50,9 +50,9 @@ public class Main {
 
 	private static void testChainSearch(RRChainSign center, AroundDir aroundDir) {
 		Move root = Move.ROOT;
-		root.make(Player.get("1P"), SignData.get('L'));
+		root.make(Player.get("1P"), SignData.get('H'));
 		Move around = new Move(
-			root, AroundDir.NORTH, Player.get("1P"), SignData.get('M')
+			root, AroundDir.NORTH, Player.get("1P"), SignData.get('I')
 		);
 
 		System.out.println("\nStart ChainSearching...\n");
