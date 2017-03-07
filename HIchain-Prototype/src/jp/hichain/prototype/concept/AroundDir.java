@@ -8,19 +8,36 @@ import java.util.EnumMap;
  *
  */
 public enum AroundDir {
-	NORTH,
-	NORTHEAST,
-	EAST,
-	SOUTHEAST,
-	SOUTH,
-	SOUTHWEST,
-	WEST,
-	NORTHWEST;
+	NORTH(Type.NEXT, 0, 1),
+	NORTHEAST(Type.CORNER, 1, 1),
+	EAST(Type.NEXT, 1, 0),
+	SOUTHEAST(Type.CORNER, 1, -1),
+	SOUTH(Type.NEXT, 0, -1),
+	SOUTHWEST(Type.CORNER, -1, -1),
+	WEST(Type.NEXT, -1, 0),
+	NORTHWEST(Type.CORNER, -1, 1);
+
+	public enum Type {
+		NEXT,
+		CORNER;
+	}
+
+	public enum Axis {
+		VERTICAL,
+		HORIZONTAL;
+	}
 
 	private EnumMap<Direction.Relation, AroundDir> relations;
+	private Type type;
+	private EnumMap<Axis, Integer> comps;
 
-	private AroundDir() {
+	private AroundDir(Type type, int v, int h) {
 		relations = new EnumMap<>(Direction.Relation.class);
+		this.type = type;
+		comps = new EnumMap<Axis, Integer>(Axis.class) {{
+			put(Axis.VERTICAL, v);
+			put(Axis.HORIZONTAL, h);
+		}};
 	}
 
 	static {
@@ -37,6 +54,14 @@ public enum AroundDir {
 		return relations.get(relation);
 	}
 
+	public Type getType() {
+		return type;
+	}
+
+	public int getComp(Axis axis) {
+		return comps.get(axis);
+	}
+
 	private static void set(AroundDir [] dirs) {
 		for (int i = 0; i < dirs.length; i++) {
 			int l = (i == 0) ? dirs.length-1 : i-1;
@@ -46,5 +71,14 @@ public enum AroundDir {
 			dirs[i].relations.put( Direction.Relation.RIGHT, dirs[r] );
 			dirs[i].relations.put( Direction.Relation.OPPOSITE, dirs[o] );
 		}
+	}
+
+	public static AroundDir getByComp(int v, int h) {
+		for (AroundDir dir : values()) {
+			if (dir.getComp(Axis.VERTICAL) == v && dir.getComp(Axis.HORIZONTAL) == h) {
+				return dir;
+			}
+		}
+		return null;
 	}
 }

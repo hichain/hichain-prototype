@@ -2,6 +2,7 @@ package jp.hichain.prototype.basic;
 
 import java.util.EnumMap;
 
+import jp.hichain.prototype.algorithm.AroundSearcher;
 import jp.hichain.prototype.concept.AroundDir;
 import jp.hichain.prototype.concept.Direction;
 
@@ -20,6 +21,7 @@ public class Square {
 	 */
 	protected Square() {
 		around = new EnumMap<>(AroundDir.class);
+		createAroundAll();
 	}
 
 	/**
@@ -32,6 +34,7 @@ public class Square {
 		around = new EnumMap<>(AroundDir.class);
 		_source.addAround(_dir, this);
 		addAround(_dir.get(Direction.Relation.OPPOSITE), _source);
+		AroundSearcher.set(this);
 	}
 
 	public static void createRoot() {
@@ -44,15 +47,6 @@ public class Square {
 	 */
 	public Square getSource() {
 		return source;
-	}
-
-	/**
-	 * 周囲Squareを追加
-	 * @param _square Square
-	 * @param _dir 自身(this)からみた_squareの方向
-	 */
-	public void addAround(AroundDir _dir, Square _square) {
-		around.put(_dir, _square);
 	}
 
 	/**
@@ -70,5 +64,20 @@ public class Square {
 	 */
 	public EnumMap <AroundDir, Square> getAroundAll() {
 		return around;
+	}
+
+	/**
+	 * 周囲Squareを追加
+	 * @param _square Square
+	 * @param _dir 自身(this)からみた_squareの方向
+	 */
+	public void addAround(AroundDir _dir, Square _square) {
+		around.put(_dir, _square);
+	}
+
+	private void createAroundAll() {
+		for (AroundDir dir : AroundDir.values()) {
+			addAround(dir, new Square(this, dir));
+		}
 	}
 }
