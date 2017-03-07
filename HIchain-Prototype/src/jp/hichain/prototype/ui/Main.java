@@ -43,7 +43,7 @@ public class Main {
 
 		long start = System.currentTimeMillis();
 		//testJudge(AroundDir.NORTH, "1P", 'H', "2P", 'I');
-		testChainSearch(Move.ROOT, AroundDir.NORTH);
+		//testChainSearch(Move.ROOT, AroundDir.NORTH);
 		long end = System.currentTimeMillis();
 		System.out.println((end-start) + " ms");
 	}

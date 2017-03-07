@@ -21,8 +21,7 @@ public class RRChainSign extends Square {
 
 	public RRChainSign(Square _source, AroundDir _dir, Player _player, ChainSign _sign) {
 		this(_source, _dir);
-		player = _player;
-		sign = _sign;
+		make(_player, _sign);
 	}
 
 	public static void createRoot() {
@@ -36,6 +35,7 @@ public class RRChainSign extends Square {
 	public void make(Player _player, ChainSign _sign) {
 		player = _player;
 		sign = _sign;
+		createAroundAll();
 	}
 
 	/**

@@ -8,7 +8,9 @@ import jp.hichain.prototype.concept.AroundDir.Axis;
 import jp.hichain.prototype.concept.Direction.Relation;
 
 public class AroundSearcher {
-	public static void set(Square root) {
+	public static void search(Square root) {
+		System.out.println( "Seaching: " + root );
+
 		EnumMap <AroundDir, Square> arounds = root.getAroundAll();
 		for (AroundDir dir : AroundDir.values()) {
 			Square target = arounds.get(dir);
@@ -19,14 +21,14 @@ public class AroundSearcher {
 			int vertical = dir.getComp(Axis.VERTICAL);
 			int horizontal = dir.getComp(Axis.HORIZONTAL);
 			Square around = search(root, vertical, horizontal);
-			if (around == null) {
-				around = new Square(root, dir);
-				System.out.println("New Square: " + dir);
-			}
 			root.addAround(dir, around);
-			around.addAround(dir.get(Relation.OPPOSITE), root);
-			System.out.println("Hit Square: " + dir);
+			if (around != null) {
+				around.addAround(dir.get(Relation.OPPOSITE), root);
+				System.out.println("Hit Square: " + dir);
+			}
 		}
+
+		System.out.println("Finish Searching");
 	}
 
 	private static Square search(Square root, int v, int h) {
@@ -48,7 +50,7 @@ public class AroundSearcher {
 			if (next != null) {
 				int targetV = target.getComp(Axis.VERTICAL);
 				int targetH = target.getComp(Axis.HORIZONTAL);
-				Square square = search(root.getAround(target), v-targetV, h-targetH);
+				Square square = search(next, v-targetV, h-targetH);
 				if (square != null) {
 					return square;
 				}

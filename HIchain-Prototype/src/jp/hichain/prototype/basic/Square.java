@@ -20,7 +20,8 @@ public class Square {
 	 * ルートマス
 	 */
 	protected Square() {
-		around = new EnumMap<>(AroundDir.class);
+		System.out.println("Root Square: " + this);
+		initAround();
 		createAroundAll();
 	}
 
@@ -30,11 +31,12 @@ public class Square {
 	 * @param _dir  ソースからみた自身(this)のAroundDir
 	 */
 	public Square(Square _source, AroundDir _dir) {
+		System.out.println("New Square: " + this + " (" + _source + ": " + _dir + ")");
 		source = _source;
-		around = new EnumMap<>(AroundDir.class);
+		initAround();
 		_source.addAround(_dir, this);
 		addAround(_dir.get(Direction.Relation.OPPOSITE), _source);
-		AroundSearcher.set(this);
+		AroundSearcher.search(this);
 	}
 
 	public static void createRoot() {
@@ -75,9 +77,19 @@ public class Square {
 		around.put(_dir, _square);
 	}
 
-	private void createAroundAll() {
+	protected void createAroundAll() {
 		for (AroundDir dir : AroundDir.values()) {
-			addAround(dir, new Square(this, dir));
+			Square square = getAround(dir);
+			if (square == null) {
+				addAround(dir, new Square(this, dir));
+			}
+		}
+	}
+
+	private void initAround() {
+		around = new EnumMap<>(AroundDir.class);
+		for (AroundDir dir : AroundDir.values()) {
+			around.put(dir, null);
 		}
 	}
 }
