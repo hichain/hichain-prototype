@@ -1,5 +1,7 @@
 package jp.hichain.prototype.basic;
 
+import java.util.HashMap;
+
 import jp.hichain.prototype.concept.AroundDir;
 
 public class RRChainSign extends Square {
@@ -24,7 +26,8 @@ public class RRChainSign extends Square {
 		make(_player, _sign);
 	}
 
-	public static void createRoot() {
+	static {
+		godMap = new HashMap<>();
 		ROOT = new RRChainSign();
 	}
 

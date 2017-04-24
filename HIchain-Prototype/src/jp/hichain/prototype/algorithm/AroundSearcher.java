@@ -7,6 +7,7 @@ import jp.hichain.prototype.concept.AroundDir;
 import jp.hichain.prototype.concept.AroundDir.Axis;
 import jp.hichain.prototype.concept.Direction.Relation;
 
+
 public class AroundSearcher {
 	public static void search(Square root) {
 		System.out.println( "Seaching: " + root );

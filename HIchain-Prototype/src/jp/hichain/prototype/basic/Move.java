@@ -1,6 +1,7 @@
 package jp.hichain.prototype.basic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import jp.hichain.prototype.concept.AroundDir;
@@ -34,7 +35,8 @@ public class Move extends RRChainSign {
 		parent = _parent;
 	}
 
-	public static void createRoot() {
+	static {
+		godMap = new HashMap<>();
 		ROOT = new Move();
 	}
 

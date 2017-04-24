@@ -4,6 +4,7 @@ import jp.hichain.prototype.basic.ChainSign;
 import jp.hichain.prototype.basic.Player;
 import jp.hichain.prototype.basic.RRChainSign;
 import jp.hichain.prototype.basic.SignPS;
+import jp.hichain.prototype.basic.Square;
 import jp.hichain.prototype.concept.AroundDir;
 import jp.hichain.prototype.concept.Direction.Relation;
 import jp.hichain.prototype.concept.PS;
@@ -41,10 +42,11 @@ public class Judge {
 		for (AroundDir dir : typePart.keySet()) {
 			System.out.println("[" + dir + "]");
 
-			RRChainSign aroundSign = (RRChainSign)target.getAround(dir);
-			if (aroundSign == null) {
+			Square aroundSquare = target.getAround(dir);
+			if (aroundSquare == null) {
 				continue;
 			}
+			RRChainSign aroundSign = (RRChainSign)aroundSquare;
 
 			SignPS antiSPS = aroundSign.getSign().getSPS();
 			SignPS.TypePart antiTypePart = antiSPS.getTypePart(Type.SIDE);

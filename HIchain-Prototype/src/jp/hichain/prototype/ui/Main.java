@@ -42,7 +42,7 @@ public class Main {
 		createPlayers();
 
 		long start = System.currentTimeMillis();
-		//testJudge(AroundDir.NORTH, "1P", 'H', "2P", 'I');
+		testJudge(AroundDir.NORTH, "1P", 'H', "2P", 'I');
 		//testChainSearch(Move.ROOT, AroundDir.NORTH);
 		long end = System.currentTimeMillis();
 		System.out.println((end-start) + " ms");
@@ -96,7 +96,6 @@ public class Main {
 		}
 
 		loadSignData( signdataFile, signImageFiles);
-		Move.createRoot();
 /*
 		ChainSign sign = SignData.get('A');
 		sign.resize(0.8);
