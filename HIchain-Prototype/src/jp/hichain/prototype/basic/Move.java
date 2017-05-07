@@ -1,43 +1,52 @@
 package jp.hichain.prototype.basic;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import jp.hichain.prototype.concept.AroundDir;
+public class Move {
+	private static Move ROOT;
+	private static Move finalMove;
 
-public class Move extends RRChainSign {
-	public static Move ROOT;
-
+	private BoardSign thisBS;
 	private Move parent;			//親の手
-	private List <Move> children;	//子どもの手
+	private List <Move> children;	//子どものとりうる手
 
 	private int moveValue;    //手の評価
 	private int moveDepth;    //手の深さ
 
-	private Move() {
-		super();
+	public Move(BoardSign _thisBS) {
+		if (ROOT == null) {
+			ROOT = this;
+		} else {
+			parent = finalMove.getParent();
+		}
+		thisBS = _thisBS;
 		children = new ArrayList<>();
+		finalMove = this;
 	}
 
-	public Move(Move _source, AroundDir _dir) {
-		super(_source, _dir);
-		children = new ArrayList<>();
+	/**
+	 * 最初の手を返す
+	 * @return Move
+	 */
+	public static Move getRoot() {
+		return ROOT;
 	}
 
-	public Move(Move _source, AroundDir _dir, Player player, ChainSign _sign) {
-		super(_source, _dir, player, _sign);
-		children = new ArrayList<>();
+	/**
+	 * 最後の手を返す
+	 * @return Move
+	 */
+	public static Move getFinalMove() {
+		return finalMove;
 	}
 
-	public Move(Move _source, AroundDir _dir, Player player, ChainSign _sign, Move _parent) {
-		this(_source, _dir, player, _sign);
-		parent = _parent;
-	}
-
-	static {
-		godMap = new HashMap<>();
-		ROOT = new Move();
+	/**
+	 * このSquareのBSを返す
+	 * @return BoardSign
+	 */
+	public BoardSign getBS() {
+		return thisBS;
 	}
 
 	/**

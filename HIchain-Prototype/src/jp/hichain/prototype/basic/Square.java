@@ -10,12 +10,15 @@ import jp.hichain.prototype.concept.Direction.Relation;
 
 /**
  * マス
+ * 周囲マスへのアクセス、
  * @author NT
  *
  */
 public class Square {
-	public static Square ROOT;
-	protected static Map<Position, Square> godMap;
+	private static Square ROOT;
+	private static Map<Position, Square> godMap;
+
+	private BoardSign thisBS;
 	private Square source;
 	private EnumMap <AroundDir, Square> around;
 	private Position position;
@@ -23,8 +26,9 @@ public class Square {
 	/**
 	 * ルートマス
 	 */
-	public Square() {
-		init();
+	public Square(BoardSign _thisBS) {
+		ROOT = this;
+		init(thisBS);
 		position = new Position(-1, -1);
 		godMap.put(position, this);
 		createAroundAll();
@@ -35,8 +39,8 @@ public class Square {
 	 * @param _source ソースSquare
 	 * @param _dir  ソースからみた自身(this)のAroundDir
 	 */
-	public Square(Square _source, AroundDir _dir) {
-		init();
+	public Square(BoardSign _thisBS, Square _source, AroundDir _dir) {
+		init(_thisBS);
 		position = new Position(
 			_source.getPosition(Axis.VERTICAL) + _dir.getComp(Axis.VERTICAL),
 			_source.getPosition(Axis.HORIZONTAL) + _dir.getComp(Axis.HORIZONTAL)
@@ -48,11 +52,32 @@ public class Square {
 
 	static {
 		godMap = new HashMap<>();
-		ROOT = new Square();
 	}
 
+	/**
+	 * 絶対座標で指定してSquareを返す
+	 * @param _v VERTICAL
+	 * @param _h HORIZONTAL
+	 * @return Square
+	 */
 	public static Square get(int _v, int _h) {
 		return godMap.get( new Position(_v, _h) );
+	}
+
+	/**
+	 * ルートを返す
+	 * @return Square
+	 */
+	public static Square getRoot() {
+		return ROOT;
+	}
+
+	/**
+	 * このSquareのBSを返す
+	 * @return BoardSign
+	 */
+	public BoardSign getBS() {
+		return thisBS;
 	}
 
 	/**
@@ -80,6 +105,11 @@ public class Square {
 		return around;
 	}
 
+	/**
+	 * 座標を返す
+	 * @param _axis 軸
+	 * @return 座標
+	 */
 	public int getPosition(Axis _axis) {
 		return position.get(_axis);
 	}
@@ -97,7 +127,8 @@ public class Square {
 		for (AroundDir dir : AroundDir.values()) {
 			Square square = getAround(dir);
 			if (square == null) {
-				addAround(dir, new Square(this, dir));
+				BoardSign bs = new BoardSign(thisBS, dir);
+				addAround(dir, bs.getSquare());
 			}
 		}
 	}
@@ -111,7 +142,8 @@ public class Square {
 		}
 	}
 
-	private void init() {
+	private void init(BoardSign _thisBS) {
+		thisBS = _thisBS;
 		around = new EnumMap<>(AroundDir.class);
 		for (AroundDir dir : AroundDir.values()) {
 			around.put(dir, null);
