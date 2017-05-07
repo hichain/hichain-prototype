@@ -19,7 +19,6 @@ public class Square {
 	private static Map<Position, Square> godMap;
 
 	private BoardSign thisBS;
-	private Square source;
 	private EnumMap <AroundDir, Square> around;
 	private Position position;
 
@@ -31,7 +30,6 @@ public class Square {
 		init(thisBS);
 		position = new Position(-1, -1);
 		godMap.put(position, this);
-		createAroundAll();
 	}
 
 	/**
@@ -46,8 +44,7 @@ public class Square {
 			_source.getPosition(Axis.HORIZONTAL) + _dir.getComp(Axis.HORIZONTAL)
 		);
 		godMap.put(position, this);
-		source = _source;
-		setArounds(_source, _dir);
+		setAroundsAll();
 	}
 
 	static {
@@ -81,20 +78,21 @@ public class Square {
 	}
 
 	/**
-	 * ソースSquareを返す
-	 * @return Square
-	 */
-	public Square getSource() {
-		return source;
-	}
-
-	/**
 	 * 指定の方角のSquareを返す
 	 * @param _dir 自身(this)からみたAroudDir
 	 * @return 周囲Square
 	 */
 	public Square getAround(AroundDir _dir) {
 		return around.get(_dir);
+	}
+
+	/**
+	 * 指定の方角にSquareがあるか返す
+	 * @param _dir 自身(this)からみたAroudDir
+	 * @return boolean
+	 */
+	public boolean hasAround(AroundDir _dir) {
+		return around.containsKey(_dir);
 	}
 
 	/**
@@ -123,22 +121,14 @@ public class Square {
 		around.put(_dir, _square);
 	}
 
-	protected void createAroundAll() {
+	private void setAroundsAll() {
 		for (AroundDir dir : AroundDir.values()) {
-			Square square = getAround(dir);
-			if (square == null) {
-				BoardSign bs = new BoardSign(thisBS, dir);
-				addAround(dir, bs.getSquare());
-			}
-		}
-	}
-
-	private void setArounds(Square _source, AroundDir _sourceDir) {
-		addAround(_sourceDir.get(Relation.OPPOSITE), _source);
-		for (AroundDir dir : AroundDir.values()) {
+			if (hasAround(dir)) continue;
 			int v = getPosition(Axis.VERTICAL) + dir.getComp(Axis.VERTICAL);
 			int h = getPosition(Axis.HORIZONTAL) + dir.getComp(Axis.HORIZONTAL);
-			addAround(dir, get(v, h));
+			Square target = get(v, h);
+			addAround(dir, target);
+			target.addAround(dir.get(Relation.OPPOSITE), this);
 		}
 	}
 
