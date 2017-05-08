@@ -21,7 +21,7 @@ public class ChainSign {
 	 * @param _num Sign Number (SN)
 	 * @param _image Sign Image (SI)
 	 */
-	protected ChainSign(SignChar _ch, SignPS _ps, SignNum _num, Map<CardColor, SignImage> _images) {
+	public ChainSign(SignChar _ch, SignPS _ps, SignNum _num, Map<CardColor, SignImage> _images) {
 		character = _ch;
 		direction = SignDir.NORTH;
 		ps = _ps;
@@ -82,13 +82,5 @@ public class ChainSign {
 	 */
 	public SignImage getSI(CardColor color) {
 		return images.get(color);
-	}
-
-	/**
-	 * SIのMapを返す
-	 * @return Map
-	 */
-	public Map<CardColor, SignImage> getSIs() {
-		return images;
 	}
 }

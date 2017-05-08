@@ -2,7 +2,6 @@ package jp.hichain.prototype.basic;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import jp.hichain.prototype.concept.CardColor;
 
@@ -68,27 +67,5 @@ public class Player {
 
 	public List<ChainSign> getFieldSigns() {
 		return fieldSigns;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (obj instanceof Player) {
-			Player player = (Player)obj;
-			return (name == player.name && cardColor == player.cardColor);
-		}
-		return false;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(name, cardColor);
-	}
-
-	@Override
-	public String toString() {
-		String string = "Player: " + name + " [" + cardColor.toString() + "]";
-		return string;
 	}
 }
