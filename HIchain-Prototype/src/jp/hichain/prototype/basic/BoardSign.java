@@ -35,7 +35,6 @@ public class BoardSign {
 		player = _player;
 		chainSign = _sign;
 		move = new Move(this);
-		createAroundsAll();
 	}
 
 	/**
@@ -84,12 +83,5 @@ public class BoardSign {
 	 */
 	public Move getMove() {
 		return move;
-	}
-
-	private void createAroundsAll() {
-		for (AroundDir dir : AroundDir.values()) {
-			if (square.hasAround(dir)) continue;
-			new BoardSign(this, dir);
-		}
 	}
 }
