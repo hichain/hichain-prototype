@@ -1,12 +1,10 @@
 package jp.hichain.prototype.basic;
 
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
 import jp.hichain.prototype.concept.AroundDir;
 import jp.hichain.prototype.concept.AroundDir.Axis;
-import jp.hichain.prototype.concept.Direction.Relation;
 
 /**
  * マス
@@ -14,11 +12,15 @@ import jp.hichain.prototype.concept.Direction.Relation;
  *
  */
 public class Square {
-	public static Square ROOT;
-	protected static Map<Position, Square> godMap;
-	private Square source;
-	private EnumMap <AroundDir, Square> around;
+	private static Map <Position, Square> abPosMap;
+
+	private Player player;
+	private ChainSign chainSign;
+	private ChainMap chainMap;
+
 	private Position position;
+
+	private Move move;
 
 	/**
 	 * ルートマス
@@ -26,8 +28,7 @@ public class Square {
 	public Square() {
 		init();
 		position = new Position(-1, -1);
-		godMap.put(position, this);
-		createAroundAll();
+		abPosMap.put(position, this);
 	}
 
 	/**
@@ -41,80 +42,65 @@ public class Square {
 			_source.getPosition(Axis.VERTICAL) + _dir.getComp(Axis.VERTICAL),
 			_source.getPosition(Axis.HORIZONTAL) + _dir.getComp(Axis.HORIZONTAL)
 		);
-		godMap.put(position, this);
-		source = _source;
+		abPosMap.put(position, this);
 		setArounds(_source, _dir);
 	}
 
 	static {
-		godMap = new HashMap<>();
-		ROOT = new Square();
+		abPosMap = new HashMap<>();
 	}
 
 	public static Square get(int _v, int _h) {
-		return godMap.get( new Position(_v, _h) );
+		return abPosMap.get( new Position(_v, _h) );
 	}
 
 	/**
-	 * ソースSquareを返す
-	 * @return Square
+	 * 手を打つ
+	 * @param _sign ChainSign
 	 */
-	public Square getSource() {
-		return source;
+	public void make(Player _player, ChainSign _sign) {
+		player = _player;
+		chainSign = _sign;
+		createAroundAll();
 	}
 
 	/**
-	 * 指定の方角のSquareを返す
-	 * @param _dir 自身(this)からみたAroudDir
-	 * @return 周囲Square
+	 * 空のマスか返す
+	 * @return true/false
 	 */
-	public Square getAround(AroundDir _dir) {
-		return around.get(_dir);
+	public boolean isEmpty() {
+		return (chainSign == null);
 	}
 
 	/**
-	 * 周囲Squareを全て返す
-	 * @return 周囲Square Map
+	 * プレイヤーを帰す
+	 * @return Player
 	 */
-	public EnumMap <AroundDir, Square> getAroundAll() {
-		return around;
-	}
-
-	public int getPosition(Axis _axis) {
-		return position.get(_axis);
+	public Player getPlayer() {
+		return player;
 	}
 
 	/**
-	 * 周囲Squareを追加
-	 * @param _square Square
-	 * @param _dir 自身(this)からみた_squareの方向
+	 * 文字を返す
+	 * @return ChainSign
 	 */
-	public void addAround(AroundDir _dir, Square _square) {
-		around.put(_dir, _square);
+	public ChainSign getSign() {
+		return chainSign;
 	}
 
-	protected void createAroundAll() {
-		for (AroundDir dir : AroundDir.values()) {
-			Square square = getAround(dir);
-			if (square == null) {
-				addAround(dir, new Square(this, dir));
-			}
-		}
+	/**
+	 * ChainMapを返す
+	 * @return ChainMap
+	 */
+	public ChainMap getChainMap() {
+		return chainMap;
 	}
 
-	private void setArounds(Square _source, AroundDir _sourceDir) {
-		addAround(_sourceDir.get(Relation.OPPOSITE), _source);
-		for (AroundDir dir : AroundDir.values()) {
-			int v = getPosition(Axis.VERTICAL) + dir.getComp(Axis.VERTICAL);
-			int h = getPosition(Axis.HORIZONTAL) + dir.getComp(Axis.HORIZONTAL);
-			addAround(dir, get(v, h));
-		}
+	public Position getPosition() {
+		return position;
 	}
 
-	private void init() {
-		around = new EnumMap<>(AroundDir.class);
-		for (AroundDir dir : AroundDir.values()) {
-			around.put(dir, null);
-		}
+	public Move getMove() {
+		return move;
 	}
 }

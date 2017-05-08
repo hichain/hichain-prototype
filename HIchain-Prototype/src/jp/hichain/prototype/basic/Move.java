@@ -1,50 +1,36 @@
 package jp.hichain.prototype.basic;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import jp.hichain.prototype.concept.AroundDir;
+public class Move {
+	private static Square firstMove;
+	private static Square lastMove;
 
-public class Move extends RRChainSign {
-	public static Move ROOT;
-
-	private Move parent;			//親の手
-	private List <Move> children;	//子どもの手
+	private Square parent;			//親の手
+	private List <Square> children;	//子どもの手
 
 	private int moveValue;    //手の評価
 	private int moveDepth;    //手の深さ
 
 	private Move() {
-		super();
 		children = new ArrayList<>();
+		parent = lastMove.getMove().getParent();
 	}
 
-	public Move(Move _source, AroundDir _dir) {
-		super(_source, _dir);
-		children = new ArrayList<>();
+	public static Square getFirstMove() {
+		return firstMove;
 	}
 
-	public Move(Move _source, AroundDir _dir, Player player, ChainSign _sign) {
-		super(_source, _dir, player, _sign);
-		children = new ArrayList<>();
-	}
-
-	public Move(Move _source, AroundDir _dir, Player player, ChainSign _sign, Move _parent) {
-		this(_source, _dir, player, _sign);
-		parent = _parent;
-	}
-
-	static {
-		godMap = new HashMap<>();
-		ROOT = new Move();
+	public static Square getLastMove() {
+		return lastMove;
 	}
 
 	/**
 	 * 親の手を返す
 	 * @return 親の手
 	 */
-	public Move getParent() {
+	public Square getParent() {
 		return parent;
 	}
 
@@ -52,7 +38,7 @@ public class Move extends RRChainSign {
 	 * 子どもの手を返す
 	 * @return 子どもの手
 	 */
-	public List <Move> getChildren() {
+	public List <Square> getChildren() {
 		return children;
 	}
 
@@ -60,7 +46,7 @@ public class Move extends RRChainSign {
 	 * 手の評価を返す
 	 * @return 手の評価
 	 */
-	public int getMoveValue() {
+	public int getValue() {
 		return moveValue;
 	}
 
@@ -68,7 +54,7 @@ public class Move extends RRChainSign {
 	 * 手の深さを返す
 	 * @return 手の深さ
 	 */
-	public int getMoveDepth() {
+	public int getDepth() {
 		return moveDepth;
 	}
 
@@ -76,7 +62,7 @@ public class Move extends RRChainSign {
 	 * 子の手を追加する
 	 * @param _parent 子の手
 	 */
-	public void addChildMove(Move _parent) {
+	public void addChild(Square _parent) {
 		children.add(_parent);
 	}
 
@@ -84,7 +70,7 @@ public class Move extends RRChainSign {
 	 * 親の手をセットする
 	 * @param _parent 親の手
 	 */
-	public void setParentMove(Move _parent) {
+	public void setParentMove(Square _parent) {
 		parent = _parent;
 	}
 
