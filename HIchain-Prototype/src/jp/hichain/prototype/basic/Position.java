@@ -6,6 +6,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Objects;
 
+import jp.hichain.prototype.algorithm.ChainSearcher;
 import jp.hichain.prototype.concept.AroundDir;
 import jp.hichain.prototype.concept.AroundDir.Axis;
 import jp.hichain.prototype.concept.Direction.Relation;
@@ -121,6 +122,7 @@ public final class Position {
 	 */
 	public void addAround(AroundDir _dir, Position _position) {
 		arounds.put(_dir, _position);
+		ChainSearcher.search(thisSquare, _dir);
 	}
 
 	/**

@@ -89,4 +89,13 @@ public class Square {
 	public Move getMove() {
 		return move;
 	}
+
+	/**
+	 * 周囲マスを返す
+	 * @param _dir 自身(this)からみた方向
+	 * @return Square
+	 */
+	public Square getAround(AroundDir _dir) {
+		return position.getAround(_dir).getSquare();
+	}
 }

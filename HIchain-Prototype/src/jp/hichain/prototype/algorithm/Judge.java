@@ -2,7 +2,6 @@ package jp.hichain.prototype.algorithm;
 
 import jp.hichain.prototype.basic.ChainSign;
 import jp.hichain.prototype.basic.Player;
-import jp.hichain.prototype.basic.RRChainSign;
 import jp.hichain.prototype.basic.SignPS;
 import jp.hichain.prototype.basic.Square;
 import jp.hichain.prototype.concept.AroundDir;
@@ -13,7 +12,7 @@ import jp.hichain.prototype.concept.PS.Type;
 
 public class Judge {
 
-	public static PS.Contact getContact(Player player, ChainSign holding, RRChainSign target) {
+	public static PS.Contact getContact(Player player, ChainSign holding, Square target) {
 		SignPS holdingSPS = holding.getSPS();
 		System.out.println("HoldingSPS:\n" + holdingSPS.toString());
 
@@ -36,7 +35,7 @@ public class Judge {
 		return Contact.NONE;
 	}
 
-	private static boolean getSideJudge(SignPS holdingSPS, RRChainSign target) {
+	private static boolean getSideJudge(SignPS holdingSPS, Square target) {
 		SignPS.TypePart typePart = holdingSPS.getTypePart(Type.SIDE);
 
 		for (AroundDir dir : typePart.keySet()) {
@@ -46,7 +45,7 @@ public class Judge {
 			if (aroundSquare == null) {
 				continue;
 			}
-			RRChainSign aroundSign = (RRChainSign)aroundSquare;
+			Square aroundSign = (Square)aroundSquare;
 
 			SignPS antiSPS = aroundSign.getSign().getSPS();
 			SignPS.TypePart antiTypePart = antiSPS.getTypePart(Type.SIDE);
@@ -69,13 +68,13 @@ public class Judge {
 		return false;
 	}
 
-	private static boolean getPointJudge(Player player, SignPS holdingSPS, RRChainSign target) {
+	private static boolean getPointJudge(Player player, SignPS holdingSPS, Square target) {
 		SignPS.TypePart typePart = holdingSPS.getTypePart(Type.POINT);
 
 		for (AroundDir dir : typePart.keySet()) {
 			System.out.println("[" + dir + "]");
 
-			RRChainSign aroundSign = (RRChainSign)target.getAround(dir);
+			Square aroundSign = (Square)target.getAround(dir);
 			if (aroundSign == null || player == aroundSign.getPlayer()) {
 				continue;
 			}
@@ -100,13 +99,13 @@ public class Judge {
 		return false;
 	}
 
-	private static boolean getCornerJudge(Player player, SignPS holdingSPS, RRChainSign target) {
+	private static boolean getCornerJudge(Player player, SignPS holdingSPS, Square target) {
 		SignPS.TypePart typePart = holdingSPS.getTypePart(Type.CORNER);
 
 		for (AroundDir dir : typePart.keySet()) {
 			System.out.println("[" + dir + "]");
 
-			RRChainSign aroundSign = (RRChainSign)target.getAround(dir);
+			Square aroundSign = (Square)target.getAround(dir);
 			if (aroundSign == null || player == aroundSign.getPlayer()) {
 				continue;
 			}
