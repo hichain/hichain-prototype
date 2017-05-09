@@ -7,14 +7,16 @@ public class Move {
 	private static Square firstMove;
 	private static Square lastMove;
 
-	private Square parent;			//親の手
+	private final Square parent;	//親の手
+	private final Square me;		//自分の手
 	private List <Square> children;	//子どもの手
 
 	private int moveValue;    //手の評価
 	private int moveDepth;    //手の深さ
 
-	private Move() {
+	private Move(Square _thisSq) {
 		children = new ArrayList<>();
+		me = _thisSq;
 		parent = lastMove.getMove().getParent();
 	}
 
@@ -24,6 +26,14 @@ public class Move {
 
 	public static Square getLastMove() {
 		return lastMove;
+	}
+
+	/**
+	 * この手を打ったマスを返す
+	 * @return Square
+	 */
+	public Square getSquare() {
+		return me;
 	}
 
 	/**
@@ -64,14 +74,6 @@ public class Move {
 	 */
 	public void addChild(Square _parent) {
 		children.add(_parent);
-	}
-
-	/**
-	 * 親の手をセットする
-	 * @param _parent 親の手
-	 */
-	public void setParentMove(Square _parent) {
-		parent = _parent;
 	}
 
 	/**

@@ -1,6 +1,9 @@
 package jp.hichain.prototype.basic;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Objects;
 
 import jp.hichain.prototype.concept.AroundDir;
@@ -8,14 +11,71 @@ import jp.hichain.prototype.concept.AroundDir.Axis;
 import jp.hichain.prototype.concept.Direction.Relation;
 
 public final class Position {
-	private final EnumMap<Axis, Integer> position;
-	private EnumMap <AroundDir, Square> arounds;
+	private static List <Position> posDB;
 
-	public Position(Position _source, AroundDir _dir) {
+	private final Square thisSquare;
+	private final EnumMap<Axis, Integer> position;
+	private EnumMap <AroundDir, Position> arounds;
+
+	/**
+	 * ルート座標
+	 * @param _root ルートSquare
+	 * @param _v V座標
+	 * @param _h H座標
+	 */
+	public Position(Square _root, int _v, int _h) {
+		init();
+		thisSquare = _root;
+		position = new EnumMap<Axis, Integer>(Axis.class) {{
+			put(Axis.VERTICAL, _v);
+			put(Axis.HORIZONTAL, _h);
+		}};
+		Collections.unmodifiableMap(position);
+		posDB.add(this);
+	}
+
+	/**
+	 * 通常の座標
+	 * @param _thisSq 座標を設定するマス
+	 * @param _source _centerのアクセス元のマス
+	 * @param _dir _sourceからみた_centerの方向
+	 */
+	public Position(Square _thisSq, Position _source, AroundDir _dir) {
+		init();
+		thisSquare = _thisSq;
 		position = new EnumMap<>(Axis.class);
 		for (Axis axis : Axis.values()) {
-			position.put(axis, _source.get(axis) + _dir.getComp(axis));
+			position.put(axis, _source.getPosition(axis) + _dir.getComp(axis));
 		}
+		Collections.unmodifiableMap(position);
+		posDB.add(this);
+		updateAroundsAll();
+	}
+
+	static {
+		posDB = new ArrayList<>();
+	}
+
+	public static Position getSquare(int _v, int _h) {
+		EnumMap<Axis, Integer> targetPos = new EnumMap<Axis, Integer>(Axis.class) {{
+			put(Axis.VERTICAL, _v);
+			put(Axis.HORIZONTAL, _h);
+		}};
+
+		for (Position pos : posDB) {
+			if (pos.position == targetPos) {
+				return pos;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * この座標にあるマスを取得する
+	 * @return Square
+	 */
+	public Square getSquare() {
+		return thisSquare;
 	}
 
 	/**
@@ -23,51 +83,59 @@ public final class Position {
 	 * @param axis 軸
 	 * @return 座標
 	 */
-	public int get(Axis axis) {
+	public int getPosition(Axis axis) {
 		return position.get(axis);
 	}
 
 	/**
-	 * 指定の方角のSquareを返す
-	 * @param _dir 自身(this)からみたAroudDir
-	 * @return 周囲Square
+	 * 指定の方角にある座標を返す
+	 * @param _dir 自身(this)からみたAroundDir
+	 * @return Position
 	 */
-	public Square getAround(AroundDir _dir) {
+	public Position getAround(AroundDir _dir) {
 		return arounds.get(_dir);
 	}
 
 	/**
-	 * 周囲Squareを全て返す
-	 * @return 周囲Square Map
+	 * 指定の方角にマスがあるか返す
+	 * @param _dir 自身(this)からみたAroundDir
+	 * @return boolean
 	 */
-	public EnumMap <AroundDir, Square> getAroundAll() {
-		return arounds;
+	public boolean hasAround(AroundDir _dir) {
+		return arounds.containsKey(_dir);
 	}
 
 	/**
-	 * 周囲Squareを追加
-	 * @param _square Square
-	 * @param _dir 自身(this)からみた_squareの方向
+	 * 周囲座標を全て返す
+	 * @return 周囲座標Map
 	 */
-	public void addAround(AroundDir _dir, Square _square) {
-		arounds.put(_dir, _square);
+	public EnumMap <AroundDir, Position> getAroundAll() {
+		return arounds;
 	}
 
-	protected void createAroundAll() {
-		for (AroundDir dir : AroundDir.values()) {
-			Square square = getAround(dir);
-			if (square == null) {
-				addAround(dir, new Square(this, dir));
-			}
-		}
+
+	/**
+	 * 周囲座標を追加
+	 * @param _dir この座標(this)からみた方向
+	 * @param _square 追加する座標
+	 */
+	public void addAround(AroundDir _dir, Position _position) {
+		arounds.put(_dir, _position);
 	}
 
-	private void setArounds(Square _source, AroundDir _sourceDir) {
-		addAround(_sourceDir.get(Relation.OPPOSITE), _source);
+	/**
+	 * 周囲座標を更新する
+	 * 自分から周囲へのアクセス、周囲から自分へのアクセスの両方を更新
+	 */
+	private void updateAroundsAll() {
 		for (AroundDir dir : AroundDir.values()) {
-			int v = vertical + dir.getComp(Axis.VERTICAL);
-			int h = horizontal + dir.getComp(Axis.HORIZONTAL);
-			addAround(dir, get(v, h));
+			if (hasAround(dir)) continue;
+			int v = getPosition(Axis.VERTICAL) + dir.getComp(Axis.VERTICAL);
+			int h = getPosition(Axis.HORIZONTAL) + dir.getComp(Axis.HORIZONTAL);
+			Position target = Position.getSquare(v, h);
+			if (target == null) continue;
+			addAround(dir, target);
+			target.addAround(dir.get(Relation.OPPOSITE), this);
 		}
 	}
 
@@ -78,6 +146,9 @@ public final class Position {
 		}
 	}
 
+	/**
+	 * 絶対座標が同じなら等しいとみなす
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
@@ -85,12 +156,12 @@ public final class Position {
 		if (!(obj instanceof Position)) {
 			return false;
 		}
-		Position position = (Position)obj;
-		return (vertical == position.vertical) && (horizontal == position.horizontal);
+		Position pos = (Position)obj;
+		return position.equals(pos.position);
 	}
 
     @Override
     public int hashCode() {
-        return Objects.hash(vertical, horizontal);
+        return Objects.hash(position);
     }
 }

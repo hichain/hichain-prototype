@@ -1,10 +1,6 @@
 package jp.hichain.prototype.basic;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import jp.hichain.prototype.concept.AroundDir;
-import jp.hichain.prototype.concept.AroundDir.Axis;
 
 /**
  * マス
@@ -12,13 +8,11 @@ import jp.hichain.prototype.concept.AroundDir.Axis;
  *
  */
 public class Square {
-	private static Map <Position, Square> abPosMap;
+	private Position position;
 
 	private Player player;
 	private ChainSign chainSign;
 	private ChainMap chainMap;
-
-	private Position position;
 
 	private Move move;
 
@@ -26,9 +20,7 @@ public class Square {
 	 * ルートマス
 	 */
 	public Square() {
-		init();
-		position = new Position(-1, -1);
-		abPosMap.put(position, this);
+		position = new Position(this, -1, -1);
 	}
 
 	/**
@@ -37,21 +29,7 @@ public class Square {
 	 * @param _dir  ソースからみた自身(this)のAroundDir
 	 */
 	public Square(Square _source, AroundDir _dir) {
-		init();
-		position = new Position(
-			_source.getPosition(Axis.VERTICAL) + _dir.getComp(Axis.VERTICAL),
-			_source.getPosition(Axis.HORIZONTAL) + _dir.getComp(Axis.HORIZONTAL)
-		);
-		abPosMap.put(position, this);
-		setArounds(_source, _dir);
-	}
-
-	static {
-		abPosMap = new HashMap<>();
-	}
-
-	public static Square get(int _v, int _h) {
-		return abPosMap.get( new Position(_v, _h) );
+		position = new Position(this, _source.getPosition(), _dir);
 	}
 
 	/**
@@ -61,7 +39,6 @@ public class Square {
 	public void make(Player _player, ChainSign _sign) {
 		player = _player;
 		chainSign = _sign;
-		createAroundAll();
 	}
 
 	/**
@@ -89,17 +66,25 @@ public class Square {
 	}
 
 	/**
-	 * ChainMapを返す
+	 * 連鎖関係を返す
 	 * @return ChainMap
 	 */
 	public ChainMap getChainMap() {
 		return chainMap;
 	}
 
+	/**
+	 * 座標を返す
+	 * @return Position
+	 */
 	public Position getPosition() {
 		return position;
 	}
 
+	/**
+	 * 手の評価などを返す
+	 * @return Move
+	 */
 	public Move getMove() {
 		return move;
 	}
