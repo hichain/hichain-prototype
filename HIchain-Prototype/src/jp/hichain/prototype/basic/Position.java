@@ -57,18 +57,22 @@ public final class Position {
 		posDB = new ArrayList<>();
 	}
 
-	public static Position getSquare(int _v, int _h) {
+	public static Position getPosition(int _v, int _h) {
 		EnumMap<Axis, Integer> targetPos = new EnumMap<Axis, Integer>(Axis.class) {{
 			put(Axis.VERTICAL, _v);
 			put(Axis.HORIZONTAL, _h);
 		}};
 
 		for (Position pos : posDB) {
-			if (pos.position == targetPos) {
+			if (pos.position.equals(targetPos)) {
 				return pos;
 			}
 		}
 		return null;
+	}
+
+	public static List<Position> getAllPosition() {
+		return posDB;
 	}
 
 	/**
@@ -144,7 +148,7 @@ public final class Position {
 			if (hasAround(dir)) continue;
 			int v = getPosition(Axis.VERTICAL) + dir.getComp(Axis.VERTICAL);
 			int h = getPosition(Axis.HORIZONTAL) + dir.getComp(Axis.HORIZONTAL);
-			Position target = Position.getSquare(v, h);
+			Position target = Position.getPosition(v, h);
 			if (target == null) continue;
 			addAround(dir, target);
 			target.addAround(dir.get(Relation.OPPOSITE), this);
@@ -156,6 +160,11 @@ public final class Position {
 		for (AroundDir dir : AroundDir.values()) {
 			arounds.put(dir, null);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "(" + getPosition(Axis.VERTICAL) + ", " + getPosition(Axis.HORIZONTAL) + ")";
 	}
 
 	/**
@@ -174,6 +183,6 @@ public final class Position {
 
     @Override
     public int hashCode() {
-        return Objects.hash(position);
+    	return Objects.hash(position);
     }
 }

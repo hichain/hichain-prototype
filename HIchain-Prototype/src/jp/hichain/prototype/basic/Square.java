@@ -19,7 +19,7 @@ public class Square {
 	/**
 	 * ルートマス
 	 */
-	public Square() {
+	private Square() {
 		position = new Position(this, -1, -1);
 	}
 
@@ -30,6 +30,22 @@ public class Square {
 	 */
 	public Square(Square _source, AroundDir _dir) {
 		position = new Position(this, _source.getPosition(), _dir);
+	}
+
+	public static void init() {
+		new Square();
+	}
+
+	/**
+	 * 絶対座標で指定してマスを取得する
+	 * @param _v V座標
+	 * @param _h H座標
+	 * @return
+	 */
+	public static Square get(int _v, int _h) {
+		Position pos = Position.getPosition(_v, _h);
+		if (pos == null) return null;
+		return pos.getSquare();
 	}
 
 	/**
@@ -96,6 +112,8 @@ public class Square {
 	 * @return Square
 	 */
 	public Square getAround(AroundDir _dir) {
-		return position.getAround(_dir).getSquare();
+		Position square = position.getAround(_dir);
+		if (square == null) return null;
+		return square.getSquare();
 	}
 }

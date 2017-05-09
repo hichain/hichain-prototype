@@ -15,13 +15,12 @@ import javax.imageio.ImageIO;
 import jp.hichain.prototype.algorithm.ChainSearcher;
 import jp.hichain.prototype.algorithm.Judge;
 import jp.hichain.prototype.basic.ChainSign;
-import jp.hichain.prototype.basic.Move;
 import jp.hichain.prototype.basic.Player;
-import jp.hichain.prototype.basic.RRChainSign;
 import jp.hichain.prototype.basic.SignChar;
 import jp.hichain.prototype.basic.SignImage;
 import jp.hichain.prototype.basic.SignNum;
 import jp.hichain.prototype.basic.SignPS;
+import jp.hichain.prototype.basic.Square;
 import jp.hichain.prototype.concept.AroundDir;
 import jp.hichain.prototype.concept.CardColor;
 import jp.hichain.prototype.concept.PS;
@@ -41,41 +40,38 @@ public class Main {
 		init();
 		createPlayers();
 
+		Square.init();
 		long start = System.currentTimeMillis();
-		testJudge(AroundDir.NORTH, "1P", 'H', "2P", 'I');
-		//testChainSearch(Move.ROOT, AroundDir.NORTH);
+		testJudge();
+		//testChainSearch();
 		long end = System.currentTimeMillis();
 		System.out.println((end-start) + " ms");
 	}
 
-	private static void testChainSearch(RRChainSign center, AroundDir aroundDir) {
-		Move root = Move.ROOT;
+	private static void testChainSearch() {
+		Square root = Square.get(-1, -1);
 		root.make(Player.get("1P"), SignData.get('H'));
-		Move around = new Move(
-			root, AroundDir.NORTH, Player.get("1P"), SignData.get('I')
-		);
+		Square around = root.getAround(AroundDir.NORTH);
+		around.make(Player.get("1P"), SignData.get('I'));
 
 		System.out.println("\nStart ChainSearching...\n");
 
-		int hits = ChainSearcher.search(center, aroundDir);
+		int hits = ChainSearcher.search(root, AroundDir.NORTH);
 
 		System.out.println("\nFinal Result: " + hits + " chains hit");
 	}
 
-	private static void testJudge(final AroundDir root_target, final String rootPL, final char rootSC, final String holdingPL, final char holdingSC) {
-		Move root = Move.ROOT;
-		root.make(Player.get(rootPL), SignData.get(rootSC));
-		Move sign = new Move(
-			root, root_target
-		);
-		//rootの下にsignがある
+	private static void testJudge() {
+		Square root = Square.get(-1, -1);
+		root.make(Player.get("1P"), SignData.get('A'));
+		Square around = root.getAround(AroundDir.NORTH);
 
-		ChainSign holdingSign = SignData.get(holdingSC);
+		ChainSign holdingSign = SignData.get('B');
 
 		System.out.println("\nStart Judging...\n");
 
 		PS.Contact result = Judge.getContact(
-			Player.get(holdingPL), holdingSign, sign
+			Player.get("2P"), holdingSign, around
 		);
 
 		System.out.println("\nFinal Result: " + result + "\n");
