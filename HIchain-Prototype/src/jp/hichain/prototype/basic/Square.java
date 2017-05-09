@@ -39,6 +39,7 @@ public class Square {
 	public void make(Player _player, ChainSign _sign) {
 		player = _player;
 		chainSign = _sign;
+		position.createAroundsAll();
 	}
 
 	/**

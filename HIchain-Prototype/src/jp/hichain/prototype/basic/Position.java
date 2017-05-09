@@ -124,6 +124,16 @@ public final class Position {
 	}
 
 	/**
+	 * 周囲に空マスを作成する
+	 */
+	public void createAroundsAll() {
+		for (AroundDir dir : AroundDir.values()) {
+			if (hasAround(dir)) continue;
+			new Square(thisSquare, dir);
+		}
+	}
+
+	/**
 	 * 周囲座標を更新する
 	 * 自分から周囲へのアクセス、周囲から自分へのアクセスの両方を更新
 	 */

@@ -1,18 +1,18 @@
 package jp.hichain.prototype.algorithm;
 
 import jp.hichain.prototype.basic.ChainMap;
-import jp.hichain.prototype.basic.RRChainSign;
 import jp.hichain.prototype.basic.SignChar;
+import jp.hichain.prototype.basic.Square;
 import jp.hichain.prototype.concept.AroundDir;
 import jp.hichain.prototype.concept.ScoredString;
 import jp.hichain.prototype.concept.SignDir;
 
 public class ChainSearcher {
 
-	public static int search(RRChainSign root, AroundDir aroundDir) {
+	public static int search(Square root, AroundDir aroundDir) {
 		int hits = 0;
 
-		RRChainSign next = (RRChainSign)root.getAround(aroundDir);
+		Square next = (Square)root.getPosition().getAround(aroundDir).getSquare();
 		if (root == null || next == null) {
 			return hits;
 		}
