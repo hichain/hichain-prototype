@@ -50,14 +50,13 @@ public final class Position {
 		}
 		Collections.unmodifiableMap(position);
 		posDB.add(this);
-		updateAroundsAll();
 	}
 
 	static {
 		posDB = new ArrayList<>();
 	}
 
-	public static Position getPosition(int _v, int _h) {
+	public static Position get(int _v, int _h) {
 		EnumMap<Axis, Integer> targetPos = new EnumMap<Axis, Integer>(Axis.class) {{
 			put(Axis.VERTICAL, _v);
 			put(Axis.HORIZONTAL, _h);
@@ -71,7 +70,7 @@ public final class Position {
 		return null;
 	}
 
-	public static List<Position> getAllPosition() {
+	public static List<Position> getAll() {
 		return posDB;
 	}
 
@@ -107,7 +106,7 @@ public final class Position {
 	 * @return boolean
 	 */
 	public boolean hasAround(AroundDir _dir) {
-		return arounds.containsKey(_dir);
+		return getAround(_dir) != null;
 	}
 
 	/**
@@ -135,7 +134,7 @@ public final class Position {
 	public void createAroundsAll() {
 		for (AroundDir dir : AroundDir.values()) {
 			if (hasAround(dir)) continue;
-			new Square(thisSquare, dir);
+			Square square = new Square(thisSquare, dir);
 		}
 	}
 
@@ -143,12 +142,12 @@ public final class Position {
 	 * 周囲座標を更新する
 	 * 自分から周囲へのアクセス、周囲から自分へのアクセスの両方を更新
 	 */
-	private void updateAroundsAll() {
+	public void updateAroundsAll() {
 		for (AroundDir dir : AroundDir.values()) {
 			if (hasAround(dir)) continue;
 			int v = getPosition(Axis.VERTICAL) + dir.getComp(Axis.VERTICAL);
 			int h = getPosition(Axis.HORIZONTAL) + dir.getComp(Axis.HORIZONTAL);
-			Position target = Position.getPosition(v, h);
+			Position target = Position.get(v, h);
 			if (target == null) continue;
 			addAround(dir, target);
 			target.addAround(dir.get(Relation.OPPOSITE), this);

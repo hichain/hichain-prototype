@@ -42,8 +42,8 @@ public class Main {
 
 		Square.init();
 		long start = System.currentTimeMillis();
-		testJudge();
-		//testChainSearch();
+		//testJudge();
+		testChainSearch();
 		long end = System.currentTimeMillis();
 		System.out.println((end-start) + " ms");
 	}
@@ -63,10 +63,10 @@ public class Main {
 
 	private static void testJudge() {
 		Square root = Square.get(-1, -1);
-		root.make(Player.get("1P"), SignData.get('A'));
+		root.make(Player.get("1P"), SignData.get('O'));
 		Square around = root.getAround(AroundDir.NORTH);
 
-		ChainSign holdingSign = SignData.get('B');
+		ChainSign holdingSign = SignData.get('H');
 
 		System.out.println("\nStart Judging...\n");
 

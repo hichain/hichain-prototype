@@ -20,6 +20,7 @@ public class Square {
 	 * ルートマス
 	 */
 	private Square() {
+		chainMap = new ChainMap();
 		position = new Position(this, -1, -1);
 	}
 
@@ -29,7 +30,9 @@ public class Square {
 	 * @param _dir  ソースからみた自身(this)のAroundDir
 	 */
 	public Square(Square _source, AroundDir _dir) {
+		chainMap = new ChainMap();
 		position = new Position(this, _source.getPosition(), _dir);
+		position.updateAroundsAll();
 	}
 
 	public static void init() {
@@ -43,7 +46,7 @@ public class Square {
 	 * @return
 	 */
 	public static Square get(int _v, int _h) {
-		Position pos = Position.getPosition(_v, _h);
+		Position pos = Position.get(_v, _h);
 		if (pos == null) return null;
 		return pos.getSquare();
 	}
@@ -112,8 +115,8 @@ public class Square {
 	 * @return Square
 	 */
 	public Square getAround(AroundDir _dir) {
-		Position square = position.getAround(_dir);
-		if (square == null) return null;
-		return square.getSquare();
+		Position pos = position.getAround(_dir);
+		if (pos == null) return null;
+		return pos.getSquare();
 	}
 }
