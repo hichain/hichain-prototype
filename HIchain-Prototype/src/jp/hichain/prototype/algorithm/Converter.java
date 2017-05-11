@@ -1,29 +1,23 @@
 package jp.hichain.prototype.algorithm;
 
+import jp.hichain.prototype.basic.ChainMap;
+import jp.hichain.prototype.basic.Player;
+import jp.hichain.prototype.basic.Position;
+import jp.hichain.prototype.basic.Square;
+import jp.hichain.prototype.concept.ScoredString;
+import jp.hichain.prototype.concept.SignDir;
+
 public class Converter {
-/*	public static int getAdditionalPoints(RRChainSign root) {
-		int points = 0;
-		ChainMap chainMap = root.getChainMap();
+	public static int getPointsAll(Player player) {
+		for (ScoredString ssKind : ScoredString.values()) {
+			for (SignDir signDir : SignDir.values()) {
+				for (Position position : Position.getAll()) {
+					Square square = position.getSquare();
+					ChainMap chainMap = square.getChainMap();
 
-		for (Map.Entry<Chain, List<AroundDir>> entry : chainMap.get().entrySet()) {
-			Chain chain = entry.getKey();
-			for (AroundDir aroundDir : entry.getValue()) {
-				boolean junction = true;
-
-				RRChainSign next = (RRChainSign)root.getAround(aroundDir);
-				ChainMap nextChainMap = next.getChainMap();
-				int roads = nextChainMap.getSize(chain);
-				if (roads == 0) {
-					continue;
-				} else if (roads == 1) {
-					junction = false;
 				}
 			}
 		}
+		return 0;
 	}
-
-	private static int getChainLength(RRChainSign root, Chain chain) {
-
-	}
-*/
 }
