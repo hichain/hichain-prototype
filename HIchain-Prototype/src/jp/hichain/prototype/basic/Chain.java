@@ -5,7 +5,7 @@ import java.util.Objects;
 import jp.hichain.prototype.concept.ScoredString;
 import jp.hichain.prototype.concept.SignDir;
 
-public class Chain {
+public final class Chain {
 	private final SignDir signDir;
 	private final ScoredString kind;
 	private final ScoredString.Order order;
@@ -14,6 +14,14 @@ public class Chain {
 		this.signDir = signDir;
 		this.kind = kind;
 		this.order = order;
+	}
+
+	public Chain(ScoredString kind, ScoredString.Order order) {
+		this(null, kind, order);
+	}
+
+	public Chain(SignDir signDir, ScoredString kind) {
+		this(signDir, kind, null);
 	}
 
 	public SignDir getSignDir() {
@@ -26,6 +34,10 @@ public class Chain {
 
 	public ScoredString.Order getOrder() {
 		return order;
+	}
+
+	public boolean equalsWithoutDir(Chain chain) {
+		return kind == chain.kind && order == chain.order;
 	}
 
 	@Override
