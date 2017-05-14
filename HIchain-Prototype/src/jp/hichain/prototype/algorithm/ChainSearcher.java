@@ -12,7 +12,7 @@ public class ChainSearcher {
 	public static int search(Square root, AroundDir aroundDir) {
 		int hits = 0;
 
-		Square next = (Square)root.getAround(aroundDir);
+		Square next = root.getAround(aroundDir);
 		if (root == null || next == null) {
 			return hits;
 		}

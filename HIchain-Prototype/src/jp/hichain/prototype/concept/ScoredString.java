@@ -11,9 +11,9 @@ public enum ScoredString {
 	);
 
 	public enum Order {
-		ASCEND,	//昇順
+		ASCEND,		//昇順
 		DESCEND,	//降順
-		SAME;	//同一
+		SAME;		//同一
 	}
 
 	public enum Edge {

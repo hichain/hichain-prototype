@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 
 import jp.hichain.prototype.algorithm.ChainSearcher;
+import jp.hichain.prototype.algorithm.Converter;
 import jp.hichain.prototype.algorithm.Judge;
 import jp.hichain.prototype.basic.ChainSign;
 import jp.hichain.prototype.basic.Player;
@@ -42,10 +43,24 @@ public class Main {
 
 		Square.init();
 		long start = System.currentTimeMillis();
-		testJudge();
+		//testJudge();
 		//testChainSearch();
+		testConvert();
 		long end = System.currentTimeMillis();
 		System.out.println((end-start) + " ms");
+	}
+
+	private static void testConvert() {
+		Converter.init(3, 2, 5)	;
+
+		Player player = Player.get("1P");
+		Square root = Square.get(-1, -1);
+		root.make(player, SignData.get('H'));
+		Square around1 = root.getAround(AroundDir.SOUTH);
+		around1.make(player, SignData.get('I'));
+		Square around2 = around1.getAround(AroundDir.SOUTH);
+		around2.make(player, SignData.get('J'));
+		System.out.println( Converter.getPointsAll(player) );
 	}
 
 	private static void testChainSearch() {
@@ -63,10 +78,10 @@ public class Main {
 
 	private static void testJudge() {
 		Square root = Square.get(-1, -1);
-		root.make(Player.get("1P"), SignData.get('A'));
+		root.make(Player.get("1P"), SignData.get('O'));
 		Square around = root.getAround(AroundDir.NORTH);
 
-		ChainSign holdingSign = SignData.get('B');
+		ChainSign holdingSign = SignData.get('H');
 
 		System.out.println("\nStart Judging...\n");
 

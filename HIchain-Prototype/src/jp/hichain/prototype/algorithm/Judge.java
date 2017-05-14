@@ -42,12 +42,11 @@ public class Judge {
 			System.out.println("[" + dir + "]");
 
 			Square aroundSquare = target.getAround(dir);
-			if (aroundSquare == null) {
+			if (aroundSquare == null || aroundSquare.isEmpty()) {
 				continue;
 			}
-			Square aroundSign = (Square)aroundSquare;
 
-			SignPS antiSPS = aroundSign.getSign().getSPS();
+			SignPS antiSPS = aroundSquare.getSign().getSPS();
 			SignPS.TypePart antiTypePart = antiSPS.getTypePart(Type.SIDE);
 
 			System.out.println("AroundSPS[" + dir + "]:\n" + antiSPS.toString());
@@ -74,12 +73,12 @@ public class Judge {
 		for (AroundDir dir : typePart.keySet()) {
 			System.out.println("[" + dir + "]");
 
-			Square aroundSign = (Square)target.getAround(dir);
-			if (aroundSign == null || player == aroundSign.getPlayer()) {
+			Square aroundSquare = target.getAround(dir);
+			if (aroundSquare == null || aroundSquare.isEmpty() ||  player == aroundSquare.getPlayer()) {
 				continue;
 			}
 
-			SignPS antiSPS = aroundSign.getSign().getSPS();
+			SignPS antiSPS = aroundSquare.getSign().getSPS();
 			SignPS.TypePart antiTypePart = antiSPS.getTypePart(Type.POINT);
 
 			System.out.println("AroundSPS[" + dir + "]:\n" + antiSPS.toString());
@@ -105,12 +104,12 @@ public class Judge {
 		for (AroundDir dir : typePart.keySet()) {
 			System.out.println("[" + dir + "]");
 
-			Square aroundSign = (Square)target.getAround(dir);
-			if (aroundSign == null || player == aroundSign.getPlayer()) {
+			Square aroundSquare = target.getAround(dir);
+			if (aroundSquare == null || aroundSquare.isEmpty() || player == aroundSquare.getPlayer()) {
 				continue;
 			}
 
-			SignPS antiSPS = aroundSign.getSign().getSPS();
+			SignPS antiSPS = aroundSquare.getSign().getSPS();
 			SignPS.TypePart antiTypePart = antiSPS.getTypePart(Type.CORNER);
 
 			System.out.println("AroundSPS[" + dir + "]:\n" + antiSPS.toString());

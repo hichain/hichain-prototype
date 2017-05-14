@@ -16,6 +16,14 @@ public class ChainCondition {
 		this.order = order;
 	}
 
+	public ChainCondition(ScoredString kind, ScoredString.Order order) {
+		this(null, kind, order);
+	}
+
+	public ChainCondition(SignDir signDir, ScoredString kind) {
+		this(signDir, kind, null);
+	}
+
 	public SignDir getSignDir() {
 		return signDir;
 	}
