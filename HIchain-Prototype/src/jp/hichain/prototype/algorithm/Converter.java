@@ -5,8 +5,8 @@ public class Converter {
 		int points = 0;
 		ChainMap chainMap = root.getChainMap();
 
-		for (Map.Entry<Chain, List<AroundDir>> entry : chainMap.get().entrySet()) {
-			Chain chain = entry.getKey();
+		for (Map.Entry<ChainCondition, List<AroundDir>> entry : chainMap.get().entrySet()) {
+			ChainCondition chain = entry.getKey();
 			for (AroundDir aroundDir : entry.getValue()) {
 				boolean junction = true;
 
@@ -22,7 +22,7 @@ public class Converter {
 		}
 	}
 
-	private static int getChainLength(RRChainSign root, Chain chain) {
+	private static int getChainLength(RRChainSign root, ChainCondition chain) {
 
 	}
 */
