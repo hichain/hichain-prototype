@@ -16,6 +16,11 @@ public enum ScoredString {
 		SAME;	//同一
 	}
 
+	public enum Edge {
+		HEAD,
+		TAIL;
+	}
+
 	private String orderString;
 
 	private ScoredString(String str) {
