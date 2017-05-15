@@ -43,8 +43,6 @@ public class ChainSearcher {
 			}
 		}
 
-		char ch = root.getSign().getSC().get();
-		System.out.println("'" + ch + "'\n" + chainMap.toString());
 		return hits;
 	}
 }

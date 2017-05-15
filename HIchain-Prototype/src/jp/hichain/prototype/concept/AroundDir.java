@@ -8,14 +8,14 @@ import java.util.EnumMap;
  *
  */
 public enum AroundDir {
-	NORTH(Type.NEXT, 0, 1),
-	NORTHEAST(Type.CORNER, 1, 1),
+	NORTH(Type.NEXT, 0, -1),
+	NORTHEAST(Type.CORNER, 1, -1),
 	EAST(Type.NEXT, 1, 0),
-	SOUTHEAST(Type.CORNER, 1, -1),
-	SOUTH(Type.NEXT, 0, -1),
-	SOUTHWEST(Type.CORNER, -1, -1),
+	SOUTHEAST(Type.CORNER, 1, 1),
+	SOUTH(Type.NEXT, 0, 1),
+	SOUTHWEST(Type.CORNER, -1, 1),
 	WEST(Type.NEXT, -1, 0),
-	NORTHWEST(Type.CORNER, -1, 1);
+	NORTHWEST(Type.CORNER, -1, -1);
 
 	public enum Type {
 		NEXT,

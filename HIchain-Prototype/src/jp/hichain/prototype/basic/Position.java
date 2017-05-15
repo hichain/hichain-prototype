@@ -125,7 +125,6 @@ public final class Position {
 	 */
 	public void addAround(AroundDir _dir, Position _position) {
 		arounds.put(_dir, _position);
-		ChainSearcher.search(thisSquare, _dir);
 	}
 
 	/**
@@ -134,7 +133,7 @@ public final class Position {
 	public void createAroundsAll() {
 		for (AroundDir dir : AroundDir.values()) {
 			if (hasAround(dir)) continue;
-			Square square = new Square(thisSquare, dir);
+			new Square(thisSquare, dir);
 		}
 	}
 
@@ -151,6 +150,18 @@ public final class Position {
 			if (target == null) continue;
 			addAround(dir, target);
 			target.addAround(dir.get(Relation.OPPOSITE), this);
+		}
+	}
+
+	/**
+	 * 周囲との連鎖を全て探索する
+	 */
+	public void searchChainsAll() {
+		for (AroundDir dir : AroundDir.values()) {
+			if (hasAround(dir)) {
+				ChainSearcher.search(thisSquare, dir);
+				ChainSearcher.search(getAround(dir).getSquare(), dir.get(Relation.OPPOSITE));
+			}
 		}
 	}
 

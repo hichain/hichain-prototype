@@ -15,10 +15,10 @@ import jp.hichain.prototype.concept.ScoredString.Order;
 import jp.hichain.prototype.concept.SignDir;
 
 /*
- * タスク:
+ * 考慮してない事項:
  * アスタリスク
  * ぞろ目
- * 重複除去
+ * 重複除去 (X*Z問題)
  */
 public class Converter {
 	private static Map<ChainCondition, Integer> chainLengthMin;
@@ -29,7 +29,7 @@ public class Converter {
 			int royalPoints = getConsecutivePoints(
 				Position.getAll(), player, new ChainCondition(signDir, ScoredString.ROYAL)
 			);
-			if (royalPoints >= getChainLengthMin(ScoredString.ROYAL, Order.DESCEND)) {
+			if (royalPoints >= getChainLengthMin(ScoredString.ROYAL, Order.ASCEND)) {
 				return -1;
 			}
 			points += getConsecutivePoints(
@@ -48,9 +48,9 @@ public class Converter {
 			Square square = position.getSquare();
 			if (square.isEmpty() || square.getPlayer() != _player) continue;
 			ChainMap chainMap = square.getChainMap();
-			List<AroundDir> descendDirs = chainMap.get(ascendChain);
+			List<AroundDir> descendDirs = chainMap.get(descendChain);
 			if (descendDirs != null) continue;
-			points += getConsecutivePoints(square, descendChain);
+			points += getConsecutivePoints(square, ascendChain);
 		}
 
 		return points;
@@ -64,8 +64,6 @@ public class Converter {
 	private static int getConsecutivePoints(Square _square, ChainCondition _chain, int _depth) {
 		int points = 0;
 		int min =  getChainLengthMin(_chain.getKind(), _chain.getOrder());
-
-		System.out.println("Depth: " + _depth);
 
 		ChainMap chainMap = _square.getChainMap();
 		List<AroundDir> dirs = chainMap.get(_chain);
@@ -91,13 +89,13 @@ public class Converter {
 	public static void init(int alphabetical, int identical, int royal) {
 		chainLengthMin = new HashMap<ChainCondition, Integer>() {{
 			put(
-				new ChainCondition(ScoredString.ALPHABETICAL, Order.DESCEND), alphabetical
+				new ChainCondition(ScoredString.ALPHABETICAL, Order.ASCEND), alphabetical
 			);
 			put(
 				new ChainCondition(ScoredString.ALPHABETICAL, Order.SAME), identical
 			);
 			put(
-				new ChainCondition(ScoredString.ROYAL, Order.DESCEND), royal
+				new ChainCondition(ScoredString.ROYAL, Order.ASCEND), royal
 			);
 		}};
 	}

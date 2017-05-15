@@ -37,4 +37,13 @@ public class SignNum {
 			newMap.put(e.getKey().get(_dir), e.getValue());
 		}
 	}
+
+	@Override
+	public String toString() {
+		String string = "";
+		for (Map.Entry<SignDir, SignChar> entry : snMap.entrySet()) {
+			string += entry.getKey() + ": " + entry.getValue() + " ";
+		}
+		return string;
+	}
 }

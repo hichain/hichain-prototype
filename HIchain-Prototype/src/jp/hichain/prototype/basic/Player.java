@@ -68,4 +68,9 @@ public class Player {
 	public List<ChainSign> getFieldSigns() {
 		return fieldSigns;
 	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
 }

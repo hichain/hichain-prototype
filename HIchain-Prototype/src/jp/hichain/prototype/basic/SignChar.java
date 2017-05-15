@@ -87,4 +87,9 @@ public class SignChar {
 		SignChar that = (SignChar)obj;
 		return signChar == that.signChar;
 	}
+
+	@Override
+	public String toString() {
+		return String.valueOf(signChar);
+	}
 }

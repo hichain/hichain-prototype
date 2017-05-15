@@ -58,6 +58,7 @@ public class Square {
 	public void make(Player _player, ChainSign _sign) {
 		player = _player;
 		chainSign = _sign;
+		position.searchChainsAll();
 		position.createAroundsAll();
 	}
 
@@ -118,5 +119,9 @@ public class Square {
 		Position pos = position.getAround(_dir);
 		if (pos == null) return null;
 		return pos.getSquare();
+	}
+
+	public String chainsToString() {
+		return "'" + chainSign.getSC() + "' " + position + "\n" + chainMap.toString();
 	}
 }

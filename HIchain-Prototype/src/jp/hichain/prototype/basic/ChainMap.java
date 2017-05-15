@@ -47,13 +47,14 @@ public class ChainMap {
 	@Override
 	public String toString() {
 		String string = "";
+		int i = 0;
 		for (Map.Entry<ChainCondition, List<AroundDir>> entry : chainMap.entrySet()) {
-			string += entry.getKey().toString() + "\n";
-			string += "[AroundDir] ";
 			for (AroundDir dir : entry.getValue()) {
 				string += dir + " ";
 			}
-			string += "\n";
+			string += ": " + entry.getKey().toString();
+			if ( i != chainMap.size()-1 ) string += "\n";
+			i++;
 		}
 		return string;
 	}
