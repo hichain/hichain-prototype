@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jp.hichain.prototype.basic.Chain;
+import jp.hichain.prototype.basic.ChainCondition;
 import jp.hichain.prototype.basic.ChainMap;
 import jp.hichain.prototype.basic.Player;
 import jp.hichain.prototype.basic.Position;
@@ -21,28 +21,28 @@ import jp.hichain.prototype.concept.SignDir;
  * 重複除去
  */
 public class Converter {
-	private static Map<Chain, Integer> chainLengthMin;
+	private static Map<ChainCondition, Integer> chainLengthMin;
 
 	public static int getPointsAll(Player player) {
 		int points = 0;
 		for (SignDir signDir : SignDir.values()) {
 			int royalPoints = getConsecutivePoints(
-				Position.getAll(), player, new Chain(signDir, ScoredString.ROYAL)
+				Position.getAll(), player, new ChainCondition(signDir, ScoredString.ROYAL)
 			);
 			if (royalPoints >= getChainLengthMin(ScoredString.ROYAL, Order.DESCEND)) {
 				return -1;
 			}
 			points += getConsecutivePoints(
-				Position.getAll(), player, new Chain(signDir, ScoredString.ALPHABETICAL)
+				Position.getAll(), player, new ChainCondition(signDir, ScoredString.ALPHABETICAL)
 			);
 		}
 		return points;
 	}
 
-	private static int getConsecutivePoints(List<Position> _positions, Player _player, Chain _chain) {
+	private static int getConsecutivePoints(List<Position> _positions, Player _player, ChainCondition _chain) {
 		int points = 0;
-		Chain ascendChain = new Chain(_chain.getSignDir(), _chain.getKind(), Order.ASCEND);
-		Chain descendChain = new Chain(_chain.getSignDir(), _chain.getKind(), Order.DESCEND);
+		ChainCondition ascendChain = new ChainCondition(_chain.getSignDir(), _chain.getKind(), Order.ASCEND);
+		ChainCondition descendChain = new ChainCondition(_chain.getSignDir(), _chain.getKind(), Order.DESCEND);
 
 		for (Position position : _positions) {
 			Square square = position.getSquare();
@@ -56,11 +56,12 @@ public class Converter {
 		return points;
 	}
 
-	private static int getConsecutivePoints(Square _square, Chain _chain) {
+
+	private static int getConsecutivePoints(Square _square, ChainCondition _chain) {
 		return getConsecutivePoints(_square, _chain, 1);
 	}
 
-	private static int getConsecutivePoints(Square _square, Chain _chain, int _depth) {
+	private static int getConsecutivePoints(Square _square, ChainCondition _chain, int _depth) {
 		int points = 0;
 		int min =  getChainLengthMin(_chain.getKind(), _chain.getOrder());
 
@@ -84,19 +85,19 @@ public class Converter {
 	}
 
 	private static int getChainLengthMin(ScoredString ssKind, Order order) {
-		return chainLengthMin.get(new Chain(ssKind, order));
+		return chainLengthMin.get(new ChainCondition(ssKind, order));
 	}
 
 	public static void init(int alphabetical, int identical, int royal) {
-		chainLengthMin = new HashMap<Chain, Integer>() {{
+		chainLengthMin = new HashMap<ChainCondition, Integer>() {{
 			put(
-				new Chain(ScoredString.ALPHABETICAL, Order.DESCEND), alphabetical
+				new ChainCondition(ScoredString.ALPHABETICAL, Order.DESCEND), alphabetical
 			);
 			put(
-				new Chain(ScoredString.ALPHABETICAL, Order.SAME), identical
+				new ChainCondition(ScoredString.ALPHABETICAL, Order.SAME), identical
 			);
 			put(
-				new Chain(ScoredString.ROYAL, Order.DESCEND), royal
+				new ChainCondition(ScoredString.ROYAL, Order.DESCEND), royal
 			);
 		}};
 	}

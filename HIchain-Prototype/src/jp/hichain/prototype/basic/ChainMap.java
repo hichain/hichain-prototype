@@ -10,21 +10,22 @@ import jp.hichain.prototype.concept.ScoredString;
 import jp.hichain.prototype.concept.SignDir;
 
 public class ChainMap {
-	Map<Chain, List<AroundDir>> chainMap;
+	Map<ChainCondition, List<AroundDir>> chainMap;
+	List<ChainEdge> chainEdges;
 
 	public ChainMap() {
 		chainMap = new HashMap<>();
 	}
 
-	public Map<Chain, List<AroundDir>> get() {
+	public Map<ChainCondition, List<AroundDir>> get() {
 		return chainMap;
 	}
 
-	public List<AroundDir> get(Chain chain) {
+	public List<AroundDir> get(ChainCondition chain) {
 		return chainMap.get(chain);
 	}
 
-	public int getSize(Chain chain) {
+	public int getSize(ChainCondition chain) {
 		if (!chainMap.containsKey(chain)) {
 			return 0;
 		}
@@ -32,21 +33,21 @@ public class ChainMap {
 	}
 
 	public void put(AroundDir aroundDir, SignDir signDir, ScoredString kind, ScoredString.Order order) {
-		Chain chain = new Chain(signDir, kind, order);
+		ChainCondition chainCnd = new ChainCondition(signDir, kind, order);
 		List<AroundDir> list;
-		if (chainMap.containsKey(chain)) {
-			list = chainMap.get(chain);
+		if (chainMap.containsKey(chainCnd)) {
+			list = chainMap.get(chainCnd);
 		} else {
 			list = new ArrayList<>();
 		}
 		list.add(aroundDir);
-		chainMap.put(chain, list);
+		chainMap.put(chainCnd, list);
 	}
 
 	@Override
 	public String toString() {
 		String string = "";
-		for (Map.Entry<Chain, List<AroundDir>> entry : chainMap.entrySet()) {
+		for (Map.Entry<ChainCondition, List<AroundDir>> entry : chainMap.entrySet()) {
 			string += entry.getKey().toString() + "\n";
 			string += "[AroundDir] ";
 			for (AroundDir dir : entry.getValue()) {
