@@ -1,42 +1,41 @@
 package jp.hichain.prototype.algorithm;
 
-import jp.hichain.prototype.basic.ChainMap;
+import jp.hichain.prototype.basic.ChainCondition;
+import jp.hichain.prototype.basic.ChainNode;
 import jp.hichain.prototype.basic.SignChar;
 import jp.hichain.prototype.basic.Square;
-import jp.hichain.prototype.concept.AroundDir;
 import jp.hichain.prototype.concept.ScoredString;
 import jp.hichain.prototype.concept.SignDir;
 
 public class ChainSearcher {
 
-	public static int search(Square root, AroundDir aroundDir) {
+	public static int search(Square me, Square you) {
 		int hits = 0;
 
-		Square next = root.getAround(aroundDir);
-		if (root == null || next == null) {
+		if (me == null || you == null) {
 			return hits;
 		}
-		if (root.isEmpty() || next.isEmpty()) {
+		if (me.isEmpty() || you.isEmpty()) {
 			return hits;
 		}
 
-		ChainMap chainMap = root.getChainMap();
 		for (SignDir signDir : SignDir.values()) {
-			SignChar rootSC = root.getSign().getSN().get(signDir);
-			SignChar nextSC = next.getSign().getSN().get(signDir);
-			if (rootSC == null || nextSC == null) {
+			SignChar meSC = me.getSign().getSN().get(signDir);
+			SignChar youSC = you.getSign().getSN().get(signDir);
+			if (meSC == null || youSC == null) {
 				continue;
 			}
 
 			for (ScoredString kind : ScoredString.values()) {
 				for (ScoredString.Order order : ScoredString.Order.values()) {
-					SignChar targetSC = rootSC.getNext(kind, order);
+					SignChar targetSC = meSC.getNext(kind, order);
 					if (targetSC == null) {
 						continue;
 					}
-					boolean result = targetSC.equals(nextSC);
+					boolean result = targetSC.equals(youSC);
 					if (result) {
-						chainMap.put(aroundDir, signDir, kind, order);
+						ChainCondition condition = new ChainCondition(signDir, kind, order);
+						addChainNode(me, you, condition);
 						hits++;
 					}
 				}
@@ -44,5 +43,33 @@ public class ChainSearcher {
 		}
 
 		return hits;
+	}
+
+	public static void addChainNode(Square me, Square you, ChainCondition condition) {
+		ChainNode myNode = me.getChainNode(condition);
+		if (myNode == null) {
+			myNode = new ChainNode(me);
+			me.addChainNode(condition, myNode);
+		}
+		ChainNode yourNode = you.getChainNode(condition);
+		if (yourNode == null) {
+			yourNode = new ChainNode(you);
+			you.addChainNode(condition, yourNode);
+		}
+
+		switch (condition.getOrder()) {
+			case ASCEND:
+				myNode.addChild(yourNode);
+				yourNode.addParent(myNode);
+			break;
+			case DESCEND:
+				myNode.addParent(yourNode);
+				yourNode.addChild(myNode);
+			break;
+			case SAME:
+				myNode.addChild(yourNode);
+				yourNode.addParent(myNode);
+			break;
+		}
 	}
 }

@@ -159,8 +159,7 @@ public final class Position {
 	public void searchChainsAll() {
 		for (AroundDir dir : AroundDir.values()) {
 			if (hasAround(dir)) {
-				ChainSearcher.search(thisSquare, dir);
-				ChainSearcher.search(getAround(dir).getSquare(), dir.get(Relation.OPPOSITE));
+				ChainSearcher.search(thisSquare, getAround(dir).getSquare());
 			}
 		}
 	}

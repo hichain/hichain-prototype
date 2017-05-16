@@ -1,15 +1,13 @@
 package jp.hichain.prototype.algorithm;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import jp.hichain.prototype.basic.ChainCondition;
-import jp.hichain.prototype.basic.ChainMap;
+import jp.hichain.prototype.basic.ChainNode;
 import jp.hichain.prototype.basic.Player;
 import jp.hichain.prototype.basic.Position;
 import jp.hichain.prototype.basic.Square;
-import jp.hichain.prototype.concept.AroundDir;
 import jp.hichain.prototype.concept.ScoredString;
 import jp.hichain.prototype.concept.ScoredString.Order;
 import jp.hichain.prototype.concept.SignDir;
@@ -23,6 +21,33 @@ import jp.hichain.prototype.concept.SignDir;
 public class Converter {
 	private static Map<ChainCondition, Integer> chainLengthMin;
 
+	public static int getPointsAll(Player player) {
+		int points = 0;
+
+		for (Position position : Position.getAll()) {
+			for (SignDir signDir : SignDir.values()) {
+				Square square = position.getSquare();
+				ChainCondition royalCondition = new ChainCondition(signDir, ScoredString.ROYAL, ScoredString.Order.ASCEND);
+				ChainNode royalNode = square.getChainNode(royalCondition);
+				if (royalNode != null) {
+					int royalPoints = getPoints(royalNode);
+					if (royalPoints >= getChainLengthMin(ScoredString.ROYAL, Order.ASCEND)) {
+						return -1;
+					}
+				}
+			}
+		}
+
+		return points;
+	}
+
+	public static int getPoints(ChainNode root) {
+		int points = 0;
+
+		return points;
+	}
+
+	/*
 	public static int getPointsAll(Player player) {
 		int points = 0;
 		for (SignDir signDir : SignDir.values()) {
@@ -81,7 +106,7 @@ public class Converter {
 
 		return points;
 	}
-
+*/
 	private static int getChainLengthMin(ScoredString ssKind, Order order) {
 		return chainLengthMin.get(new ChainCondition(ssKind, order));
 	}

@@ -1,5 +1,8 @@
 package jp.hichain.prototype.basic;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import jp.hichain.prototype.concept.AroundDir;
 
 /**
@@ -8,11 +11,11 @@ import jp.hichain.prototype.concept.AroundDir;
  *
  */
 public class Square {
-	private Position position;
+	private final Position position;
 
 	private Player player;
 	private ChainSign chainSign;
-	private ChainMap chainMap;
+	private Map<ChainCondition, ChainNode> chainMap;
 
 	private Move move;
 
@@ -20,7 +23,7 @@ public class Square {
 	 * ルートマス
 	 */
 	private Square() {
-		chainMap = new ChainMap();
+		chainMap = new HashMap<>();
 		position = new Position(this, -1, -1);
 	}
 
@@ -30,7 +33,7 @@ public class Square {
 	 * @param _dir  ソースからみた自身(this)のAroundDir
 	 */
 	public Square(Square _source, AroundDir _dir) {
-		chainMap = new ChainMap();
+		chainMap = new HashMap<>();
 		position = new Position(this, _source.getPosition(), _dir);
 		position.updateAroundsAll();
 	}
@@ -87,11 +90,11 @@ public class Square {
 	}
 
 	/**
-	 * 連鎖関係を返す
-	 * @return ChainMap
+	 * 連鎖ノードを返す
+	 * @return ChainNode
 	 */
-	public ChainMap getChainMap() {
-		return chainMap;
+	public ChainNode getChainNode(ChainCondition _chainCondition) {
+		return chainMap.get(_chainCondition);
 	}
 
 	/**
@@ -121,7 +124,7 @@ public class Square {
 		return pos.getSquare();
 	}
 
-	public String chainsToString() {
-		return "'" + chainSign.getSC() + "' " + position + "\n" + chainMap.toString();
+	public void addChainNode(ChainCondition _condition, ChainNode _node) {
+		chainMap.put(_condition, _node);
 	}
 }
