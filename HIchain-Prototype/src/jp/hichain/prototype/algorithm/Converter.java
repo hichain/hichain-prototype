@@ -1,6 +1,8 @@
 package jp.hichain.prototype.algorithm;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import jp.hichain.prototype.basic.ChainCondition;
@@ -17,6 +19,7 @@ import jp.hichain.prototype.concept.SignDir;
  * アスタリスク
  * ぞろ目
  * 重複除去 (X*Z問題)
+ * 連鎖ループ問題 (UR)
  */
 public class Converter {
 	private static Map<ChainCondition, Integer> chainLengthMin;
@@ -25,15 +28,19 @@ public class Converter {
 		int points = 0;
 
 		for (Position position : Position.getAll()) {
+			Square square = position.getSquare();
+			if (square.isEmpty() || square.getPlayer() != player) {
+				continue;
+			}
 			for (SignDir signDir : SignDir.values()) {
-				Square square = position.getSquare();
 				ChainCondition royalCondition = new ChainCondition(signDir, ScoredString.ROYAL, ScoredString.Order.ASCEND);
 				ChainNode royalNode = square.getChainNode(royalCondition);
-				if (royalNode != null) {
-					int royalPoints = getPoints(royalNode);
-					if (royalPoints >= getChainLengthMin(ScoredString.ROYAL, Order.ASCEND)) {
-						return -1;
-					}
+				if (royalNode == null || !royalNode.isRoot()) {
+					continue;
+				}
+				int royalPoints = getPoints(royalNode, royalCondition);
+				if (royalPoints >= getChainLengthMin(ScoredString.ROYAL, Order.ASCEND)) {
+					return -1;
 				}
 			}
 		}
@@ -41,10 +48,27 @@ public class Converter {
 		return points;
 	}
 
-	public static int getPoints(ChainNode root) {
+	public static int getPoints(ChainNode root, ChainCondition condition) {
 		int points = 0;
 
+		ChainNode node = root;
+
 		return points;
+	}
+
+	private static List<Integer> getChainsLength(ChainNode root) {
+		List<Integer> lengthList = new ArrayList<>();
+
+		int length = 1;
+		ChainNode node = root;
+		while (node != null) {
+			for (ChainNode child : node.getChildren()) {
+				node = child;
+				if (node.isLeaf()) {
+
+				}
+			}
+		}
 	}
 
 	/*
