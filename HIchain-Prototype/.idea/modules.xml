@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/HIchain-Prototype/HIchain-Prototype.iml" filepath="$PROJECT_DIR$/HIchain-Prototype/HIchain-Prototype.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HIchain-Prototype.iml" filepath="$PROJECT_DIR$/HIchain-Prototype.iml" />
     </modules>
   </component>
 </project>

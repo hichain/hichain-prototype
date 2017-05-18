@@ -80,7 +80,7 @@ public class Main {
 
 		System.out.println("\nStart ChainSearching...\n");
 
-		int hits = ChainSearcher.search(root, AroundDir.NORTH);
+		int hits = ChainSearcher.search(root, around);
 
 		System.out.println("\nFinal Result: " + hits + " chains hit");
 	}

@@ -41,4 +41,17 @@ public class ChainNode {
 	public void addChild(ChainNode _node) {
 		children.add(_node);
 	}
+
+	@Override
+	public String toString() {
+		if (isLeaf()) {
+			return thisSquare.getPosition().toString();
+		}
+
+		String string = "";
+		for (ChainNode node : children) {
+			string += " -> " + node.toString() + "\n";
+		}
+		return string;
+	}
 }

@@ -127,4 +127,12 @@ public class Square {
 	public void addChainNode(ChainCondition _condition, ChainNode _node) {
 		chainMap.put(_condition, _node);
 	}
+
+	public String chainsToString() {
+		String string = "";
+		for (Map.Entry<ChainCondition, ChainNode> entry : chainMap.entrySet()) {
+			string += entry.getKey() + "\n > " + entry.getValue();
+		}
+		return string;
+	}
 }
