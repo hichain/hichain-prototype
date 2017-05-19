@@ -34,9 +34,15 @@ public class Converter {
 				boolean over = gameIsOver(square, signDir);
 				if (over) return -1;
 				ChainCondition abcalCondition = new ChainCondition(signDir, ScoredString.ALPHABETICAL, Order.ASCEND);
-				points += getPoints(square.getChainNode(abcalCondition), abcalCondition);
+				ChainNode node = square.getChainNode(abcalCondition);
+				if (node != null && node.isRoot()) {
+					points += getPoints(node, abcalCondition);
+				}
 				ChainCondition idCondition = new ChainCondition(signDir, ScoredString.ALPHABETICAL, Order.SAME);
-				points += getPoints(square.getChainNode(idCondition), idCondition);
+				node = square.getChainNode(idCondition);
+				if (node != null && node.isRoot()) {
+					points += getPoints(node, idCondition);
+				}
 			}
 		}
 
@@ -79,7 +85,7 @@ public class Converter {
 	}
 
 	private static int getChainLengthMin(ChainCondition condition) {
-		return chainLengthMin.get(condition);
+		return chainLengthMin.get(new ChainCondition(condition.getKind(), condition.getOrder()));
 	}
 
 	public static void init(int alphabetical, int identical, int royal) {

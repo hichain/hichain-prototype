@@ -44,13 +44,14 @@ public class ChainNode {
 
 	@Override
 	public String toString() {
+		String pos = thisSquare.getPosition().toString();
 		if (isLeaf()) {
-			return thisSquare.getPosition().toString();
+			return pos;
 		}
 
 		String string = "";
 		for (ChainNode node : children) {
-			string += " -> " + node.toString() + "\n";
+			string += pos + " -> " + node.toString();
 		}
 		return string;
 	}

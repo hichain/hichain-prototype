@@ -130,8 +130,11 @@ public class Square {
 
 	public String chainsToString() {
 		String string = "";
+		int i = 0;
 		for (Map.Entry<ChainCondition, ChainNode> entry : chainMap.entrySet()) {
 			string += entry.getKey() + "\n > " + entry.getValue();
+			if (i < chainMap.size()-1) string += "\n";
+			i++;
 		}
 		return string;
 	}

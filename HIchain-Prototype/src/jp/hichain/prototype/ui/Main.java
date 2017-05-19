@@ -57,19 +57,11 @@ public class Main {
 		Square root = Square.get(-1, -1);
 		root.make(player, SignData.get('A'));
 		Square around1 = root.getAround(AroundDir.SOUTH);
-		around1.make(player, SignData.get('Z'));
+		around1.make(player, SignData.get('B'));
 		Square around2 = around1.getAround(AroundDir.SOUTH);
-		around2.make(player, SignData.get('Y'));
-		Square around3 = root.getAround(AroundDir.EAST);
-		around3.make(player, SignData.get('B'));
-		Square around4 = around3.getAround(AroundDir.NORTH);
-		around4.make(player, SignData.get('C'));
-		System.out.println("\n" + root.chainsToString() + "\n");
-		System.out.println(around1.chainsToString() + "\n");
-		System.out.println(around2.chainsToString() + "\n");
-		System.out.println(around3.chainsToString() + "\n");
-		System.out.println(around4.chainsToString() + "\n");
-		System.out.println( "POINTS: " + Converter.getPointsAll(player) );
+		around2.make(player, SignData.get('C'));
+		System.out.println("\n" + root.chainsToString());
+		System.out.println( "\nPOINTS: " + Converter.getPointsAll(player) );
 	}
 
 	private static void testChainSearch() {
