@@ -1,9 +1,9 @@
-### [develop-preai](https://github.com/hichain/HIchain-Prototype/tree/develop-preai)でAI用にアルゴリズムを全て書き換え中
+### AI開発に向けて [develop-preai](https://github.com/hichain/HIchain-Prototype/tree/develop-preai) で新アルゴリズム実装中
 # HIchain Prototype版
 
 ![ゲームイメージ](https://github.com/hichain/HIchain-Prototype/blob/master/images/playing3.gif)
 
-## HIchain(ハイチェイン) とは
+## HICHAIN(ハイチェイン) とは
   + 同人ボードゲームサークル｢[HIchain Project](http://hichain.sokon.jp)｣が制作した配列ゲームです
   + ルールは[こちら](http://hichain.sokon.jp/rule.html)
 
