@@ -8,16 +8,16 @@ import jp.hichain.prototype.concept.SignDir;
 public class ChainCondition {
 	private final SignDir signDir;
 	private final ScoredString kind;
-	private final ScoredString.Order order;
+	private final ScoredString.Relation relation;
 
-	public ChainCondition(SignDir signDir, ScoredString kind, ScoredString.Order order) {
+	public ChainCondition(SignDir signDir, ScoredString kind, ScoredString.Relation relation) {
 		this.signDir = signDir;
 		this.kind = kind;
-		this.order = order;
+		this.relation = relation;
 	}
 
-	public ChainCondition(ScoredString kind, ScoredString.Order order) {
-		this(null, kind, order);
+	public ChainCondition(ScoredString kind, ScoredString.Relation relation) {
+		this(null, kind, relation);
 	}
 
 	public ChainCondition(SignDir signDir, ScoredString kind) {
@@ -32,8 +32,8 @@ public class ChainCondition {
 		return kind;
 	}
 
-	public ScoredString.Order getOrder() {
-		return order;
+	public ScoredString.Relation getRelation() {
+		return relation;
 	}
 
 	@Override
@@ -42,19 +42,19 @@ public class ChainCondition {
 		if (obj == null) return false;
 		if (obj instanceof ChainCondition) {
 			ChainCondition chainCnd = (ChainCondition)obj;
-			return (signDir == chainCnd.signDir && kind == chainCnd.kind && order == chainCnd.order);
+			return (signDir == chainCnd.signDir && kind == chainCnd.kind && relation == chainCnd.relation);
 		}
 		return false;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(signDir, kind, order);
+		return Objects.hash(signDir, kind, relation);
 	}
 
 	@Override
 	public String toString() {
-		String string = "[SignDir] " + signDir + " [Kind] " + kind + " [Order] " + order;
+		String string = "[SignDir] " + signDir + " [Kind] " + kind + " [Relation] " + relation;
 		return string;
 	}
 }
