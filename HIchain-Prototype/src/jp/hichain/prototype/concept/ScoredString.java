@@ -10,15 +10,10 @@ public enum ScoredString {
 		"CHAIN"
 	);
 
-	public enum Order {
-		ASCEND,		//昇順
-		DESCEND,	//降順
-		SAME;		//同一
-	}
-
-	public enum Edge {
-		HEAD,
-		TAIL;
+	public enum Relation {
+		PREVIOUS,	//前
+		NEXT,	    //次
+		SAME;       //同一
 	}
 
 	private String orderString;

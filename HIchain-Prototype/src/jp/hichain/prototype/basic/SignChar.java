@@ -10,11 +10,11 @@ public class SignChar {
 	private static Map<Character, SignChar> signs = new HashMap<>();
 
 	private char signChar;
-	private EnumMap<ScoredString, EnumMap<ScoredString.Order, SignChar>> nextMap;
+	private EnumMap<ScoredString, EnumMap<ScoredString.Relation, SignChar>> relationMap;
 
 	private SignChar(char ch) {
 		signChar = ch;
-		nextMap = new EnumMap<>(ScoredString.class);
+		relationMap = new EnumMap<>(ScoredString.class);
 	}
 
 	static {
@@ -25,11 +25,11 @@ public class SignChar {
 		return signChar;
 	}
 
-	public SignChar getNext(ScoredString kind, ScoredString.Order order) {
-		if (!nextMap.containsKey(kind)) {
+	public SignChar getRelation(ScoredString kind, ScoredString.Relation relation) {
+		if (!relationMap.containsKey(kind)) {
 			return null;
 		}
-		return nextMap.get(kind).get(order);
+		return relationMap.get(kind).get(relation);
 	}
 
 	public static boolean contains(char ch) {
@@ -63,12 +63,12 @@ public class SignChar {
 				SignChar lsc = signs.get(chs[l]);
 				SignChar rsc = signs.get(chs[r]);
 
-				EnumMap<ScoredString.Order, SignChar> map = new EnumMap<>(ScoredString.Order.class);
-				map.put( ScoredString.Order.ASCEND, rsc );
-				map.put( ScoredString.Order.DESCEND, lsc );
-				map.put( ScoredString.Order.SAME, sc );
+				EnumMap<ScoredString.Relation, SignChar> map = new EnumMap<>(ScoredString.Relation.class);
+				map.put( ScoredString.Relation.NEXT, rsc );
+				map.put( ScoredString.Relation.PREVIOUS, lsc );
+				map.put( ScoredString.Relation.SAME, sc );
 
-				sc.nextMap.put(kind, map);
+				sc.relationMap.put(kind, map);
 			}
 		}
 

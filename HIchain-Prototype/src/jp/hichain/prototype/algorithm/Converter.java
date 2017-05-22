@@ -36,6 +36,7 @@ public class Converter {
 				ChainCondition abcalCondition = new ChainCondition(signDir, ScoredString.ALPHABETICAL, Order.ASCEND);
 				ChainNode node = square.getChainNode(abcalCondition);
 				if (node != null && node.isRoot()) {
+					System.out.println(points);
 					points += getPoints(node, abcalCondition);
 				}
 				ChainCondition idCondition = new ChainCondition(signDir, ScoredString.ALPHABETICAL, Order.SAME);

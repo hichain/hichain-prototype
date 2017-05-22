@@ -27,14 +27,14 @@ public class ChainSearcher {
 			}
 
 			for (ScoredString kind : ScoredString.values()) {
-				for (ScoredString.Order order : ScoredString.Order.values()) {
-					SignChar targetSC = meSC.getNext(kind, order);
+				for (ScoredString.Relation relation : ScoredString.Relation.values()) {
+					SignChar targetSC = meSC.getRelation(kind, relation);
 					if (targetSC == null) {
 						continue;
 					}
 					boolean result = targetSC.equals(youSC);
 					if (result) {
-						ChainCondition condition = new ChainCondition(signDir, kind, order);
+						ChainCondition condition = new ChainCondition(signDir, kind, relation);
 						addChainNode(me, you, condition);
 						hits++;
 					}
@@ -57,7 +57,7 @@ public class ChainSearcher {
 			you.addChainNode(condition, yourNode);
 		}
 
-		switch (condition.getOrder()) {
+		switch (condition.getRelation()) {
 			case ASCEND:
 				myNode.addChild(yourNode);
 				yourNode.addParent(myNode);
