@@ -33,7 +33,7 @@ public class Player {
 
 	public static Player get(String name) {
 		for (Player player : players) {
-			if (player.name == name) {
+			if (player.name.equals(name)) {
 				return player;
 			}
 		}

@@ -18,6 +18,7 @@ public class Move {
 		children = new ArrayList<>();
 		me = _thisSq;
 		parent = lastMove.getMove().getParent();
+		lastMove = me;
 	}
 
 	public static Square getFirstMove() {

@@ -1,17 +1,17 @@
 package jp.hichain.prototype.basic;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ChainNode {
 	private final Square thisSquare;
-	private List<ChainNode> parents;
-	private List<ChainNode> children;
+	private Set<ChainNode> parents;
+	private Set<ChainNode> children;
 
 	public ChainNode(Square _thisSq) {
 		thisSquare = _thisSq;
-		parents = new ArrayList<>();
-		children = new ArrayList<>();
+		parents = new HashSet<>();
+		children = new HashSet<>();
 	}
 
 	public boolean isRoot() {
@@ -26,11 +26,11 @@ public class ChainNode {
 		return thisSquare;
 	}
 
-	public List<ChainNode> getParent() {
+	public Set<ChainNode> getParent() {
 		return parents;
 	}
 
-	public List<ChainNode> getChildren() {
+	public Set<ChainNode> getChildren() {
 		return children;
 	}
 
@@ -44,15 +44,25 @@ public class ChainNode {
 
 	@Override
 	public String toString() {
+		return toIncrementalString("");
+	}
+
+	private String toIncrementalString(String str) {
 		String pos = thisSquare.getPosition().toString();
 		if (isLeaf()) {
 			return pos;
 		}
 
-		String string = "";
+		String newStr = str;
+		String increment = pos + " -> ";
+		int i = 0;
 		for (ChainNode node : children) {
-			string += pos + " -> " + node.toString();
+			newStr += increment + node.toIncrementalString(str);
+			if (i < children.size()-1) {
+				newStr += "\n > " + str;
+			}
+			i++;
 		}
-		return string;
+		return newStr;
 	}
 }

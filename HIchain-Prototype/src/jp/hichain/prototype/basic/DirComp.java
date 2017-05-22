@@ -2,6 +2,7 @@ package jp.hichain.prototype.basic;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import jp.hichain.prototype.concept.Direction;
 
@@ -62,7 +63,12 @@ public class DirComp implements Cloneable {
 		if (obj == null) return false;
 		if (getClass() != obj.getClass()) return false;
 		DirComp comp = (DirComp)obj;
-		return components.equals(comp);
+		return components.equals(comp.components);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(components);
 	}
 
 	@Override

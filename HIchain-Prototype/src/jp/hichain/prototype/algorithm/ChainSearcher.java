@@ -34,8 +34,8 @@ public class ChainSearcher {
 					}
 					boolean result = targetSC.equals(youSC);
 					if (result) {
-						ChainCondition condition = new ChainCondition(signDir, kind, relation);
-						addChainNode(me, you, condition);
+						ChainCondition condition = new ChainCondition(signDir, kind);
+						addChainNode(me, you, condition, relation);
 						hits++;
 					}
 				}
@@ -45,7 +45,7 @@ public class ChainSearcher {
 		return hits;
 	}
 
-	public static void addChainNode(Square me, Square you, ChainCondition condition) {
+	private static void addChainNode(Square me, Square you, ChainCondition condition, ScoredString.Relation relation) {
 		ChainNode myNode = me.getChainNode(condition);
 		if (myNode == null) {
 			myNode = new ChainNode(me);
@@ -57,16 +57,12 @@ public class ChainSearcher {
 			you.addChainNode(condition, yourNode);
 		}
 
-		switch (condition.getRelation()) {
-			case ASCEND:
-				myNode.addChild(yourNode);
-				yourNode.addParent(myNode);
-			break;
-			case DESCEND:
+		switch (relation) {
+			case PREVIOUS:
 				myNode.addParent(yourNode);
 				yourNode.addChild(myNode);
 			break;
-			case SAME:
+			case NEXT:
 				myNode.addChild(yourNode);
 				yourNode.addParent(myNode);
 			break;

@@ -60,13 +60,12 @@ public class SignChar {
 				int r = (i == chs.length-1) ? 0 : i+1;
 
 				SignChar sc = signs.get(chs[i]);
-				SignChar lsc = signs.get(chs[l]);
-				SignChar rsc = signs.get(chs[r]);
+				SignChar lsc = (kind == ScoredString.IDENTICAL) ? sc : signs.get(chs[l]);
+				SignChar rsc = (kind == ScoredString.IDENTICAL) ? sc : signs.get(chs[r]);
 
 				EnumMap<ScoredString.Relation, SignChar> map = new EnumMap<>(ScoredString.Relation.class);
 				map.put( ScoredString.Relation.NEXT, rsc );
 				map.put( ScoredString.Relation.PREVIOUS, lsc );
-				map.put( ScoredString.Relation.SAME, sc );
 
 				sc.relationMap.put(kind, map);
 			}

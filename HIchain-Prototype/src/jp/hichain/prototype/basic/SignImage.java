@@ -12,6 +12,7 @@ public class SignImage {
 
 	public SignImage(BufferedImage image) {
 		signImage = image;
+		filter = new AffineTransform();
 	}
 
 	public BufferedImage get() {

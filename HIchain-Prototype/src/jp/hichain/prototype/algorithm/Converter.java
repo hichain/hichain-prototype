@@ -9,7 +9,6 @@ import jp.hichain.prototype.basic.Player;
 import jp.hichain.prototype.basic.Position;
 import jp.hichain.prototype.basic.Square;
 import jp.hichain.prototype.concept.ScoredString;
-import jp.hichain.prototype.concept.ScoredString.Order;
 import jp.hichain.prototype.concept.SignDir;
 
 /*
@@ -20,7 +19,7 @@ import jp.hichain.prototype.concept.SignDir;
  * 連鎖ループ問題 (UR)
  */
 public class Converter {
-	private static Map<ChainCondition, Integer> chainLengthMin;
+	private static Map<ScoredString, Integer> chainLengthMin;
 
 	public static int getPointsAll(Player player) {
 		int points = 0;
@@ -33,17 +32,8 @@ public class Converter {
 			for (SignDir signDir : SignDir.values()) {
 				boolean over = gameIsOver(square, signDir);
 				if (over) return -1;
-				ChainCondition abcalCondition = new ChainCondition(signDir, ScoredString.ALPHABETICAL, Order.ASCEND);
-				ChainNode node = square.getChainNode(abcalCondition);
-				if (node != null && node.isRoot()) {
-					System.out.println(points);
-					points += getPoints(node, abcalCondition);
-				}
-				ChainCondition idCondition = new ChainCondition(signDir, ScoredString.ALPHABETICAL, Order.SAME);
-				node = square.getChainNode(idCondition);
-				if (node != null && node.isRoot()) {
-					points += getPoints(node, idCondition);
-				}
+				points += getPoints(square, signDir, ScoredString.ALPHABETICAL);
+				points += getPoints(square, signDir, ScoredString.IDENTICAL);
 			}
 		}
 
@@ -51,28 +41,27 @@ public class Converter {
 	}
 
 	private static boolean gameIsOver(Square root, SignDir signDir) {
-		ChainCondition royalCondition = new ChainCondition(signDir, ScoredString.ROYAL, ScoredString.Order.ASCEND);
-		ChainNode royalNode = root.getChainNode(royalCondition);
-		if (royalNode == null || !royalNode.isRoot()) {
-			return false;
-		}
-		int royalPoints = getPoints(royalNode, royalCondition);
-		int royalMin = getChainLengthMin(royalCondition);
+		int royalPoints = getPoints(root, signDir, ScoredString.ROYAL);
+		int royalMin = getChainLengthMin(ScoredString.ROYAL);
 		if (royalPoints >= royalMin*royalMin) {
 			return true;
 		}
 		return false;
 	}
 
-	private static int getPoints(ChainNode root, ChainCondition condition) {
-		return getPoints(root, condition, 0);
+	private static int getPoints(Square root, SignDir signDir, ScoredString ssKind) {
+		ChainCondition condition = new ChainCondition(signDir, ssKind);
+		ChainNode rootNode = root.getChainNode(condition);
+		if (rootNode == null || !rootNode.isRoot()) return 0;
+
+		return getPoints(rootNode, condition, 1);
 	}
 
 	private static int getPoints(ChainNode root, ChainCondition condition, int length) {
 		int points = 0;
 
 		if (root.isLeaf()) {
-			if( getChainLengthMin(condition) <= length ) {
+			if( getChainLengthMin(condition.getKind()) <= length ) {
 				return length*length;
 			}
 			return 0;
@@ -85,20 +74,20 @@ public class Converter {
 		return points;
 	}
 
-	private static int getChainLengthMin(ChainCondition condition) {
-		return chainLengthMin.get(new ChainCondition(condition.getKind(), condition.getOrder()));
+	private static int getChainLengthMin(ScoredString kind) {
+		return chainLengthMin.get(kind);
 	}
 
 	public static void init(int alphabetical, int identical, int royal) {
-		chainLengthMin = new HashMap<ChainCondition, Integer>() {{
+		chainLengthMin = new HashMap<ScoredString, Integer>() {{
 			put(
-				new ChainCondition(ScoredString.ALPHABETICAL, Order.ASCEND), alphabetical
+				ScoredString.ALPHABETICAL, alphabetical
 			);
 			put(
-				new ChainCondition(ScoredString.ALPHABETICAL, Order.SAME), identical
+				ScoredString.IDENTICAL, identical
 			);
 			put(
-				new ChainCondition(ScoredString.ROYAL, Order.ASCEND), royal
+				ScoredString.ROYAL, royal
 			);
 		}};
 	}

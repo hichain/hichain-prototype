@@ -8,20 +8,10 @@ import jp.hichain.prototype.concept.SignDir;
 public class ChainCondition {
 	private final SignDir signDir;
 	private final ScoredString kind;
-	private final ScoredString.Relation relation;
-
-	public ChainCondition(SignDir signDir, ScoredString kind, ScoredString.Relation relation) {
-		this.signDir = signDir;
-		this.kind = kind;
-		this.relation = relation;
-	}
-
-	public ChainCondition(ScoredString kind, ScoredString.Relation relation) {
-		this(null, kind, relation);
-	}
 
 	public ChainCondition(SignDir signDir, ScoredString kind) {
-		this(signDir, kind, null);
+		this.signDir = signDir;
+		this.kind = kind;
 	}
 
 	public SignDir getSignDir() {
@@ -32,9 +22,6 @@ public class ChainCondition {
 		return kind;
 	}
 
-	public ScoredString.Relation getRelation() {
-		return relation;
-	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -42,19 +29,19 @@ public class ChainCondition {
 		if (obj == null) return false;
 		if (obj instanceof ChainCondition) {
 			ChainCondition chainCnd = (ChainCondition)obj;
-			return (signDir == chainCnd.signDir && kind == chainCnd.kind && relation == chainCnd.relation);
+			return (signDir == chainCnd.signDir && kind == chainCnd.kind);
 		}
 		return false;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(signDir, kind, relation);
+		return Objects.hash(signDir, kind);
 	}
 
 	@Override
 	public String toString() {
-		String string = "[SignDir] " + signDir + " [Kind] " + kind + " [Relation] " + relation;
+		String string = "[SignDir] " + signDir + " [Kind] " + kind;
 		return string;
 	}
 }
