@@ -1,6 +1,5 @@
 package jp.hichain.prototype.basic;
 
-import java.text.CharacterIterator;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +28,7 @@ public class ChainNode {
 		return thisSquare;
 	}
 
-	public Set<ChainNode> getParent() {
+	public Set<ChainNode> getParents() {
 		return parents;
 	}
 
@@ -51,7 +50,7 @@ public class ChainNode {
 		List<ChainNode> roots = getRoots();
 		for (int i = 0; i < roots.size(); i++) {
 			ChainNode root = roots.get(i);
-			str += " > " + root.toScoredString("");
+			str += root.toScoredString("");
 			if (i < roots.size()-1) str += "\n";
 		}
 		return str;
@@ -59,33 +58,33 @@ public class ChainNode {
 
 	private String toScoredString(String inputStr) {
 		String pos = thisSquare.getPosition().toString();
-		if (isLeaf()) return pos;
+		if (isLeaf()) return (inputStr + pos);
 
 		String currentStr = inputStr + pos + " -> ";
-		String str = currentStr;
+		String str = (inputStr == "") ? " > " : "";
 		int i = 0;
 		for (ChainNode child : children) {
 			str += child.toScoredString(currentStr);
+			if (i < children.size()-1) str += "\n > ";
 			i++;
 		}
 
-		str = " > " + str;
 		return str;
 	}
 
 	private List<ChainNode> getRoots() {
 		List<ChainNode> roots = new ArrayList<>();
-		addRoots(roots);
+		searchRoots(roots);
 		return roots;
 	}
 
-	private void addRoots(List <ChainNode> nodes) {
+	public void searchRoots(List <ChainNode> nodes) {
 		if (isRoot()) {
 			nodes.add(this);
 			return;
 		}
 		for (ChainNode parent : parents) {
-			parent.addRoots(nodes);
+			parent.searchRoots(nodes);
 		}
 	}
 }

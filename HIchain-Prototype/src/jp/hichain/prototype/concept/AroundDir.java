@@ -1,6 +1,7 @@
 package jp.hichain.prototype.concept;
 
 import java.util.EnumMap;
+import java.util.EnumSet;
 
 /**
  * 周囲マス方向 (8方向)
@@ -62,6 +63,23 @@ public enum AroundDir {
 		return comps.get(axis);
 	}
 
+	public static AroundDir getByComp(int v, int h) {
+		for (AroundDir dir : values()) {
+			if (dir.getComp(Axis.VERTICAL) == v && dir.getComp(Axis.HORIZONTAL) == h) {
+				return dir;
+			}
+		}
+		return null;
+	}
+
+	public static EnumSet<AroundDir> values(Type type) {
+		EnumSet<AroundDir> dirs = EnumSet.noneOf(AroundDir.class);
+		for (AroundDir dir : AroundDir.values()) {
+			if (dir.type == type) dirs.add(dir);
+		}
+		return dirs;
+	}
+
 	private static void set(AroundDir [] dirs) {
 		for (int i = 0; i < dirs.length; i++) {
 			int l = (i == 0) ? dirs.length-1 : i-1;
@@ -71,14 +89,5 @@ public enum AroundDir {
 			dirs[i].relations.put( Direction.Relation.RIGHT, dirs[r] );
 			dirs[i].relations.put( Direction.Relation.OPPOSITE, dirs[o] );
 		}
-	}
-
-	public static AroundDir getByComp(int v, int h) {
-		for (AroundDir dir : values()) {
-			if (dir.getComp(Axis.VERTICAL) == v && dir.getComp(Axis.HORIZONTAL) == h) {
-				return dir;
-			}
-		}
-		return null;
 	}
 }

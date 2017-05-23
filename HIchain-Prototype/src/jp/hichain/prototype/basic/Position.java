@@ -9,6 +9,7 @@ import java.util.Objects;
 import jp.hichain.prototype.algorithm.ChainSearcher;
 import jp.hichain.prototype.concept.AroundDir;
 import jp.hichain.prototype.concept.AroundDir.Axis;
+import jp.hichain.prototype.concept.AroundDir.Type;
 import jp.hichain.prototype.concept.Direction.Relation;
 
 public final class Position {
@@ -157,7 +158,7 @@ public final class Position {
 	 * 周囲との連鎖を全て探索する
 	 */
 	public void searchChainsAll() {
-		for (AroundDir dir : AroundDir.values()) {
+		for (AroundDir dir : AroundDir.values(Type.NEXT)) {
 			if (hasAround(dir)) {
 				ChainSearcher.search(thisSquare, getAround(dir).getSquare());
 			}
