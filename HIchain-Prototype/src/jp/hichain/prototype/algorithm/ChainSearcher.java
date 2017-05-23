@@ -1,5 +1,7 @@
 package jp.hichain.prototype.algorithm;
 
+import java.util.EnumSet;
+
 import jp.hichain.prototype.basic.ChainCondition;
 import jp.hichain.prototype.basic.ChainNode;
 import jp.hichain.prototype.basic.SignChar;
@@ -27,7 +29,11 @@ public class ChainSearcher {
 			}
 
 			for (ScoredString kind : ScoredString.values()) {
-				for (ScoredString.Relation relation : ScoredString.Relation.values()) {
+				EnumSet<ScoredString.Relation> relations = EnumSet.of(ScoredString.Relation.PREVIOUS);
+				if (kind != ScoredString.IDENTICAL) {
+					relations.add(ScoredString.Relation.NEXT);
+				}
+				for (ScoredString.Relation relation : relations) {
 					SignChar targetSC = meSC.getRelation(kind, relation);
 					if (targetSC == null) {
 						continue;

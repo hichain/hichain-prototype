@@ -62,7 +62,7 @@ public class Main {
 		around2.make(player, SignData.get('C'));
 		Square around3 = around1.getAround(AroundDir.EAST);
 		around3.make(player, SignData.get('C'));
-		System.out.println("\n" + around3.chainsToString());
+		System.out.println("\n" + around1.chainsToString());
 		System.out.println( "\nPOINTS: " + Converter.getPointsAll(player) );
 	}
 
