@@ -9,6 +9,7 @@ public class ChainNode {
 	private final Square thisSquare;
 	private Set<ChainNode> parents;
 	private Set<ChainNode> children;
+	private boolean active;
 
 	public ChainNode(Square _thisSq) {
 		thisSquare = _thisSq;
@@ -22,6 +23,10 @@ public class ChainNode {
 
 	public boolean isLeaf() {
 		return (children.size() == 0);
+	}
+
+	public boolean isActive() {
+		return active;
 	}
 
 	public Square getSquare() {
@@ -78,7 +83,7 @@ public class ChainNode {
 		return roots;
 	}
 
-	public void searchRoots(List <ChainNode> nodes) {
+	private void searchRoots(List <ChainNode> nodes) {
 		if (isRoot()) {
 			nodes.add(this);
 			return;
@@ -86,5 +91,9 @@ public class ChainNode {
 		for (ChainNode parent : parents) {
 			parent.searchRoots(nodes);
 		}
+	}
+
+	private boolean isActiveSquare() {
+
 	}
 }
