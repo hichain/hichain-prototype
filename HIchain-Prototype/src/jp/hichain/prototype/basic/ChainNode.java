@@ -82,6 +82,8 @@ public class ChainNode {
 
 	private String toScoredString(String inputStr) {
 		String pos = thisSquare.getPosition().toString();
+		if (mature) pos += "m";
+		if (valid) pos += "v";
 		if (isLeaf()) return (inputStr + pos);
 
 		String currentStr = inputStr + pos + " -> ";

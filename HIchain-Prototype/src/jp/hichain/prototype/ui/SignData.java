@@ -33,7 +33,13 @@ public class SignData {
 	 * @return BS
 	 */
 	public static ChainSign get(char _ch) {
-		return signs.get(_ch);
+		ChainSign sign = null;
+		try {
+			sign = signs.get(_ch).clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return sign;
 	}
 
 	/**

@@ -6,7 +6,7 @@ import jp.hichain.prototype.concept.CardColor;
 import jp.hichain.prototype.concept.Direction;
 import jp.hichain.prototype.concept.SignDir;
 
-public class ChainSign {
+public class ChainSign implements Cloneable {
 	private SignChar character;
 	private SignDir direction;
 	private SignPS ps;
@@ -82,5 +82,17 @@ public class ChainSign {
 	 */
 	public SignImage getSI(CardColor color) {
 		return images.get(color);
+	}
+
+	@Override
+	public ChainSign clone() throws CloneNotSupportedException {
+		ChainSign sign = (ChainSign)super.clone();
+		sign.character = character;
+		sign.direction = direction;
+		sign.ps = ps;
+		sign.number = number;
+		sign.images = images;
+
+		return sign;
 	}
 }

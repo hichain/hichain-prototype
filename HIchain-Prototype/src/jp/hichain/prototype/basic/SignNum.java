@@ -32,10 +32,11 @@ public class SignNum {
 	}
 
 	public void rotate(Direction.Relation _dir) {
-		EnumMap<SignDir, SignChar> newMap = new EnumMap<>(snMap);
+		EnumMap<SignDir, SignChar> newMap = new EnumMap<>(SignDir.class);
 		for (Map.Entry<SignDir, SignChar> e : snMap.entrySet()) {
 			newMap.put(e.getKey().get(_dir), e.getValue());
 		}
+		snMap = newMap;
 	}
 
 	@Override
