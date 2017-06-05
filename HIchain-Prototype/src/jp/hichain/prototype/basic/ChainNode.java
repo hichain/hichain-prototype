@@ -9,12 +9,14 @@ public class ChainNode {
 	private final Square thisSquare;
 	private Set<ChainNode> parents;
 	private Set<ChainNode> children;
-	private boolean active;
+	private boolean valid = true;
+	private boolean mature = false;
 
 	public ChainNode(Square _thisSq) {
 		thisSquare = _thisSq;
 		parents = new HashSet<>();
 		children = new HashSet<>();
+		valid = !thisSquare.hasPluralChains();
 	}
 
 	public boolean isRoot() {
@@ -25,8 +27,12 @@ public class ChainNode {
 		return (children.size() == 0);
 	}
 
-	public boolean isActive() {
-		return active;
+	public boolean isValid() {
+		return valid;
+	}
+
+	public boolean isMature() {
+		return mature;
 	}
 
 	public Square getSquare() {
@@ -47,6 +53,19 @@ public class ChainNode {
 
 	public void addChild(ChainNode _node) {
 		children.add(_node);
+	}
+
+	public int getMaxLength() {
+		int max = 1;
+		max += getParentsMaxLength(0);
+		max += getChildrenMaxLength(0);
+		return max;
+	}
+
+	public void setMatureAll() {
+		mature = true;
+		parentsSetMature();
+		childrenSetMature();
 	}
 
 	@Override
@@ -93,7 +112,49 @@ public class ChainNode {
 		}
 	}
 
-	private boolean isActiveSquare() {
+	private int getParentsMaxLength(int length) {
+		if (isRoot()) {
+			return length;
+		}
 
+		int max = 0;
+		for (ChainNode node : parents) {
+			int branchMax = node.getParentsMaxLength(length+1);
+			if (max < branchMax) {
+				max = branchMax;
+			}
+		}
+
+		return max;
+	}
+
+	private int getChildrenMaxLength(int length) {
+		if (isLeaf()) {
+			return length;
+		}
+
+		int max = 0;
+		for (ChainNode node : children) {
+			int branchMax = node.getChildrenMaxLength(length+1);
+			if (max < branchMax) {
+				max = branchMax;
+			}
+		}
+
+		return max;
+	}
+
+	private void parentsSetMature() {
+		for (ChainNode node : parents) {
+			node.mature = true;
+			node.parentsSetMature();
+		}
+	}
+
+	private void childrenSetMature() {
+		for (ChainNode node : children) {
+			node.mature = true;
+			node.childrenSetMature();
+		}
 	}
 }

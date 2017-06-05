@@ -128,6 +128,16 @@ public class Square {
 		chainMap.put(_condition, _node);
 	}
 
+	public boolean hasPluralChains() {
+		for (ChainNode node : chainMap.values()) {
+			if (node.isValid()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
 	public String chainsToString() {
 		String string = "";
 		int i = 0;

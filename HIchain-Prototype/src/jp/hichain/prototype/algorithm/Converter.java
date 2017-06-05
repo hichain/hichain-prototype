@@ -21,6 +21,10 @@ import jp.hichain.prototype.concept.SignDir;
 public class Converter {
 	private static Map<ScoredString, Integer> chainLengthMin;
 
+	public static int getChainLengthMin(ScoredString kind) {
+		return chainLengthMin.get(kind);
+	}
+
 	public static int getPointsAll(Player player) {
 		int points = 0;
 
@@ -72,10 +76,6 @@ public class Converter {
 		}
 
 		return points;
-	}
-
-	private static int getChainLengthMin(ScoredString kind) {
-		return chainLengthMin.get(kind);
 	}
 
 	public static void init(int alphabetical, int identical, int royal) {

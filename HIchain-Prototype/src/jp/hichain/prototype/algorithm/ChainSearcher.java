@@ -73,5 +73,10 @@ public class ChainSearcher {
 				yourNode.addParent(myNode);
 			break;
 		}
+
+		int maxLength = myNode.getMaxLength();
+		if (Converter.getChainLengthMin(condition.getKind()) <= maxLength) {
+			myNode.setMatureAll();
+		}
 	}
 }

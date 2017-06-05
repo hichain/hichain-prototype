@@ -60,9 +60,9 @@ public class Main {
 		around1.make(player, SignData.get('B'));
 		Square around2 = around1.getAround(AroundDir.SOUTH);
 		around2.make(player, SignData.get('C'));
-		Square around3 = around1.getAround(AroundDir.EAST);
+/*		Square around3 = around1.getAround(AroundDir.EAST);
 		around3.make(player, SignData.get('C'));
-		System.out.println("\n" + around1.chainsToString());
+*/		System.out.println("\n" + root.chainsToString());
 		System.out.println( "\nPOINTS: " + Converter.getPointsAll(player) );
 	}
 
