@@ -1,5 +1,6 @@
 package jp.hichain.prototype.basic;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -98,6 +99,14 @@ public class Square {
 	}
 
 	/**
+	 * 連鎖ノードを全て返す
+	 * @return 全てのChainNode
+	 */
+	public Collection<ChainNode> getChainNodes() {
+		return chainMap.values();
+	}
+
+	/**
 	 * 座標を返す
 	 * @return Position
 	 */
@@ -129,7 +138,7 @@ public class Square {
 	}
 
 	public boolean hasPluralChains() {
-		for (ChainNode node : chainMap.values()) {
+		for (ChainNode node : getChainNodes()) {
 			if (node.isValid()) {
 				return true;
 			}

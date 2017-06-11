@@ -53,7 +53,7 @@ public class Converter {
 	private static int getPoints(Square root, SignDir signDir, ScoredString ssKind) {
 		ChainCombination condition = new ChainCombination(signDir, ssKind);
 		ChainNode rootNode = root.getChainNode(condition);
-		if (rootNode == null || !rootNode.isRoot()) return 0;
+		if (rootNode == null || !rootNode.isEdgeOf(ChainNode.Edge.ROOT)) return 0;
 
 		return getPoints(rootNode, condition, 1);
 	}
@@ -61,14 +61,14 @@ public class Converter {
 	private static int getPoints(ChainNode root, ChainCombination condition, int length) {
 		int points = 0;
 
-		if (root.isLeaf()) {
+		if (root.isEdgeOf(ChainNode.Edge.LEAF)) {
 			if( getChainLengthMin(condition.getKind()) <= length ) {
 				return length*length;
 			}
 			return 0;
 		}
 
-		for (ChainNode child : root.getChildren()) {
+		for (ChainNode child : root.get(ChainNode.Relation.CHILD)) {
 			points += getPoints(child, condition, length+1);
 		}
 

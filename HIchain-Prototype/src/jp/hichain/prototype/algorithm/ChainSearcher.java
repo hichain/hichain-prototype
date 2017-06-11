@@ -40,8 +40,10 @@ public class ChainSearcher {
 					}
 					boolean result = targetSC.equals(youSC);
 					if (result) {
-						ChainCombination condition = new ChainCombination(signDir, kind);
-						addChainNode(me, you, condition, relation);
+						ChainCombination combination = new ChainCombination(signDir, kind);
+						addChainNode(me, you, combination, relation);
+						ScoreSearcher.judgeMature(me, combination);
+						ScoreSearcher.judgeValid( you.getChainNode(combination) );
 						hits++;
 					}
 				}
@@ -65,18 +67,13 @@ public class ChainSearcher {
 
 		switch (relation) {
 			case PREVIOUS:
-				myNode.addParent(yourNode);
-				yourNode.addChild(myNode);
-			break;
+				myNode.add(yourNode, ChainNode.Relation.PARENT);
+				yourNode.add(myNode, ChainNode.Relation.CHILD);
+				break;
 			case NEXT:
-				myNode.addChild(yourNode);
-				yourNode.addParent(myNode);
-			break;
-		}
-
-		int maxLength = myNode.getMaxLength();
-		if (Converter.getChainLengthMin(condition.getKind()) <= maxLength) {
-			myNode.setMatureAll();
+				myNode.add(yourNode, ChainNode.Relation.CHILD);
+				yourNode.add(myNode, ChainNode.Relation.PARENT);
+				break;
 		}
 	}
 }

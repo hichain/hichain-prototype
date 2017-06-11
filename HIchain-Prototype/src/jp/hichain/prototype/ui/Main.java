@@ -15,13 +15,7 @@ import javax.imageio.ImageIO;
 import jp.hichain.prototype.algorithm.ChainSearcher;
 import jp.hichain.prototype.algorithm.Converter;
 import jp.hichain.prototype.algorithm.Judge;
-import jp.hichain.prototype.basic.ChainSign;
-import jp.hichain.prototype.basic.Player;
-import jp.hichain.prototype.basic.SignChar;
-import jp.hichain.prototype.basic.SignImage;
-import jp.hichain.prototype.basic.SignNum;
-import jp.hichain.prototype.basic.SignPS;
-import jp.hichain.prototype.basic.Square;
+import jp.hichain.prototype.basic.*;
 import jp.hichain.prototype.concept.*;
 
 public class Main {
@@ -48,21 +42,20 @@ public class Main {
 	}
 
 	private static void testConvert() {
-		Converter.init(3, 2, 5)	;
+		Converter.init(3, 2, 5);
 
 		Player player = Player.get("1P");
 		Square root = Square.get(-1, -1);
 		root.make(player, SignData.get('H'));
 		Square around1 = root.getAround(AroundDir.SOUTH);
-		around1.make(player, SignData.get('I'));
+		around1.make(player, SignData.get('H'));
 		Square around2 = around1.getAround(AroundDir.SOUTH);
-		ChainSign sign = SignData.get('J');
+		ChainSign sign = SignData.get('H');
 		sign.rotate(Direction.Relation.OPPOSITE);
-		System.out.println( sign.getSN() );
 		around2.make(player, sign);
-/*		Square around3 = around1.getAround(AroundDir.EAST);
-		around3.make(player, SignData.get('C'));
-*/		System.out.println("\n" + root.chainsToString());
+		Square around3 = around1.getAround(AroundDir.EAST);
+		around3.make(player, SignData.get('J'));
+		System.out.println("\n" + root.chainsToString());
 		System.out.println( "\nPOINTS: " + Converter.getPointsAll(player) );
 	}
 
