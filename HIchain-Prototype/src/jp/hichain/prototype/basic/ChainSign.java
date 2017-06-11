@@ -16,10 +16,9 @@ public class ChainSign implements Cloneable {
 	/**
 	 * コンストラクタ
 	 * @param _ch Sign Character (SC)
-	 * @param _dir Sign Dir (SD)
 	 * @param _ps Sign PS (SPS)
 	 * @param _num Sign Number (SN)
-	 * @param _image Sign Image (SI)
+	 * @param _images Sign Image (SI)
 	 */
 	public ChainSign(SignChar _ch, SignPS _ps, SignNum _num, Map<CardColor, SignImage> _images) {
 		character = _ch;

@@ -3,7 +3,7 @@ package jp.hichain.prototype.algorithm;
 import java.util.HashMap;
 import java.util.Map;
 
-import jp.hichain.prototype.basic.ChainCondition;
+import jp.hichain.prototype.basic.ChainCombination;
 import jp.hichain.prototype.basic.ChainNode;
 import jp.hichain.prototype.basic.Player;
 import jp.hichain.prototype.basic.Position;
@@ -47,21 +47,18 @@ public class Converter {
 	private static boolean gameIsOver(Square root, SignDir signDir) {
 		int royalPoints = getPoints(root, signDir, ScoredString.ROYAL);
 		int royalMin = getChainLengthMin(ScoredString.ROYAL);
-		if (royalPoints >= royalMin*royalMin) {
-			return true;
-		}
-		return false;
+		return royalPoints >= royalMin*royalMin;
 	}
 
 	private static int getPoints(Square root, SignDir signDir, ScoredString ssKind) {
-		ChainCondition condition = new ChainCondition(signDir, ssKind);
+		ChainCombination condition = new ChainCombination(signDir, ssKind);
 		ChainNode rootNode = root.getChainNode(condition);
 		if (rootNode == null || !rootNode.isRoot()) return 0;
 
 		return getPoints(rootNode, condition, 1);
 	}
 
-	private static int getPoints(ChainNode root, ChainCondition condition, int length) {
+	private static int getPoints(ChainNode root, ChainCombination condition, int length) {
 		int points = 0;
 
 		if (root.isLeaf()) {

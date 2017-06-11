@@ -2,7 +2,7 @@ package jp.hichain.prototype.algorithm;
 
 import java.util.EnumSet;
 
-import jp.hichain.prototype.basic.ChainCondition;
+import jp.hichain.prototype.basic.ChainCombination;
 import jp.hichain.prototype.basic.ChainNode;
 import jp.hichain.prototype.basic.SignChar;
 import jp.hichain.prototype.basic.Square;
@@ -40,7 +40,7 @@ public class ChainSearcher {
 					}
 					boolean result = targetSC.equals(youSC);
 					if (result) {
-						ChainCondition condition = new ChainCondition(signDir, kind);
+						ChainCombination condition = new ChainCombination(signDir, kind);
 						addChainNode(me, you, condition, relation);
 						hits++;
 					}
@@ -51,7 +51,7 @@ public class ChainSearcher {
 		return hits;
 	}
 
-	private static void addChainNode(Square me, Square you, ChainCondition condition, ScoredString.Relation relation) {
+	private static void addChainNode(Square me, Square you, ChainCombination condition, ScoredString.Relation relation) {
 		ChainNode myNode = me.getChainNode(condition);
 		if (myNode == null) {
 			myNode = new ChainNode(me);

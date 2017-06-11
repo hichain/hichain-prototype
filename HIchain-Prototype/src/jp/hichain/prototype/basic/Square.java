@@ -15,7 +15,7 @@ public class Square {
 
 	private Player player;
 	private ChainSign chainSign;
-	private Map<ChainCondition, ChainNode> chainMap;
+	private Map<ChainCombination, ChainNode> chainMap;
 
 	private Move move;
 
@@ -46,7 +46,7 @@ public class Square {
 	 * 絶対座標で指定してマスを取得する
 	 * @param _v V座標
 	 * @param _h H座標
-	 * @return
+	 * @return Square
 	 */
 	public static Square get(int _v, int _h) {
 		Position pos = Position.get(_v, _h);
@@ -93,8 +93,8 @@ public class Square {
 	 * 連鎖ノードを返す
 	 * @return ChainNode
 	 */
-	public ChainNode getChainNode(ChainCondition _chainCondition) {
-		return chainMap.get(_chainCondition);
+	public ChainNode getChainNode(ChainCombination _ChainCombination) {
+		return chainMap.get(_ChainCombination);
 	}
 
 	/**
@@ -124,7 +124,7 @@ public class Square {
 		return pos.getSquare();
 	}
 
-	public void addChainNode(ChainCondition _condition, ChainNode _node) {
+	public void addChainNode(ChainCombination _condition, ChainNode _node) {
 		chainMap.put(_condition, _node);
 	}
 
@@ -141,7 +141,7 @@ public class Square {
 	public String chainsToString() {
 		String string = "";
 		int i = 0;
-		for (Map.Entry<ChainCondition, ChainNode> entry : chainMap.entrySet()) {
+		for (Map.Entry<ChainCombination, ChainNode> entry : chainMap.entrySet()) {
 			string += entry.getKey() + "\n" + entry.getValue();
 			if (i < chainMap.size()-1) string += "\n";
 			i++;
