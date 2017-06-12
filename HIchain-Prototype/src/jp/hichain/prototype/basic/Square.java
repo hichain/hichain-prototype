@@ -99,11 +99,11 @@ public class Square {
 	}
 
 	/**
-	 * 連鎖ノードを全て返す
-	 * @return 全てのChainNode
+	 * 連鎖ノードのマップを返す
+	 * @return 連鎖ノードマップ
 	 */
-	public Collection<ChainNode> getChainNodes() {
-		return chainMap.values();
+	public Map<ChainCombination, ChainNode> getChainMap() {
+		return chainMap;
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class Square {
 	}
 
 	public boolean hasPluralChains() {
-		for (ChainNode node : getChainNodes()) {
+		for (ChainNode node : getChainMap().values()) {
 			if (node.isValid()) {
 				return true;
 			}

@@ -33,19 +33,20 @@ public class Main {
 		createPlayers();
 
 		Square.init();
+		Converter.init(3, 2, 5);
+
 		long start = System.currentTimeMillis();
 		//testJudge();
 		//testChainSearch();
 		testConvert();
 		long end = System.currentTimeMillis();
+
 		System.out.println((end-start) + " ms");
 	}
 
 	private static void testConvert() {
-		Converter.init(3, 2, 5);
-
 		Player player = Player.get("1P");
-		Square root = Square.get(-1, -1);
+		Square root = Position.getRoot().getSquare();
 		root.make(player, SignData.get('H'));
 		Square around1 = root.getAround(AroundDir.SOUTH);
 		around1.make(player, SignData.get('I'));
@@ -60,7 +61,7 @@ public class Main {
 	}
 
 	private static void testChainSearch() {
-		Square root = Square.get(-1, -1);
+		Square root = Position.getRoot().getSquare();
 		root.make(Player.get("1P"), SignData.get('A'));
 		Square around = root.getAround(AroundDir.SOUTH);
 		around.make(Player.get("1P"), SignData.get('B'));
@@ -74,7 +75,7 @@ public class Main {
 	}
 
 	private static void testJudge() {
-		Square root = Square.get(-1, -1);
+		Square root = Position.getRoot().getSquare();
 		root.make(Player.get("1P"), SignData.get('O'));
 		Square around = root.getAround(AroundDir.NORTH);
 
@@ -130,7 +131,6 @@ public class Main {
 	 * 文字データをロードする
 	 * @param _dataPath SN、PSの入ったCSVのパス
 	 * @param _imagePath SIのパス (色の数分)
-	 * @param _signs ロードする文字
 	 */
 	private static void loadSignData(File _dataPath, Map<CardColor, File> _imagePath) {
 		System.out.println("Loading SignData: ");

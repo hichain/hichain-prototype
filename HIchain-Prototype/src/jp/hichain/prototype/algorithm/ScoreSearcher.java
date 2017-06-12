@@ -5,6 +5,7 @@ import jp.hichain.prototype.basic.ChainNode;
 import jp.hichain.prototype.basic.Square;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -24,8 +25,8 @@ public class ScoreSearcher {
 	public static boolean judgeValid(ChainNode node) {
 		int maxLength = getMaxLength(node);
 		int anotherMaxLength = 0;
-		Collection<ChainNode> nodes = node.getSquare().getChainNodes();
-		for (ChainNode overlappingNode : nodes) {
+		Map<ChainCombination, ChainNode> nodes = node.getSquare().getChainMap();
+		for (ChainNode overlappingNode : nodes.values()) {
 			if (overlappingNode == node) continue;
 			int max = getMaxLength(overlappingNode);
 			if (anotherMaxLength < max) {
@@ -35,7 +36,7 @@ public class ScoreSearcher {
 		if (maxLength <= anotherMaxLength) {
 			return false;
 		}
-		for (ChainNode overlappingNode : nodes) {
+		for (ChainNode overlappingNode : nodes.values()) {
 			overlappingNode.setValidAll(false);
 		}
 		node.setValidAll(true);

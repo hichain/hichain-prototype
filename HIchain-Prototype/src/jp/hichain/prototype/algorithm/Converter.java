@@ -33,43 +33,43 @@ public class Converter {
 			if (square.isEmpty() || square.getPlayer() != player) {
 				continue;
 			}
-			for (SignDir signDir : SignDir.values()) {
-				boolean over = gameIsOver(square, signDir);
-				if (over) return -1;
-				points += getPoints(square, signDir, ScoredString.ALPHABETICAL);
-				points += getPoints(square, signDir, ScoredString.IDENTICAL);
+			for (Map.Entry<ChainCombination, ChainNode> chainEntry : square.getChainMap().entrySet()) {
+				ChainCombination combination = chainEntry.getKey();
+				ChainNode node = chainEntry.getValue();
+				if (!node.isEdgeOf(ChainNode.Edge.ROOT)) {
+					continue;
+				}
+				if (!(node.isMature() && node.isValid())) {
+					continue;
+				}
+				if (combination.getKind() == ScoredString.ROYAL) {
+					if ( completedRoyalString(node) ) return -1;
+				}
+				points += getPoints(node, combination.getKind(), 1);
 			}
 		}
 
 		return points;
 	}
 
-	private static boolean gameIsOver(Square root, SignDir signDir) {
-		int royalPoints = getPoints(root, signDir, ScoredString.ROYAL);
+	private static boolean completedRoyalString(ChainNode root) {
+		int royalPoints = getPoints(root, ScoredString.ROYAL, 1);
 		int royalMin = getChainLengthMin(ScoredString.ROYAL);
 		return royalPoints >= royalMin*royalMin;
 	}
 
-	private static int getPoints(Square root, SignDir signDir, ScoredString ssKind) {
-		ChainCombination condition = new ChainCombination(signDir, ssKind);
-		ChainNode rootNode = root.getChainNode(condition);
-		if (rootNode == null || !rootNode.isEdgeOf(ChainNode.Edge.ROOT)) return 0;
-
-		return getPoints(rootNode, condition, 1);
-	}
-
-	private static int getPoints(ChainNode root, ChainCombination condition, int length) {
+	private static int getPoints(ChainNode root, ScoredString kind, int length) {
 		int points = 0;
 
 		if (root.isEdgeOf(ChainNode.Edge.LEAF)) {
-			if( getChainLengthMin(condition.getKind()) <= length ) {
+			if( getChainLengthMin(kind) <= length ) {
 				return length*length;
 			}
 			return 0;
 		}
 
 		for (ChainNode child : root.get(ChainNode.Relation.CHILD)) {
-			points += getPoints(child, condition, length+1);
+			points += getPoints(child, kind, length+1);
 		}
 
 		return points;

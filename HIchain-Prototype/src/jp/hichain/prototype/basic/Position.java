@@ -13,6 +13,7 @@ import jp.hichain.prototype.concept.AroundDir.Type;
 import jp.hichain.prototype.concept.Direction.Relation;
 
 public final class Position {
+	private static Position ROOT;
 	private static List <Position> posDB;
 
 	private final Square thisSquare;
@@ -25,7 +26,7 @@ public final class Position {
 	 * @param _v V座標
 	 * @param _h H座標
 	 */
-	public Position(Square _root, int _v, int _h) {
+	Position(Square _root, int _v, int _h) {
 		init();
 		thisSquare = _root;
 		position = new EnumMap<Axis, Integer>(Axis.class) {{
@@ -34,6 +35,7 @@ public final class Position {
 		}};
 		Collections.unmodifiableMap(position);
 		posDB.add(this);
+		ROOT = this;
 	}
 
 	/**
@@ -42,7 +44,7 @@ public final class Position {
 	 * @param _source _centerのアクセス元のマス
 	 * @param _dir _sourceからみた_centerの方向
 	 */
-	public Position(Square _thisSq, Position _source, AroundDir _dir) {
+	Position(Square _thisSq, Position _source, AroundDir _dir) {
 		init();
 		thisSquare = _thisSq;
 		position = new EnumMap<>(Axis.class);
@@ -55,6 +57,10 @@ public final class Position {
 
 	static {
 		posDB = new ArrayList<>();
+	}
+
+	public static Position getRoot() {
+		return ROOT;
 	}
 
 	public static Position get(int _v, int _h) {
@@ -84,20 +90,11 @@ public final class Position {
 	}
 
 	/**
-	 * 絶対座標を取得する
-	 * @param axis 軸
-	 * @return 座標
-	 */
-	public int getPosition(Axis axis) {
-		return position.get(axis);
-	}
-
-	/**
 	 * 指定の方角にある座標を返す
 	 * @param _dir 自身(this)からみたAroundDir
 	 * @return Position
 	 */
-	public Position getAround(AroundDir _dir) {
+	Position getAround(AroundDir _dir) {
 		return arounds.get(_dir);
 	}
 
@@ -118,20 +115,10 @@ public final class Position {
 		return arounds;
 	}
 
-
-	/**
-	 * 周囲座標を追加
-	 * @param _dir この座標(this)からみた方向
-	 * @param _square 追加する座標
-	 */
-	public void addAround(AroundDir _dir, Position _position) {
-		arounds.put(_dir, _position);
-	}
-
 	/**
 	 * 周囲に空マスを作成する
 	 */
-	public void createAroundsAll() {
+	void createAroundsAll() {
 		for (AroundDir dir : AroundDir.values()) {
 			if (hasAround(dir)) continue;
 			new Square(thisSquare, dir);
@@ -142,7 +129,7 @@ public final class Position {
 	 * 周囲座標を更新する
 	 * 自分から周囲へのアクセス、周囲から自分へのアクセスの両方を更新
 	 */
-	public void updateAroundsAll() {
+	void updateAroundsAll() {
 		for (AroundDir dir : AroundDir.values()) {
 			if (hasAround(dir)) continue;
 			int v = getPosition(Axis.VERTICAL) + dir.getComp(Axis.VERTICAL);
@@ -157,12 +144,30 @@ public final class Position {
 	/**
 	 * 周囲との連鎖を全て探索する
 	 */
-	public void searchChainsAll() {
+	void searchChainsAll() {
 		for (AroundDir dir : AroundDir.values(Type.NEXT)) {
 			if (hasAround(dir)) {
 				ChainSearcher.search(thisSquare, getAround(dir).getSquare());
 			}
 		}
+	}
+
+	/**
+	 * 周囲座標を追加
+	 * @param _dir この座標(this)からみた方向
+	 * @param _square 追加する座標
+	 */
+	private void addAround(AroundDir _dir, Position _position) {
+		arounds.put(_dir, _position);
+	}
+
+	/**
+	 * 絶対座標を取得する
+	 * @param axis 軸
+	 * @return 座標
+	 */
+	private int getPosition(Axis axis) {
+		return position.get(axis);
 	}
 
 	private void init() {
