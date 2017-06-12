@@ -39,13 +39,26 @@ public class ChainSearcher {
 						continue;
 					}
 					boolean result = targetSC.equals(youSC);
-					if (result) {
-						ChainCombination combination = new ChainCombination(signDir, kind);
-						addChainNode(me, you, combination, relation);
+					if (!result) continue;
+
+					ChainCombination combination = new ChainCombination(signDir, kind);
+					addChainNode(me, you, combination, relation);
+
+					ChainNode myNode = me.getChainNode(combination);
+					ChainNode yourNode = you.getChainNode(combination);
+					if (yourNode.isMature()) {
+						myNode.setMature(true);
+					} else {
 						ScoreSearcher.judgeMature(me, combination);
-						ScoreSearcher.judgeValid( you.getChainNode(combination) );
-						hits++;
 					}
+					if (!yourNode.isValid()) {
+						ScoreSearcher.judgeValid(yourNode);
+					}
+					if (!myNode.isValid()) {
+						ScoreSearcher.judgeValid(myNode);
+					}
+
+					hits++;
 				}
 			}
 		}

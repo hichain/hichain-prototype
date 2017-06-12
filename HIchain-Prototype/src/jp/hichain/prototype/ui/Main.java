@@ -48,9 +48,9 @@ public class Main {
 		Square root = Square.get(-1, -1);
 		root.make(player, SignData.get('H'));
 		Square around1 = root.getAround(AroundDir.SOUTH);
-		around1.make(player, SignData.get('H'));
+		around1.make(player, SignData.get('I'));
 		Square around2 = around1.getAround(AroundDir.SOUTH);
-		ChainSign sign = SignData.get('H');
+		ChainSign sign = SignData.get('J');
 		sign.rotate(Direction.Relation.OPPOSITE);
 		around2.make(player, sign);
 		Square around3 = around1.getAround(AroundDir.EAST);
