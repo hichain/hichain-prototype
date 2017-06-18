@@ -47,16 +47,16 @@ public class Main {
 	private static void testConvert() {
 		Player player = Player.get("1P");
 		Square root = Position.getRoot().getSquare();
-		root.make(player, SignData.get('H'));
+		root.make(player, SignData.get('A'));
 		Square around1 = root.getAround(AroundDir.SOUTH);
-		around1.make(player, SignData.get('I'));
+		around1.make(player, SignData.get('B'));
 		Square around2 = around1.getAround(AroundDir.SOUTH);
-		ChainSign sign = SignData.get('J');
-		sign.rotate(Direction.Relation.OPPOSITE);
+		ChainSign sign = SignData.get('*');
+//		sign.rotate(Direction.Relation.OPPOSITE);
 		around2.make(player, sign);
-		Square around3 = around1.getAround(AroundDir.EAST);
+/*		Square around3 = around1.getAround(AroundDir.EAST);
 		around3.make(player, SignData.get('J'));
-		System.out.println("\n" + root.chainsToString());
+*/      System.out.println("\n" + around2.chainsToString());
 		System.out.println( "\nPOINTS: " + Converter.getPointsAll(player) );
 	}
 

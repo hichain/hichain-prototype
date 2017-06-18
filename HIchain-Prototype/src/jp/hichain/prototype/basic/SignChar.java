@@ -42,6 +42,11 @@ public class SignChar {
 
 	private static void init() {
 		signs.put( ' ', new SignChar(' ') );
+		SignChar asterisk = new SignChar('*');
+		EnumMap<ScoredString.Relation, SignChar> asteriskMap = new EnumMap<>(ScoredString.Relation.class);
+		asteriskMap.put( ScoredString.Relation.NEXT, asterisk );
+		asteriskMap.put( ScoredString.Relation.PREVIOUS, asterisk );
+		signs.put('*', asterisk);
 
 		for (ScoredString kind : ScoredString.values()) {
 			String orderString = kind.getOrderString();
@@ -69,9 +74,10 @@ public class SignChar {
 
 				sc.relationMap.put(kind, map);
 			}
+
+			asterisk.relationMap.put(kind, asteriskMap);
 		}
 
-		signs.put( '*', new SignChar('*') );
 	}
 
 	@Override

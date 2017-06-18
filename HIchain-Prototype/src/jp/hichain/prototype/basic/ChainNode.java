@@ -1,5 +1,7 @@
 package jp.hichain.prototype.basic;
 
+import jp.hichain.prototype.concept.ScoredString;
+import jp.hichain.prototype.ui.SignData;
 import java.util.*;
 
 public class ChainNode {
@@ -7,6 +9,7 @@ public class ChainNode {
 	private EnumMap<Relation, Set<ChainNode>> relationMap;
 	private boolean valid = true;
 	private boolean mature = false;
+	private final boolean asterisk;
 
 	public ChainNode(Square _thisSq) {
 		thisSquare = _thisSq;
@@ -15,6 +18,7 @@ public class ChainNode {
 			put(Relation.CHILD, new HashSet<>());
 		}};
 		valid = !thisSquare.hasPluralChains();
+		asterisk = thisSquare.getSign().getSC().get() == '*';
 	}
 
 	public enum Relation {
@@ -53,16 +57,16 @@ public class ChainNode {
 
 	public boolean isValid() { return valid; }
 
-	public void setValid(boolean valid) {
-		this.valid = valid;
+	public void setValid(boolean _valid) {
+		valid = _valid;
 	}
 
 	public boolean isMature() {
 		return mature;
 	}
 
-	public void setMature(boolean mature) {
-		this.mature = mature;
+	public void setMature(boolean _mature) {
+		mature = _mature;
 	}
 
 	public Square getSquare() {
@@ -77,14 +81,18 @@ public class ChainNode {
 		relationMap.get(relation).add(node);
 	}
 
-	public void setMatureAll(boolean mature) {
-		setMaturesAll(Relation.PARENT, mature);
-		setMaturesAll(Relation.CHILD, mature);
+	public void setMatureAll(boolean _mature) {
+		setMaturesAll(Relation.PARENT, _mature);
+		setMaturesAll(Relation.CHILD, _mature);
 	}
 
-	public void setValidAll(boolean valid) {
-		setValidAll(Relation.PARENT, valid);
-		setValidAll(Relation.CHILD, valid);
+	public void setValidAll(boolean _valid) {
+		setValidAll(Relation.PARENT, _valid);
+		setValidAll(Relation.CHILD, _valid);
+	}
+
+	public boolean isAsterisk() {
+		return asterisk;
 	}
 
 	@Override

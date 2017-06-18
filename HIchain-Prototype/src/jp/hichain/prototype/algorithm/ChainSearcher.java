@@ -8,6 +8,7 @@ import jp.hichain.prototype.basic.SignChar;
 import jp.hichain.prototype.basic.Square;
 import jp.hichain.prototype.concept.ScoredString;
 import jp.hichain.prototype.concept.SignDir;
+import jp.hichain.prototype.ui.SignData;
 
 public class ChainSearcher {
 
@@ -20,13 +21,18 @@ public class ChainSearcher {
 		if (me.isEmpty() || you.isEmpty()) {
 			return hits;
 		}
+		//自分が*ならmeとyouを入れ替える (処理の簡略化のため)
+		if (me.getSign().getSC().get() == '*') {
+			return search(you, me);
+		}
 
 		for (SignDir signDir : SignDir.values()) {
-			SignChar meSC = me.getSign().getSN().get(signDir);
-			SignChar youSC = you.getSign().getSN().get(signDir);
-			if (meSC == null || youSC == null) {
+			SignChar mySC = me.getSign().getSN().get(signDir);
+			SignChar yourSC = you.getSign().getSN().get(signDir);
+			if (mySC == null || yourSC == null) {
 				continue;
 			}
+			boolean asterisk = yourSC.get() == '*';
 
 			for (ScoredString kind : ScoredString.values()) {
 				EnumSet<ScoredString.Relation> relations = EnumSet.of(ScoredString.Relation.PREVIOUS);
@@ -34,14 +40,23 @@ public class ChainSearcher {
 					relations.add(ScoredString.Relation.NEXT);
 				}
 				for (ScoredString.Relation relation : relations) {
-					SignChar targetSC = meSC.getRelation(kind, relation);
+					SignChar targetSC = mySC.getRelation(kind, relation);
 					if (targetSC == null) {
 						continue;
 					}
-					boolean result = targetSC.equals(youSC);
-					if (!result) continue;
 
 					ChainCombination combination = new ChainCombination(signDir, kind);
+					boolean result;
+					if (asterisk) {
+						ChainNode asteriskNode = you.getChainNode(combination);
+						if (asteriskNode == null) {
+							result = true;
+						} else {
+
+						}
+					}
+					boolean result = asterisk || targetSC.equals(yourSC);
+					if (!result) continue;
 					addChainNode(me, you, combination, relation);
 
 					ChainNode myNode = me.getChainNode(combination);
@@ -88,5 +103,21 @@ public class ChainSearcher {
 				yourNode.add(myNode, ChainNode.Relation.PARENT);
 				break;
 		}
+	}
+
+	private static boolean isChainableToAsterisk(ChainNode asteNode, SignChar rootSC, ChainCombination combination) {
+		for (ScoredString.Relation ssRelation : ScoredString.Relation.values()) {
+			SignChar targetSC = rootSC.getRelation(combination.getKind(), ssRelation);
+			for (ChainNode.Relation nodeRelation : ChainNode.Relation.values()) {
+				for (ChainNode nextNode : asteNode.get(nodeRelation)) {
+					ScoredString.Relation reverseSSRelation = ssRelation.getReverse();
+					SignChar nextSC = nextNode.getSquare().getSign().getSN().get( combination.getSignDir() );
+					if (nextSC.getRelation(combination.getKind(), reverseSSRelation).equals(targetSC)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 }

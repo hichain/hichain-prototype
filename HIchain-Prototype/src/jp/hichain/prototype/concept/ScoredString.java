@@ -16,7 +16,11 @@ public enum ScoredString {
 
 	public enum Relation {
 		PREVIOUS,	//前
-		NEXT,	    //次
+		NEXT;	    //次
+
+		public Relation getReverse() {
+			return (this == PREVIOUS) ? NEXT : PREVIOUS;
+		}
 	}
 
 	private final String orderString;
