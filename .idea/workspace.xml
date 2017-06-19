@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2a71177f-cda3-4c79-8eac-7d2cce3f964f" name="Default" comment="">
+    <list default="true" id="2a71177f-cda3-4c79-8eac-7d2cce3f964f" name="Default" comment="[wip] introducing asterisk">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/algorithm/ChainSearcher.java" afterPath="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/algorithm/ChainSearcher.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/algorithm/ScoreSearcher.java" afterPath="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/algorithm/ScoreSearcher.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/basic/ChainNode.java" afterPath="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/basic/ChainNode.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/basic/SignChar.java" afterPath="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/basic/SignChar.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/concept/ScoredString.java" afterPath="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/concept/ScoredString.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/ui/Main.java" afterPath="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/ui/Main.java" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
@@ -25,11 +22,9 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/ui/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="56" column="59" lean-forward="true" selection-start-line="56" selection-start-column="59" selection-end-line="56" selection-end-column="59" />
-              <folding>
-                <element signature="e#3561#3572#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="342">
+              <caret line="57" column="48" lean-forward="true" selection-start-line="57" selection-start-column="48" selection-end-line="57" selection-end-column="48" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -37,8 +32,8 @@
       <file leaf-file-name="Square.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/basic/Square.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
-              <caret line="64" column="35" lean-forward="true" selection-start-line="64" selection-start-column="35" selection-end-line="64" selection-end-column="35" />
+            <state relative-caret-position="632">
+              <caret line="64" column="35" lean-forward="false" selection-start-line="64" selection-start-column="35" selection-end-line="64" selection-end-column="35" />
               <folding />
             </state>
           </provider>
@@ -47,21 +42,30 @@
       <file leaf-file-name="ChainSearcher.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/algorithm/ChainSearcher.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-209">
-              <caret line="48" column="35" lean-forward="true" selection-start-line="48" selection-start-column="35" selection-end-line="48" selection-end-column="35" />
+            <state relative-caret-position="1344">
+              <caret line="129" column="45" lean-forward="true" selection-start-line="129" selection-start-column="45" selection-end-line="129" selection-end-column="45" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ScoredString.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/concept/ScoredString.java">
+      <file leaf-file-name="SignChar.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/basic/SignChar.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="20" column="34" lean-forward="false" selection-start-line="20" selection-start-column="24" selection-end-line="20" selection-end-column="34" />
+            <state relative-caret-position="-437">
+              <caret line="31" column="67" lean-forward="true" selection-start-line="31" selection-start-column="67" selection-end-line="31" selection-end-column="67" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ScoreSearcher.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/algorithm/ScoreSearcher.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1007">
+              <caret line="53" column="50" lean-forward="true" selection-start-line="53" selection-start-column="50" selection-end-line="53" selection-end-column="50" />
               <folding>
-                <element signature="e#295#296#0" expanded="true" />
-                <element signature="e#347#348#0" expanded="true" />
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -70,19 +74,10 @@
       <file leaf-file-name="ChainNode.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/basic/ChainNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="93" column="29" lean-forward="false" selection-start-line="93" selection-start-column="19" selection-end-line="93" selection-end-column="29" />
+            <state relative-caret-position="912">
+              <caret line="54" column="0" lean-forward="false" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
               <folding>
-                <element signature="e#1271#1272#0" expanded="true" />
-                <element signature="e#1292#1293#0" expanded="true" />
-                <element signature="e#1322#1323#0" expanded="true" />
-                <element signature="e#1342#1343#0" expanded="true" />
-                <element signature="e#1511#1512#0" expanded="true" />
-                <element signature="e#1550#1551#0" expanded="true" />
-                <element signature="e#1605#1606#0" expanded="true" />
-                <element signature="e#1647#1648#0" expanded="true" />
-                <element signature="e#1939#1940#0" expanded="true" />
-                <element signature="e#1961#1962#0" expanded="true" />
+                <element signature="e#1185#1186#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -91,22 +86,11 @@
       <file leaf-file-name="Converter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/algorithm/Converter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="727">
+            <state relative-caret-position="646">
               <caret line="45" column="64" lean-forward="false" selection-start-line="45" selection-start-column="64" selection-end-line="45" selection-end-column="64" />
               <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ScoreSearcher.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/algorithm/ScoreSearcher.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="20" column="9" lean-forward="true" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="9" />
-              <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#624#625#0" expanded="false" />
+                <element signature="e#662#663#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -170,11 +154,11 @@
         <option value="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/basic/Position.java" />
         <option value="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/algorithm/Converter.java" />
         <option value="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/basic/Square.java" />
-        <option value="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/basic/SignChar.java" />
         <option value="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/basic/ChainNode.java" />
-        <option value="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/algorithm/ScoreSearcher.java" />
-        <option value="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/ui/Main.java" />
         <option value="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/concept/ScoredString.java" />
+        <option value="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/algorithm/ScoreSearcher.java" />
+        <option value="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/basic/SignChar.java" />
+        <option value="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/ui/Main.java" />
         <option value="$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/algorithm/ChainSearcher.java" />
       </list>
     </option>
@@ -206,60 +190,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
-      <pane id="Scope">
-        <subPane subId="Problems">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="HIchain-Prototype">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="HIchain-Prototype">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="src">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="jp/hichain/prototype">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="basic">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="HIchain-Prototype">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="HIchain-Prototype">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="src">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="jp/hichain/prototype">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -388,6 +318,60 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="algorithm" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="Scope">
+        <subPane subId="Problems">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="HIchain-Prototype">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="HIchain-Prototype">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="src">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="jp/hichain/prototype">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="basic">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="HIchain-Prototype">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="HIchain-Prototype">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="src">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="jp/hichain/prototype">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -849,7 +833,9 @@
       <workItem from="1497163868708" duration="30000" />
       <workItem from="1497163923228" duration="21648000" />
       <workItem from="1497278425633" duration="9854000" />
-      <workItem from="1497780239380" duration="21131000" />
+      <workItem from="1497780239380" duration="21198000" />
+      <workItem from="1497846310427" duration="3367000" />
+      <workItem from="1497875562258" duration="11829000" />
     </task>
     <task id="LOCAL-00001" summary="[wip] add isActiveSquare(): ChainNode">
       <created>1496594971968</created>
@@ -886,11 +872,18 @@
       <option name="project" value="LOCAL" />
       <updated>1497288835909</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="[wip] introducing asterisk">
+      <created>1497808827364</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1497808827364</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="61591000" />
+    <option name="totallyTimeSpent" value="76854000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1216" extended-state="6" />
@@ -965,7 +958,8 @@
     <MESSAGE value=":art: renamed ChainCondition -&gt; ChainCombination" />
     <MESSAGE value=":sparkles: create ScoreSearcher&#10;&#10;judge mature and valid" />
     <MESSAGE value=":bug: X*Z problem is fixed (maybe): Converter" />
-    <option name="LAST_COMMIT_MESSAGE" value=":bug: X*Z problem is fixed (maybe): Converter" />
+    <MESSAGE value="[wip] introducing asterisk" />
+    <option name="LAST_COMMIT_MESSAGE" value="[wip] introducing asterisk" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -990,9 +984,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="703">
           <caret line="59" column="49" lean-forward="false" selection-start-line="59" selection-start-column="49" selection-end-line="59" selection-end-column="49" />
-          <folding>
-            <element signature="e#3561#3572#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1017,7 +1009,8 @@
         <state relative-caret-position="133">
           <caret line="16" column="6" lean-forward="false" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#624#625#0" expanded="false" />
+            <element signature="e#662#663#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1027,16 +1020,7 @@
         <state relative-caret-position="418">
           <caret line="31" column="5" lean-forward="false" selection-start-line="31" selection-start-column="5" selection-end-line="31" selection-end-column="5" />
           <folding>
-            <element signature="e#1271#1272#0" expanded="true" />
-            <element signature="e#1292#1293#0" expanded="true" />
-            <element signature="e#1322#1323#0" expanded="true" />
-            <element signature="e#1342#1343#0" expanded="true" />
-            <element signature="e#1511#1512#0" expanded="true" />
-            <element signature="e#1550#1551#0" expanded="true" />
-            <element signature="e#1605#1606#0" expanded="true" />
-            <element signature="e#1647#1648#0" expanded="true" />
-            <element signature="e#1939#1940#0" expanded="true" />
-            <element signature="e#1961#1962#0" expanded="true" />
+            <element signature="e#1185#1186#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1045,9 +1029,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="703">
           <caret line="59" column="49" lean-forward="false" selection-start-line="59" selection-start-column="49" selection-end-line="59" selection-end-column="49" />
-          <folding>
-            <element signature="e#3561#3572#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1072,7 +1054,8 @@
         <state relative-caret-position="133">
           <caret line="16" column="6" lean-forward="false" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#624#625#0" expanded="false" />
+            <element signature="e#662#663#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1082,16 +1065,7 @@
         <state relative-caret-position="418">
           <caret line="31" column="5" lean-forward="false" selection-start-line="31" selection-start-column="5" selection-end-line="31" selection-end-column="5" />
           <folding>
-            <element signature="e#1271#1272#0" expanded="true" />
-            <element signature="e#1292#1293#0" expanded="true" />
-            <element signature="e#1322#1323#0" expanded="true" />
-            <element signature="e#1342#1343#0" expanded="true" />
-            <element signature="e#1511#1512#0" expanded="true" />
-            <element signature="e#1550#1551#0" expanded="true" />
-            <element signature="e#1605#1606#0" expanded="true" />
-            <element signature="e#1647#1648#0" expanded="true" />
-            <element signature="e#1939#1940#0" expanded="true" />
-            <element signature="e#1961#1962#0" expanded="true" />
+            <element signature="e#1185#1186#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1100,9 +1074,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="703">
           <caret line="59" column="49" lean-forward="false" selection-start-line="59" selection-start-column="49" selection-end-line="59" selection-end-column="49" />
-          <folding>
-            <element signature="e#3561#3572#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1127,7 +1099,8 @@
         <state relative-caret-position="133">
           <caret line="16" column="6" lean-forward="false" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#624#625#0" expanded="false" />
+            <element signature="e#662#663#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1137,16 +1110,7 @@
         <state relative-caret-position="418">
           <caret line="31" column="5" lean-forward="false" selection-start-line="31" selection-start-column="5" selection-end-line="31" selection-end-column="5" />
           <folding>
-            <element signature="e#1271#1272#0" expanded="true" />
-            <element signature="e#1292#1293#0" expanded="true" />
-            <element signature="e#1322#1323#0" expanded="true" />
-            <element signature="e#1342#1343#0" expanded="true" />
-            <element signature="e#1511#1512#0" expanded="true" />
-            <element signature="e#1550#1551#0" expanded="true" />
-            <element signature="e#1605#1606#0" expanded="true" />
-            <element signature="e#1647#1648#0" expanded="true" />
-            <element signature="e#1939#1940#0" expanded="true" />
-            <element signature="e#1961#1962#0" expanded="true" />
+            <element signature="e#1185#1186#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1155,9 +1119,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="703">
           <caret line="59" column="49" lean-forward="false" selection-start-line="59" selection-start-column="49" selection-end-line="59" selection-end-column="49" />
-          <folding>
-            <element signature="e#3561#3572#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1182,7 +1144,8 @@
         <state relative-caret-position="133">
           <caret line="16" column="6" lean-forward="false" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#624#625#0" expanded="false" />
+            <element signature="e#662#663#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1192,16 +1155,7 @@
         <state relative-caret-position="418">
           <caret line="31" column="5" lean-forward="true" selection-start-line="31" selection-start-column="5" selection-end-line="31" selection-end-column="5" />
           <folding>
-            <element signature="e#1271#1272#0" expanded="true" />
-            <element signature="e#1292#1293#0" expanded="true" />
-            <element signature="e#1322#1323#0" expanded="true" />
-            <element signature="e#1342#1343#0" expanded="true" />
-            <element signature="e#1511#1512#0" expanded="true" />
-            <element signature="e#1550#1551#0" expanded="true" />
-            <element signature="e#1605#1606#0" expanded="true" />
-            <element signature="e#1647#1648#0" expanded="true" />
-            <element signature="e#1939#1940#0" expanded="true" />
-            <element signature="e#1961#1962#0" expanded="true" />
+            <element signature="e#1185#1186#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1210,9 +1164,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#3561#3572#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1237,16 +1189,7 @@
         <state relative-caret-position="1463">
           <caret line="96" column="0" lean-forward="true" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
           <folding>
-            <element signature="e#1271#1272#0" expanded="true" />
-            <element signature="e#1292#1293#0" expanded="true" />
-            <element signature="e#1322#1323#0" expanded="true" />
-            <element signature="e#1342#1343#0" expanded="true" />
-            <element signature="e#1511#1512#0" expanded="true" />
-            <element signature="e#1550#1551#0" expanded="true" />
-            <element signature="e#1605#1606#0" expanded="true" />
-            <element signature="e#1647#1648#0" expanded="true" />
-            <element signature="e#1939#1940#0" expanded="true" />
-            <element signature="e#1961#1962#0" expanded="true" />
+            <element signature="e#1185#1186#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1256,7 +1199,8 @@
         <state relative-caret-position="133">
           <caret line="16" column="6" lean-forward="false" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#624#625#0" expanded="false" />
+            <element signature="e#662#663#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1265,9 +1209,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="532">
           <caret line="53" column="33" lean-forward="false" selection-start-line="53" selection-start-column="33" selection-end-line="53" selection-end-column="33" />
-          <folding>
-            <element signature="e#3561#3572#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1284,16 +1226,7 @@
         <state relative-caret-position="171">
           <caret line="12" column="38" lean-forward="true" selection-start-line="12" selection-start-column="38" selection-end-line="12" selection-end-column="38" />
           <folding>
-            <element signature="e#1271#1272#0" expanded="true" />
-            <element signature="e#1292#1293#0" expanded="true" />
-            <element signature="e#1322#1323#0" expanded="true" />
-            <element signature="e#1342#1343#0" expanded="true" />
-            <element signature="e#1511#1512#0" expanded="true" />
-            <element signature="e#1550#1551#0" expanded="true" />
-            <element signature="e#1605#1606#0" expanded="true" />
-            <element signature="e#1647#1648#0" expanded="true" />
-            <element signature="e#1939#1940#0" expanded="true" />
-            <element signature="e#1961#1962#0" expanded="true" />
+            <element signature="e#1185#1186#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1303,7 +1236,8 @@
         <state relative-caret-position="133">
           <caret line="16" column="6" lean-forward="true" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#624#625#0" expanded="false" />
+            <element signature="e#662#663#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1333,7 +1267,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="76">
           <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1366,7 +1299,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="95">
           <caret line="9" column="16" lean-forward="true" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1374,7 +1306,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1396,66 +1327,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/algorithm/Converter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="727">
+        <state relative-caret-position="646">
           <caret line="45" column="64" lean-forward="false" selection-start-line="45" selection-start-column="64" selection-end-line="45" selection-end-column="64" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#624#625#0" expanded="false" />
+            <element signature="e#662#663#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/algorithm/ScoreSearcher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="20" column="9" lean-forward="true" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/basic/ChainNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="93" column="29" lean-forward="false" selection-start-line="93" selection-start-column="19" selection-end-line="93" selection-end-column="29" />
-          <folding>
-            <element signature="e#1271#1272#0" expanded="true" />
-            <element signature="e#1292#1293#0" expanded="true" />
-            <element signature="e#1322#1323#0" expanded="true" />
-            <element signature="e#1342#1343#0" expanded="true" />
-            <element signature="e#1511#1512#0" expanded="true" />
-            <element signature="e#1550#1551#0" expanded="true" />
-            <element signature="e#1605#1606#0" expanded="true" />
-            <element signature="e#1647#1648#0" expanded="true" />
-            <element signature="e#1939#1940#0" expanded="true" />
-            <element signature="e#1961#1962#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/ui/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="56" column="59" lean-forward="true" selection-start-line="56" selection-start-column="59" selection-end-line="56" selection-end-column="59" />
-          <folding>
-            <element signature="e#3561#3572#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/basic/Square.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="64" column="35" lean-forward="true" selection-start-line="64" selection-start-column="35" selection-end-line="64" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/basic/SignChar.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-983">
-          <caret line="11" column="26" lean-forward="true" selection-start-line="11" selection-start-column="26" selection-end-line="11" selection-end-column="26" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1470,10 +1347,54 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/basic/Square.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="632">
+          <caret line="64" column="35" lean-forward="false" selection-start-line="64" selection-start-column="35" selection-end-line="64" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/ui/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="57" column="48" lean-forward="true" selection-start-line="57" selection-start-column="48" selection-end-line="57" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/algorithm/ScoreSearcher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1007">
+          <caret line="53" column="50" lean-forward="true" selection-start-line="53" selection-start-column="50" selection-end-line="53" selection-end-column="50" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/basic/ChainNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="912">
+          <caret line="54" column="0" lean-forward="false" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
+          <folding>
+            <element signature="e#1185#1186#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/basic/SignChar.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-437">
+          <caret line="31" column="67" lean-forward="true" selection-start-line="31" selection-start-column="67" selection-end-line="31" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/HIchain-Prototype/src/jp/hichain/prototype/algorithm/ChainSearcher.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-209">
-          <caret line="48" column="35" lean-forward="true" selection-start-line="48" selection-start-column="35" selection-end-line="48" selection-end-column="35" />
+        <state relative-caret-position="1344">
+          <caret line="129" column="45" lean-forward="true" selection-start-line="129" selection-start-column="45" selection-end-line="129" selection-end-column="45" />
           <folding />
         </state>
       </provider>

@@ -21,59 +21,19 @@ public class ChainSearcher {
 		if (me.isEmpty() || you.isEmpty()) {
 			return hits;
 		}
-		//自分が*ならmeとyouを入れ替える (処理の簡略化のため)
-		if (me.getSign().getSC().get() == '*') {
-			return search(you, me);
-		}
 
 		for (SignDir signDir : SignDir.values()) {
 			SignChar mySC = me.getSign().getSN().get(signDir);
 			SignChar yourSC = you.getSign().getSN().get(signDir);
-			if (mySC == null || yourSC == null) {
-				continue;
-			}
-			boolean asterisk = yourSC.get() == '*';
+			if (mySC == null || yourSC == null)	continue;
+			boolean hasAsterisk = (mySC.get() == '*') || (yourSC.get() == '*');
 
 			for (ScoredString kind : ScoredString.values()) {
-				EnumSet<ScoredString.Relation> relations = EnumSet.of(ScoredString.Relation.PREVIOUS);
-				if (kind != ScoredString.IDENTICAL) {
-					relations.add(ScoredString.Relation.NEXT);
-				}
-				for (ScoredString.Relation relation : relations) {
-					SignChar targetSC = mySC.getRelation(kind, relation);
-					if (targetSC == null) {
-						continue;
-					}
-
-					ChainCombination combination = new ChainCombination(signDir, kind);
-					boolean result;
-					if (asterisk) {
-						ChainNode asteriskNode = you.getChainNode(combination);
-						if (asteriskNode == null) {
-							result = true;
-						} else {
-
-						}
-					}
-					boolean result = asterisk || targetSC.equals(yourSC);
-					if (!result) continue;
-					addChainNode(me, you, combination, relation);
-
-					ChainNode myNode = me.getChainNode(combination);
-					ChainNode yourNode = you.getChainNode(combination);
-					if (yourNode.isMature()) {
-						myNode.setMature(true);
-					} else {
-						ScoreSearcher.judgeMature(me, combination);
-					}
-					if (!yourNode.isValid()) {
-						ScoreSearcher.judgeValid(yourNode);
-					}
-					if (!myNode.isValid()) {
-						ScoreSearcher.judgeValid(myNode);
-					}
-
-					hits++;
+				ChainCombination combination = new ChainCombination(signDir, kind);
+				if (hasAsterisk) {
+					hits += searchAsterisk(me, you, combination);
+				} else {
+					hits += search(me, you, combination);
 				}
 			}
 		}
@@ -81,16 +41,107 @@ public class ChainSearcher {
 		return hits;
 	}
 
-	private static void addChainNode(Square me, Square you, ChainCombination condition, ScoredString.Relation relation) {
-		ChainNode myNode = me.getChainNode(condition);
+	private static int search(Square me, Square you, ChainCombination combination) {
+		int hits = 0;
+
+		SignDir signDir = combination.getSignDir();
+		ScoredString ssKind = combination.getKind();
+		SignChar mySC = me.getSign().getSN().get(signDir);
+		SignChar yourSC = you.getSign().getSN().get(signDir);
+
+		EnumSet<ScoredString.Relation> relations = EnumSet.of(ScoredString.Relation.PREVIOUS);
+		if (ssKind != ScoredString.IDENTICAL) {
+			relations.add(ScoredString.Relation.NEXT);
+		}
+		for (ScoredString.Relation relation : relations) {
+			SignChar targetSC = mySC.getRelation(ssKind, relation);
+			if (targetSC == null) continue;
+
+			boolean result = targetSC.equals(yourSC);
+			if (!result) continue;
+			addChainNode(me, you, combination, relation);
+			judgeMatureAndValid(me, you, combination);
+
+			hits++;
+		}
+
+		return hits;
+	}
+
+	private static int searchAsterisk(Square me, Square you, ChainCombination combination) {
+		int hits = 0;
+
+		SignDir signDir = combination.getSignDir();
+		ScoredString ssKind = combination.getKind();
+		SignChar mySC = me.getSign().getSN().get(signDir);
+		SignChar yourSC = you.getSign().getSN().get(signDir);
+
+		//必ずyouが*になるようにする
+		if (mySC.get() == '*') return searchAsterisk(you, me, combination);
+
+		ChainNode asteNode = you.getChainNode(combination);
+		boolean skipSearching = (asteNode == null);
+
+		EnumSet<ScoredString.Relation> relations = EnumSet.of(ScoredString.Relation.PREVIOUS);
+		if (!(ssKind == ScoredString.IDENTICAL)) {
+			relations.add(ScoredString.Relation.NEXT);
+		}
+		for (ScoredString.Relation ssRelation : relations) {
+			SignChar targetSC = mySC.getRelation(combination.getKind(), ssRelation, 2);
+			if (targetSC == null) continue;
+
+			boolean hit = skipSearching || isChainedToAsterisk(asteNode, targetSC, ssRelation, combination);
+			if (!hit) continue;
+			addChainNode(me, you, combination, ssRelation);
+			judgeMatureAndValid(me, you, combination);
+
+			hits++;
+		}
+
+		return hits;
+	}
+
+	private static boolean isChainedToAsterisk(ChainNode asteNode, SignChar targetSC, ScoredString.Relation ssRelation, ChainCombination combination) {
+		SignDir signDir = combination.getSignDir();
+		ScoredString ssKind = combination.getKind();
+
+		ChainNode.Relation nodeRelation = (ssRelation == ScoredString.Relation.PREVIOUS) ? ChainNode.Relation.PARENT : ChainNode.Relation.CHILD;
+		for (ChainNode nextNode : asteNode.get(nodeRelation)) {
+			SignChar nextSC = nextNode.getSquare().getSign().getSN().get(signDir);
+			if (nextSC.equals(targetSC)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static void judgeMatureAndValid(Square me, Square you, ChainCombination combination) {
+		ChainNode myNode = me.getChainNode(combination);
+		ChainNode yourNode = you.getChainNode(combination);
+		if (yourNode.isMature()) {
+			myNode.setMature(true);
+		} else {
+			ScoreSearcher.judgeMature(me, combination);
+		}
+		if (!yourNode.isValid()) {
+			ScoreSearcher.judgeValid(yourNode);
+		}
+		if (!myNode.isValid()) {
+			ScoreSearcher.judgeValid(myNode);
+		}
+	}
+
+	private static void addChainNode(Square me, Square you, ChainCombination combination, ScoredString.Relation relation) {
+		System.out.println(me.getPosition() + " -> " + you.getPosition() + ":" + combination.getSignDir() + " => " + combination.getKind() + " (" + relation + ")");
+		ChainNode myNode = me.getChainNode(combination);
 		if (myNode == null) {
 			myNode = new ChainNode(me);
-			me.addChainNode(condition, myNode);
+			me.addChainNode(combination, myNode);
 		}
-		ChainNode yourNode = you.getChainNode(condition);
+		ChainNode yourNode = you.getChainNode(combination);
 		if (yourNode == null) {
 			yourNode = new ChainNode(you);
-			you.addChainNode(condition, yourNode);
+			you.addChainNode(combination, yourNode);
 		}
 
 		switch (relation) {
@@ -103,21 +154,5 @@ public class ChainSearcher {
 				yourNode.add(myNode, ChainNode.Relation.PARENT);
 				break;
 		}
-	}
-
-	private static boolean isChainableToAsterisk(ChainNode asteNode, SignChar rootSC, ChainCombination combination) {
-		for (ScoredString.Relation ssRelation : ScoredString.Relation.values()) {
-			SignChar targetSC = rootSC.getRelation(combination.getKind(), ssRelation);
-			for (ChainNode.Relation nodeRelation : ChainNode.Relation.values()) {
-				for (ChainNode nextNode : asteNode.get(nodeRelation)) {
-					ScoredString.Relation reverseSSRelation = ssRelation.getReverse();
-					SignChar nextSC = nextNode.getSquare().getSign().getSN().get( combination.getSignDir() );
-					if (nextSC.getRelation(combination.getKind(), reverseSSRelation).equals(targetSC)) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
 	}
 }

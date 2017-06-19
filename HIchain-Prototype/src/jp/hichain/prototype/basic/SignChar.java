@@ -26,10 +26,15 @@ public class SignChar {
 	}
 
 	public SignChar getRelation(ScoredString kind, ScoredString.Relation relation) {
-		if (!relationMap.containsKey(kind)) {
-			return null;
-		}
-		return relationMap.get(kind).get(relation);
+		return getRelation(kind, relation, 1);
+	}
+
+	public SignChar getRelation(ScoredString kind, ScoredString.Relation relation, int times) {
+		if (times == 0) return this;
+		if (!relationMap.containsKey(kind)) return null;
+		SignChar nextSC = relationMap.get(kind).get(relation);
+		if (nextSC == null) return null;
+		return nextSC.getRelation(kind, relation, times-1);
 	}
 
 	public static boolean contains(char ch) {
