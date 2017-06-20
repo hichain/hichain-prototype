@@ -12,18 +12,14 @@ public class ChainNode {
 	private boolean mature = false;
 
 	public ChainNode(Square _thisSq) {
-		this(_thisSq, false);
-	}
-
-	public ChainNode(Square _thisSq, boolean asterisk) {
 		thisSquare = _thisSq;
 		relationMap = new EnumMap<Relation, Set<ChainNode>>(Relation.class) {{
 			put(Relation.PARENT, new HashSet<>());
 			put(Relation.CHILD, new HashSet<>());
 		}};
 		activeMap = new EnumMap<Relation, Boolean>(Relation.class) {{
-			put(Relation.PARENT, !asterisk);
-			put(Relation.CHILD, !asterisk);
+			put(Relation.PARENT, true);
+			put(Relation.CHILD, true);
 		}};
 		valid = !thisSquare.hasPluralChains();
 	}
@@ -81,8 +77,8 @@ public class ChainNode {
 		return activeMap.get(relation);
 	}
 
-	public void setActive(Relation relation) {
-		activeMap.put(relation, true);
+	public void setActive(Relation relation, boolean active) {
+		activeMap.put(relation, active);
 	}
 
 	public Square getSquare() {
