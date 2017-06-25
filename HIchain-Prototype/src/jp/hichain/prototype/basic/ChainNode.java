@@ -7,6 +7,7 @@ import java.util.*;
 public class ChainNode {
 	private final Square thisSquare;
 	private EnumMap<Relation, Set<ChainNode>> relationMap;
+	private EnumMap<Relation, Boolean> activeMap;
 	private boolean valid = true;
 	private boolean mature = false;
 
@@ -15,6 +16,10 @@ public class ChainNode {
 		relationMap = new EnumMap<Relation, Set<ChainNode>>(Relation.class) {{
 			put(Relation.PARENT, new HashSet<>());
 			put(Relation.CHILD, new HashSet<>());
+		}};
+		activeMap = new EnumMap<Relation, Boolean>(Relation.class) {{
+			put(Relation.PARENT, true);
+			put(Relation.CHILD, true);
 		}};
 		valid = !thisSquare.hasPluralChains();
 	}
@@ -50,6 +55,7 @@ public class ChainNode {
 	}
 
 	public boolean isEdgeOf(Edge edge) {
+		if (!isActive( edge.getRelation() )) return true;
 		return relationMap.get( edge.getRelation() ).size() == 0;
 	}
 
@@ -67,11 +73,20 @@ public class ChainNode {
 		mature = _mature;
 	}
 
+	public boolean isActive(Relation relation) {
+		return activeMap.get(relation);
+	}
+
+	public void setActive(Relation relation, boolean active) {
+		activeMap.put(relation, active);
+	}
+
 	public Square getSquare() {
 		return thisSquare;
 	}
 
 	public Set<ChainNode> get(Relation relation) {
+		if (!isActive(relation)) return new HashSet<>();
 		return relationMap.get(relation);
 	}
 
