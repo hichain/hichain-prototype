@@ -92,7 +92,15 @@ public class ChainSearcher {
 
 			boolean hit = skipSearching || isChainedToAsterisk(asteNode, targetSC, ssRelation, combination);
 			if (!hit) continue;
+
 			addChainNode(me, you, combination, ssRelation);
+
+			if (skipSearching) {
+				asteNode = you.getChainNode(combination);
+				ChainNode.Relation nodeRelation = (ssRelation == ScoredString.Relation.PREVIOUS) ? ChainNode.Relation.CHILD : ChainNode.Relation.PARENT;
+				asteNode.setActive(nodeRelation, false);
+			}
+
 			judgeMatureAndValid(me, you, combination);
 
 			hits++;
@@ -106,12 +114,14 @@ public class ChainSearcher {
 		ScoredString ssKind = combination.getKind();
 
 		ChainNode.Relation nodeRelation = (ssRelation == ScoredString.Relation.PREVIOUS) ? ChainNode.Relation.PARENT : ChainNode.Relation.CHILD;
+		asteNode.setActive(nodeRelation, true);
 		for (ChainNode nextNode : asteNode.get(nodeRelation)) {
 			SignChar nextSC = nextNode.getSquare().getSign().getSN().get(signDir);
 			if (nextSC.equals(targetSC)) {
 				return true;
 			}
 		}
+		asteNode.setActive(nodeRelation, false);
 		return false;
 	}
 

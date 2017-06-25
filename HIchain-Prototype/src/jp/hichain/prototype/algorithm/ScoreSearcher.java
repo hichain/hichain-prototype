@@ -52,7 +52,6 @@ public class ScoreSearcher {
 
 	private static int getMaxLength(ChainNode root, ChainNode.Relation relation, int length) {
 		if (root.isEdgeOf( relation.getEdge() )) {
-			if (root.isAsterisk()) length--;
 			return length;
 		}
 
