@@ -36,7 +36,7 @@ public class Converter {
 			for (Map.Entry<ChainCombination, ChainNode> chainEntry : square.getChainMap().entrySet()) {
 				ChainCombination combination = chainEntry.getKey();
 				ChainNode node = chainEntry.getValue();
-				if (!node.isEdgeOf(ChainNode.Edge.ROOT)) {
+				if (node.isAsterisk() || !node.isEdgeOf(ChainNode.Edge.ROOT)) {
 					continue;
 				}
 				if (!(node.isMature() && node.isValid())) {

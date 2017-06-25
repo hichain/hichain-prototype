@@ -1,8 +1,10 @@
 package jp.hichain.prototype.algorithm;
 
+import jp.hichain.prototype.basic.AsteriskNode;
 import jp.hichain.prototype.basic.ChainCombination;
 import jp.hichain.prototype.basic.ChainNode;
 import jp.hichain.prototype.basic.Square;
+import jp.hichain.prototype.concept.ScoredString;
 
 import java.util.Collection;
 import java.util.Map;
@@ -12,10 +14,10 @@ import java.util.Set;
  * Created by NT on 2017/06/11.
  */
 public class ScoreSearcher {
-	public static boolean judgeMature(Square square, ChainCombination combination) {
-		ChainNode node = square.getChainNode(combination);
+	public static boolean judgeMature(ChainNode node) {
+		ScoredString kind = node.getCombination().getKind();
 		int maxLength = getMaxLength(node);
-		if (Converter.getChainLengthMin(combination.getKind()) <= maxLength) {
+		if (Converter.getChainLengthMin(kind) <= maxLength) {
 			node.setMatureAll(true);
 			return true;
 		}
@@ -52,6 +54,8 @@ public class ScoreSearcher {
 
 	private static int getMaxLength(ChainNode root, ChainNode.Relation relation, int length) {
 		if (root.isEdgeOf( relation.getEdge() )) {
+			if (root instanceof AsteriskNode) System.out.println("hit");
+			if (root.isAsterisk()) length--;
 			return length;
 		}
 

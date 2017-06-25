@@ -94,8 +94,10 @@ public class Square {
 	 * 連鎖ノードを返す
 	 * @return ChainNode
 	 */
-	public ChainNode getChainNode(ChainCombination _ChainCombination) {
-		return chainMap.get(_ChainCombination);
+	public ChainNode getChainNode(ChainCombination _combination) {
+		ChainNode node = chainMap.get(_combination);
+		if (node != null && node.isAsterisk()) System.out.println("!This is a kind of asterisk");
+		return node;
 	}
 
 	/**

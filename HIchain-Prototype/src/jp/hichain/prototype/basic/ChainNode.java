@@ -6,22 +6,37 @@ import java.util.*;
 
 public class ChainNode {
 	private final Square thisSquare;
-	private EnumMap<Relation, Set<ChainNode>> relationMap;
-	private EnumMap<Relation, Boolean> activeMap;
+	private final ChainCombination combination;
+	private final SignChar signChar;
+	protected EnumMap<Relation, Set<ChainNode>> relationMap;
 	private boolean valid = true;
 	private boolean mature = false;
+	private final boolean asterisk;
 
-	public ChainNode(Square _thisSq) {
+	public ChainNode(Square _thisSq, ChainCombination _combination) {
 		thisSquare = _thisSq;
+		combination = _combination;
+		signChar = _thisSq.getSign().getSN().get( _combination.getSignDir() );
+
 		relationMap = new EnumMap<Relation, Set<ChainNode>>(Relation.class) {{
 			put(Relation.PARENT, new HashSet<>());
 			put(Relation.CHILD, new HashSet<>());
 		}};
-		activeMap = new EnumMap<Relation, Boolean>(Relation.class) {{
-			put(Relation.PARENT, true);
-			put(Relation.CHILD, true);
+		valid = !thisSquare.hasPluralChains();
+		asterisk = (signChar.get() == '*');
+	}
+
+	public ChainNode(Square _thisSq, ChainCombination _combination, SignChar _signChar) {
+		thisSquare = _thisSq;
+		combination = _combination;
+		signChar = _signChar;
+
+		relationMap = new EnumMap<Relation, Set<ChainNode>>(Relation.class) {{
+			put(Relation.PARENT, new HashSet<>());
+			put(Relation.CHILD, new HashSet<>());
 		}};
 		valid = !thisSquare.hasPluralChains();
+		asterisk = true;
 	}
 
 	public enum Relation {
@@ -54,9 +69,28 @@ public class ChainNode {
 		}
 	}
 
+	public Square getSquare() {
+		return thisSquare;
+	}
+
+	public ChainCombination getCombination() {
+		return combination;
+	}
+
+	public SignChar getSignChar() {
+		return  signChar;
+	}
+
 	public boolean isEdgeOf(Edge edge) {
-		if (!isActive( edge.getRelation() )) return true;
 		return relationMap.get( edge.getRelation() ).size() == 0;
+	}
+
+	public Set<ChainNode> get(Relation relation) {
+		return relationMap.get(relation);
+	}
+
+	public void add(ChainNode node, Relation relation) {
+		relationMap.get(relation).add(node);
 	}
 
 	public boolean isValid() { return valid; }
@@ -73,27 +107,6 @@ public class ChainNode {
 		mature = _mature;
 	}
 
-	public boolean isActive(Relation relation) {
-		return activeMap.get(relation);
-	}
-
-	public void setActive(Relation relation, boolean active) {
-		activeMap.put(relation, active);
-	}
-
-	public Square getSquare() {
-		return thisSquare;
-	}
-
-	public Set<ChainNode> get(Relation relation) {
-		if (!isActive(relation)) return new HashSet<>();
-		return relationMap.get(relation);
-	}
-
-	public void add(ChainNode node, Relation relation) {
-		relationMap.get(relation).add(node);
-	}
-
 	public void setMatureAll(boolean _mature) {
 		setMaturesAll(Relation.PARENT, _mature);
 		setMaturesAll(Relation.CHILD, _mature);
@@ -102,6 +115,10 @@ public class ChainNode {
 	public void setValidAll(boolean _valid) {
 		setValidAll(Relation.PARENT, _valid);
 		setValidAll(Relation.CHILD, _valid);
+	}
+
+	public boolean isAsterisk() {
+		return asterisk;
 	}
 
 	@Override
@@ -162,5 +179,9 @@ public class ChainNode {
 		for (ChainNode node : get(relation)) {
 			node.setValidAll(relation, valid);
 		}
+	}
+
+	private void init(Square _thisSq, ChainCombination _combination, SignChar _signChar) {
+
 	}
 }

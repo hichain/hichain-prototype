@@ -2,10 +2,7 @@ package jp.hichain.prototype.algorithm;
 
 import java.util.EnumSet;
 
-import jp.hichain.prototype.basic.ChainCombination;
-import jp.hichain.prototype.basic.ChainNode;
-import jp.hichain.prototype.basic.SignChar;
-import jp.hichain.prototype.basic.Square;
+import jp.hichain.prototype.basic.*;
 import jp.hichain.prototype.concept.ScoredString;
 import jp.hichain.prototype.concept.SignDir;
 import jp.hichain.prototype.ui.SignData;
@@ -60,7 +57,7 @@ public class ChainSearcher {
 			boolean result = targetSC.equals(yourSC);
 			if (!result) continue;
 			addChainNode(me, you, combination, relation);
-			judgeMatureAndValid(me, you, combination);
+			judgeMatureAndValid(me.getChainNode(combination), you.getChainNode(combination), combination);
 
 			hits++;
 		}
@@ -79,29 +76,47 @@ public class ChainSearcher {
 		//必ずyouが*になるようにする
 		if (mySC.get() == '*') return searchAsterisk(you, me, combination);
 
-		ChainNode asteNode = you.getChainNode(combination);
-		boolean skipSearching = (asteNode == null);
+		ChainNode myNode = me.getChainNode(combination);
+		AsteriskNode asteNode = null;
+
+		//孤立なら探索をスキップ
+		ChainNode asteNodeTmp = you.getChainNode(combination);
+		//同時にnull判定を行う (false => null)
+		boolean skipSearching = (asteNodeTmp instanceof AsteriskNode);  //探索をスキップするか
+		if (skipSearching) {
+			asteNode = (AsteriskNode)asteNodeTmp;
+		} else {
+			asteNode = new AsteriskNode(you, combination);
+			you.addChainNode(combination, asteNode);
+		}
 
 		EnumSet<ScoredString.Relation> relations = EnumSet.of(ScoredString.Relation.PREVIOUS);
-		if (!(ssKind == ScoredString.IDENTICAL)) {
+		if (ssKind != ScoredString.IDENTICAL) {
 			relations.add(ScoredString.Relation.NEXT);
 		}
+
 		for (ScoredString.Relation ssRelation : relations) {
-			SignChar targetSC = mySC.getRelation(combination.getKind(), ssRelation, 2);
+			SignChar targetSC = mySC.getRelation(ssKind, ssRelation, 2);
 			if (targetSC == null) continue;
 
-			boolean hit = skipSearching || isChainedToAsterisk(asteNode, targetSC, ssRelation, combination);
-			if (!hit) continue;
-
-			addChainNode(me, you, combination, ssRelation);
-
+			ChainNode substituteNode = null;    //*が代わるノード
 			if (skipSearching) {
-				asteNode = you.getChainNode(combination);
-				ChainNode.Relation nodeRelation = (ssRelation == ScoredString.Relation.PREVIOUS) ? ChainNode.Relation.CHILD : ChainNode.Relation.PARENT;
-				asteNode.setActive(nodeRelation, false);
+				SignChar signChar = mySC.getRelation(ssKind, ssRelation.getReverse());
+				substituteNode = new ChainNode(you, combination, signChar);
+				asteNode.addSubstituteNode(signChar, substituteNode);
+			} else {
+				substituteNode = searchChainedSubstituteNode(asteNode, targetSC, ssRelation, combination);
+			}
+			if (substituteNode == null) continue;
+
+			if (myNode == null) {
+				myNode = new ChainNode(you, combination);
+				me.addChainNode(combination, myNode);
 			}
 
-			judgeMatureAndValid(me, you, combination);
+			addRelation(myNode, substituteNode, ssRelation);
+
+			judgeMatureAndValid(myNode, substituteNode, combination);
 
 			hits++;
 		}
@@ -109,29 +124,28 @@ public class ChainSearcher {
 		return hits;
 	}
 
-	private static boolean isChainedToAsterisk(ChainNode asteNode, SignChar targetSC, ScoredString.Relation ssRelation, ChainCombination combination) {
+	private static ChainNode searchChainedSubstituteNode(ChainNode root, SignChar targetSC, ScoredString.Relation ssRelation, ChainCombination combination) {
+		AsteriskNode asteNode = (AsteriskNode)root;
 		SignDir signDir = combination.getSignDir();
 		ScoredString ssKind = combination.getKind();
 
 		ChainNode.Relation nodeRelation = (ssRelation == ScoredString.Relation.PREVIOUS) ? ChainNode.Relation.PARENT : ChainNode.Relation.CHILD;
-		asteNode.setActive(nodeRelation, true);
-		for (ChainNode nextNode : asteNode.get(nodeRelation)) {
-			SignChar nextSC = nextNode.getSquare().getSign().getSN().get(signDir);
-			if (nextSC.equals(targetSC)) {
-				return true;
+		for (ChainNode substituteNode : asteNode.getSubstituteNodes()) {
+			for (ChainNode nextNode : substituteNode.get(nodeRelation)) {
+				SignChar nextSC = nextNode.getSignChar();
+				if (nextSC.equals(targetSC)) {
+					return substituteNode;
+				}
 			}
 		}
-		asteNode.setActive(nodeRelation, false);
-		return false;
+		return null;
 	}
 
-	private static void judgeMatureAndValid(Square me, Square you, ChainCombination combination) {
-		ChainNode myNode = me.getChainNode(combination);
-		ChainNode yourNode = you.getChainNode(combination);
+	private static void judgeMatureAndValid(ChainNode myNode, ChainNode yourNode, ChainCombination combination) {
 		if (yourNode.isMature()) {
 			myNode.setMature(true);
 		} else {
-			ScoreSearcher.judgeMature(me, combination);
+			ScoreSearcher.judgeMature(myNode);
 		}
 		if (!yourNode.isValid()) {
 			ScoreSearcher.judgeValid(yourNode);
@@ -145,23 +159,27 @@ public class ChainSearcher {
 		System.out.println(me.getPosition() + " -> " + you.getPosition() + ":" + combination.getSignDir() + " => " + combination.getKind() + " (" + relation + ")");
 		ChainNode myNode = me.getChainNode(combination);
 		if (myNode == null) {
-			myNode = new ChainNode(me);
+			myNode = new ChainNode(me, combination);
 			me.addChainNode(combination, myNode);
 		}
 		ChainNode yourNode = you.getChainNode(combination);
 		if (yourNode == null) {
-			yourNode = new ChainNode(you);
+			yourNode = new ChainNode(you, combination);
 			you.addChainNode(combination, yourNode);
 		}
 
+		addRelation(myNode, yourNode, relation);
+	}
+
+	private static void addRelation(ChainNode me, ChainNode you, ScoredString.Relation relation) {
 		switch (relation) {
 			case PREVIOUS:
-				myNode.add(yourNode, ChainNode.Relation.PARENT);
-				yourNode.add(myNode, ChainNode.Relation.CHILD);
+				me.add(you, ChainNode.Relation.PARENT);
+				you.add(me, ChainNode.Relation.CHILD);
 				break;
 			case NEXT:
-				myNode.add(yourNode, ChainNode.Relation.CHILD);
-				yourNode.add(myNode, ChainNode.Relation.PARENT);
+				me.add(you, ChainNode.Relation.CHILD);
+				me.add(me, ChainNode.Relation.PARENT);
 				break;
 		}
 	}
