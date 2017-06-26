@@ -11,7 +11,7 @@ public class ChainNode {
 	protected EnumMap<Relation, Set<ChainNode>> relationMap;
 	private boolean valid = true;
 	private boolean mature = false;
-	private final boolean asterisk;
+	private final boolean substitute;
 
 	public ChainNode(Square _thisSq, ChainCombination _combination) {
 		thisSquare = _thisSq;
@@ -23,7 +23,7 @@ public class ChainNode {
 			put(Relation.CHILD, new HashSet<>());
 		}};
 		valid = !thisSquare.hasPluralChains();
-		asterisk = (signChar.get() == '*');
+		substitute = (signChar.get() == '*');
 	}
 
 	public ChainNode(Square _thisSq, ChainCombination _combination, SignChar _signChar) {
@@ -36,7 +36,7 @@ public class ChainNode {
 			put(Relation.CHILD, new HashSet<>());
 		}};
 		valid = !thisSquare.hasPluralChains();
-		asterisk = true;
+		substitute = true;
 	}
 
 	public enum Relation {
@@ -117,13 +117,20 @@ public class ChainNode {
 		setValidAll(Relation.CHILD, _valid);
 	}
 
-	public boolean isAsterisk() {
-		return asterisk;
+	public boolean isSubstituteForAsterisk() {
+		return substitute;
+	}
+
+	public boolean isActive() {
+		if ( isSubstituteForAsterisk() ) {
+			return !(isEdgeOf(Edge.ROOT) || isEdgeOf(Edge.LEAF));
+		}
+		return true;
 	}
 
 	@Override
 	public String toString() {
-		String str = "";
+		String str = getCombination() + "\n";
 		List<ChainNode> roots = getEdges(Edge.ROOT);
 		for (int i = 0; i < roots.size(); i++) {
 			ChainNode root = roots.get(i);
@@ -133,13 +140,16 @@ public class ChainNode {
 		return str;
 	}
 
-	private String toScoredString(String inputStr) {
-		String pos = thisSquare.getPosition().toString();
-		if (mature) pos += "m";
-		if (valid) pos += "v";
-		if (isEdgeOf(Edge.LEAF)) return (inputStr + pos);
+	protected String toScoredString(String inputStr) {
+		String sign = getSignChar().toString();
+		sign += thisSquare.getPosition().toString();
+		if (isSubstituteForAsterisk()) sign += "*";
+		if (isActive()) sign += "a";
+		if (isMature()) sign += "m";
+		if (isValid()) sign += "v";
+		if (isEdgeOf(Edge.LEAF)) return (inputStr + sign);
 
-		String currentStr = inputStr + pos + " -> ";
+		String currentStr = inputStr + sign + " -- ";
 		String str = (inputStr.equals("")) ? " > " : "";
 		int i = 0;
 		for (ChainNode child : get(Relation.CHILD)) {
@@ -151,7 +161,7 @@ public class ChainNode {
 		return str;
 	}
 
-	private List<ChainNode> getEdges(Edge edge) {
+	protected List<ChainNode> getEdges(Edge edge) {
 		List<ChainNode> roots = new ArrayList<>();
 		search(roots, edge);
 		return roots;
@@ -168,7 +178,10 @@ public class ChainNode {
 	}
 
 	private void setMaturesAll(Relation relation, boolean mature) {
-		setMature(mature);
+		if (isActive()) {
+			setMature(mature);
+		}
+
 		for (ChainNode node : get(relation)) {
 			node.setMaturesAll(relation, mature);
 		}
@@ -179,9 +192,5 @@ public class ChainNode {
 		for (ChainNode node : get(relation)) {
 			node.setValidAll(relation, valid);
 		}
-	}
-
-	private void init(Square _thisSq, ChainCombination _combination, SignChar _signChar) {
-
 	}
 }

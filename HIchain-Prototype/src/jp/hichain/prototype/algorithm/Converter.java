@@ -1,21 +1,16 @@
 package jp.hichain.prototype.algorithm;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import jp.hichain.prototype.basic.ChainCombination;
-import jp.hichain.prototype.basic.ChainNode;
-import jp.hichain.prototype.basic.Player;
-import jp.hichain.prototype.basic.Position;
-import jp.hichain.prototype.basic.Square;
+import jp.hichain.prototype.basic.*;
 import jp.hichain.prototype.concept.ScoredString;
 import jp.hichain.prototype.concept.SignDir;
 
 /*
  * 考慮してない事項:
  * アスタリスク
- * ぞろ目
- * 重複除去 (X*Z問題)
  * 連鎖ループ問題 (A-Z問題)
  */
 public class Converter {
@@ -33,19 +28,20 @@ public class Converter {
 			if (square.isEmpty() || square.getPlayer() != player) {
 				continue;
 			}
-			for (Map.Entry<ChainCombination, ChainNode> chainEntry : square.getChainMap().entrySet()) {
-				ChainCombination combination = chainEntry.getKey();
-				ChainNode node = chainEntry.getValue();
-				if (node.isAsterisk() || !node.isEdgeOf(ChainNode.Edge.ROOT)) {
-					continue;
+
+			Collection<ChainNode> nodes = square.getChainNodes();
+			for (ChainNode node : nodes) {
+				if (node instanceof AsteriskNode) {
+					for (ChainNode substituteNode : ((AsteriskNode) node).getSubstituteNodes()) {
+						int point = getPoints(substituteNode, substituteNode.getCombination().getKind());
+						if (point == -1) return -1;
+						points += point;
+					}
+				} else {
+					int point = getPoints(node, node.getCombination().getKind());
+					if (point == -1) return -1;
+					points += point;
 				}
-				if (!(node.isMature() && node.isValid())) {
-					continue;
-				}
-				if (combination.getKind() == ScoredString.ROYAL) {
-					if ( completedRoyalString(node) ) return -1;
-				}
-				points += getPoints(node, combination.getKind(), 1);
 			}
 		}
 
@@ -56,6 +52,19 @@ public class Converter {
 		int royalPoints = getPoints(root, ScoredString.ROYAL, 1);
 		int royalMin = getChainLengthMin(ScoredString.ROYAL);
 		return royalPoints >= royalMin*royalMin;
+	}
+
+	private static int getPoints(ChainNode node, ScoredString kind) {
+		if (!(node.isActive() && node.isEdgeOf(ChainNode.Edge.ROOT))) {
+			return 0;
+		}
+		if (!(node.isMature() && node.isValid())) {
+			return 0;
+		}
+		if (kind == ScoredString.ROYAL) {
+			if ( completedRoyalString(node) ) return -1;
+		}
+		return getPoints(node, kind, 1);
 	}
 
 	private static int getPoints(ChainNode root, ScoredString kind, int length) {

@@ -95,9 +95,11 @@ public class Square {
 	 * @return ChainNode
 	 */
 	public ChainNode getChainNode(ChainCombination _combination) {
-		ChainNode node = chainMap.get(_combination);
-		if (node != null && node.isAsterisk()) System.out.println("!This is a kind of asterisk");
-		return node;
+		return chainMap.get(_combination);
+	}
+
+	public Collection<ChainNode> getChainNodes() {
+		return chainMap.values();
 	}
 
 	/**
@@ -140,8 +142,8 @@ public class Square {
 	}
 
 	public boolean hasPluralChains() {
-		for (ChainNode node : getChainMap().values()) {
-			if (node.isValid()) {
+		for (ChainNode node : getChainNodes()) {
+			if (node.isValid() || node instanceof AsteriskNode) {
 				return true;
 			}
 		}
@@ -153,7 +155,7 @@ public class Square {
 		String string = "";
 		int i = 0;
 		for (Map.Entry<ChainCombination, ChainNode> entry : chainMap.entrySet()) {
-			string += entry.getKey() + "\n" + entry.getValue();
+			string += entry.getValue();
 			if (i < chainMap.size()-1) string += "\n";
 			i++;
 		}

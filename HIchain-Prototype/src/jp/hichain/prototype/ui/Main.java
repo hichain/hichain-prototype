@@ -41,7 +41,7 @@ public class Main {
 		testConvert();
 		long end = System.currentTimeMillis();
 
-		System.out.println((end-start) + " ms");
+		System.out.println((end - start) + " ms");
 	}
 
 	private static void testConvert() {
@@ -51,11 +51,12 @@ public class Main {
 		Square around1 = root.getAround(AroundDir.SOUTH);
 		around1.make(player, SignData.get('*'));
 		Square around2 = around1.getAround(AroundDir.SOUTH);
-		around2.make(player, SignData.get('O'));
-/*		Square around3 = around1.getAround(AroundDir.EAST);
-		around3.make(player, SignData.get('J'));
-*/ //     System.out.println("\n" + root.chainsToString());
-		System.out.println( "\nPOINTS: " + Converter.getPointsAll(player) );
+		around2.make(player, SignData.get('F'));
+		Square around3 = around1.getAround(AroundDir.EAST);
+//		around3.make(player, SignData.get('F'));
+
+		System.out.println("\n" + root.chainsToString());
+		System.out.println("\nPOINTS: " + Converter.getPointsAll(player));
 	}
 
 	private static void testChainSearch() {
@@ -82,15 +83,15 @@ public class Main {
 		System.out.println("\nStart Judging...\n");
 
 		PS.Contact result = Judge.getContact(
-			Player.get("2P"), holdingSign, around
+				Player.get("2P"), holdingSign, around
 		);
 
 		System.out.println("\nFinal Result: " + result + "\n");
 	}
 
 	private static void createPlayers() {
-		Player.add( new Player("1P", CardColor.BLACK) );
-		Player.add( new Player("2P", CardColor.RED) );
+		Player.add(new Player("1P", CardColor.BLACK));
+		Player.add(new Player("2P", CardColor.RED));
 	}
 
 	private static void init() {
@@ -98,11 +99,11 @@ public class Main {
 		Map<CardColor, File> signImageFiles = new HashMap<>();
 		for (Map.Entry<CardColor, String> entry : SIGNIMAGEPATH.entrySet()) {
 			signImageFiles.put(
-				entry.getKey(), new File( entry.getValue() )
+					entry.getKey(), new File(entry.getValue())
 			);
 		}
 
-		loadSignData( signdataFile, signImageFiles);
+		loadSignData(signdataFile, signImageFiles);
 /*
 		ChainSign sign = SignData.get('A');
 		sign.resize(0.8);
@@ -117,8 +118,8 @@ public class Main {
 */
 	}
 
-	private static Set <Character> getSignSet(char [] _signs) {
-		Set <Character> signSet = new HashSet<Character>();
+	private static Set<Character> getSignSet(char[] _signs) {
+		Set<Character> signSet = new HashSet<Character>();
 		for (char ch : _signs) {
 			signSet.add(ch);
 		}
@@ -127,7 +128,8 @@ public class Main {
 
 	/**
 	 * 文字データをロードする
-	 * @param _dataPath SN、PSの入ったCSVのパス
+	 *
+	 * @param _dataPath  SN、PSの入ったCSVのパス
 	 * @param _imagePath SIのパス (色の数分)
 	 */
 	private static void loadSignData(File _dataPath, Map<CardColor, File> _imagePath) {
@@ -135,27 +137,27 @@ public class Main {
 
 		BufferedReader brData = null;
 		try {
-			brData = new BufferedReader( new FileReader(_dataPath) );
+			brData = new BufferedReader(new FileReader(_dataPath));
 
-			SignDir [] dirsHeader = new SignDir[4];
-			PS [] psHeader = new PS[16];
+			SignDir[] dirsHeader = new SignDir[4];
+			PS[] psHeader = new PS[16];
 
 			String line = brData.readLine();
 			line = brData.readLine();
-			String [] header = line.split(",", 0);
+			String[] header = line.split(",", 0);
 			for (int i = 0; i < dirsHeader.length; i++) {
-				dirsHeader[i] = SignDir.valueOf(header[i+1]);
+				dirsHeader[i] = SignDir.valueOf(header[i + 1]);
 			}
 			for (int i = 0; i < psHeader.length; i++) {
-				psHeader[i] = PS.valueOf(header[i+5]);
+				psHeader[i] = PS.valueOf(header[i + 5]);
 			}
 
-			while ( (line = brData.readLine()) != null) {
+			while ((line = brData.readLine()) != null) {
 				SignNum signNum = new SignNum();
 				SignPS signPS = new SignPS();
 				Map<CardColor, SignImage> signImages = new HashMap<>();
 
-				String [] data = line.split(",", 0); // 行をカンマ区切りで配列に変換
+				String[] data = line.split(",", 0); // 行をカンマ区切りで配列に変換
 
 				char ch = data[0].charAt(0);
 				//読み込む文字のリストになかったら次
@@ -164,31 +166,31 @@ public class Main {
 				}
 
 				//文字データの分解
-				SignChar signChar = SignChar.get(ch);	//文字
+				SignChar signChar = SignChar.get(ch);    //文字
 				//SNを代入
 				for (int i = 0; i < 4; i++) {
-					char partSN = data[i+1].charAt(0);
+					char partSN = data[i + 1].charAt(0);
 					if (partSN == ' ') continue;
 					signNum.put(dirsHeader[i], SignChar.get(partSN));
 				}
 				//SignPSを代入
 				for (int i = 0; i < 16; i++) {
-					if (Integer.parseInt(data[i+5]) == 1) {
+					if (Integer.parseInt(data[i + 5]) == 1) {
 						signPS.add(psHeader[i]);
 					}
 				}
 
 				char fullwidthCh = getFullWidthChar(signChar.get()); //全角文字
 
-				boolean success = true;	//画像の読み込みに成功したか
+				boolean success = true;    //画像の読み込みに成功したか
 
 				//画像をプレイヤー数分読み込む
 				for (Map.Entry<CardColor, File> entry : _imagePath.entrySet()) {
 					File imageFile = new File(entry.getValue().getPath() + "\\" + fullwidthCh + ".png");
 					try {
-						BufferedImage image = ImageIO.read( imageFile );
-						signImages.put(entry.getKey(), new SignImage(image) );
-					} catch (IOException | IllegalArgumentException  e) {
+						BufferedImage image = ImageIO.read(imageFile);
+						signImages.put(entry.getKey(), new SignImage(image));
+					} catch (IOException | IllegalArgumentException e) {
 						System.out.println("'" + signChar.get() + "' Image was not found!");
 						success = false;
 						break;
@@ -200,7 +202,7 @@ public class Main {
 				}
 
 				//SignDataへ文字データを追加
-				SignData.add( new ChainSign(signChar, signPS, signNum, signImages) );
+				SignData.add(new ChainSign(signChar, signPS, signNum, signImages));
 
 				System.out.print("'" + signChar.get() + "' ");
 			}
@@ -214,20 +216,21 @@ public class Main {
 
 	/**
 	 * 半角から全角に変換する
+	 *
 	 * @param _ch 半角文字
 	 * @return 全角文字
 	 */
 	private static char getFullWidthChar(char _ch) {
 		if (_ch >= 'A' && _ch <= 'Z') {
-			return (char)('Ａ' + _ch - 'A');
+			return (char) ('Ａ' + _ch - 'A');
 		} else if (_ch >= '0' && _ch <= '9') {
-			return (char)('０' + _ch - '0');
+			return (char) ('０' + _ch - '0');
 		} else {
 			switch (_ch) {
-			case ' ':
-				return '　';
-			case '*':
-				return '＊';
+				case ' ':
+					return '　';
+				case '*':
+					return '＊';
 			}
 		}
 		return '　';

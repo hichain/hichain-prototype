@@ -27,8 +27,15 @@ public class ScoreSearcher {
 	public static boolean judgeValid(ChainNode node) {
 		int maxLength = getMaxLength(node);
 		int anotherMaxLength = 0;
-		Map<ChainCombination, ChainNode> nodes = node.getSquare().getChainMap();
-		for (ChainNode overlappingNode : nodes.values()) {
+
+		Collection<ChainNode> nodes;
+		if (node.isSubstituteForAsterisk()) {
+			AsteriskNode asteriskNode = (AsteriskNode)(node.getSquare().getChainNode( node.getCombination() ));
+			nodes = asteriskNode.getSubstituteNodes();
+		} else {
+			nodes = node.getSquare().getChainNodes();
+		}
+		for (ChainNode overlappingNode : nodes) {
 			if (overlappingNode == node) continue;
 			int max = getMaxLength(overlappingNode);
 			if (anotherMaxLength < max) {
@@ -38,7 +45,7 @@ public class ScoreSearcher {
 		if (maxLength <= anotherMaxLength) {
 			return false;
 		}
-		for (ChainNode overlappingNode : nodes.values()) {
+		for (ChainNode overlappingNode : nodes) {
 			overlappingNode.setValidAll(false);
 		}
 		node.setValidAll(true);
@@ -54,8 +61,7 @@ public class ScoreSearcher {
 
 	private static int getMaxLength(ChainNode root, ChainNode.Relation relation, int length) {
 		if (root.isEdgeOf( relation.getEdge() )) {
-			if (root instanceof AsteriskNode) System.out.println("hit");
-			if (root.isAsterisk()) length--;
+			if (!root.isActive()) length--;
 			return length;
 		}
 

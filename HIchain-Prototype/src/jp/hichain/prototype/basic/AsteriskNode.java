@@ -28,7 +28,23 @@ public class AsteriskNode extends ChainNode {
 
 	@Override
 	public boolean isEdgeOf(Edge edge) {
-		System.out.println("WARNING");
+		assert false : "Not allow isEdgeOf() from an AsteriskNode";
 		return super.isEdgeOf(edge);
 	}
+
+	@Override
+	public String toString() {
+		if (getSubstituteNodes().size() == 0) return "!EMPTY";
+
+		String str = getCombination() + "\n";
+		ChainNode substituteNode = (ChainNode)getSubstituteNodes().toArray()[0];
+		List<ChainNode> roots = substituteNode.getEdges(Edge.ROOT);
+		for (int i = 0; i < roots.size(); i++) {
+			ChainNode root = roots.get(i);
+			str += root.toScoredString("");
+			if (i < roots.size() - 1) str += "\n";
+		}
+		return str;
+	}
+
 }

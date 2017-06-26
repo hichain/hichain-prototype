@@ -5,7 +5,6 @@ import java.util.EnumSet;
 import jp.hichain.prototype.basic.*;
 import jp.hichain.prototype.concept.ScoredString;
 import jp.hichain.prototype.concept.SignDir;
-import jp.hichain.prototype.ui.SignData;
 
 public class ChainSearcher {
 
@@ -71,7 +70,6 @@ public class ChainSearcher {
 		SignDir signDir = combination.getSignDir();
 		ScoredString ssKind = combination.getKind();
 		SignChar mySC = me.getSign().getSN().get(signDir);
-		SignChar yourSC = you.getSign().getSN().get(signDir);
 
 		//必ずyouが*になるようにする
 		if (mySC.get() == '*') return searchAsterisk(you, me, combination);
@@ -79,15 +77,12 @@ public class ChainSearcher {
 		ChainNode myNode = me.getChainNode(combination);
 		AsteriskNode asteNode = null;
 
-		//孤立なら探索をスキップ
+		//孤立*なら探索をスキップ
+		//TODO: 孤立*でなくても探索をスキップする場合があるので直す
 		ChainNode asteNodeTmp = you.getChainNode(combination);
-		//同時にnull判定を行う (false => null)
-		boolean skipSearching = (asteNodeTmp instanceof AsteriskNode);  //探索をスキップするか
-		if (skipSearching) {
+		boolean skipSearching = !(asteNodeTmp instanceof AsteriskNode);
+		if (!skipSearching) {
 			asteNode = (AsteriskNode)asteNodeTmp;
-		} else {
-			asteNode = new AsteriskNode(you, combination);
-			you.addChainNode(combination, asteNode);
 		}
 
 		EnumSet<ScoredString.Relation> relations = EnumSet.of(ScoredString.Relation.PREVIOUS);
@@ -99,9 +94,14 @@ public class ChainSearcher {
 			SignChar targetSC = mySC.getRelation(ssKind, ssRelation, 2);
 			if (targetSC == null) continue;
 
+			if (asteNode == null) {
+				asteNode = new AsteriskNode(you, combination);
+				you.addChainNode(combination, asteNode);
+			}
+
 			ChainNode substituteNode = null;    //*が代わるノード
 			if (skipSearching) {
-				SignChar signChar = mySC.getRelation(ssKind, ssRelation.getReverse());
+				SignChar signChar = mySC.getRelation(ssKind, ssRelation);
 				substituteNode = new ChainNode(you, combination, signChar);
 				asteNode.addSubstituteNode(signChar, substituteNode);
 			} else {
@@ -110,7 +110,7 @@ public class ChainSearcher {
 			if (substituteNode == null) continue;
 
 			if (myNode == null) {
-				myNode = new ChainNode(you, combination);
+				myNode = new ChainNode(me, combination);
 				me.addChainNode(combination, myNode);
 			}
 
@@ -124,13 +124,12 @@ public class ChainSearcher {
 		return hits;
 	}
 
-	private static ChainNode searchChainedSubstituteNode(ChainNode root, SignChar targetSC, ScoredString.Relation ssRelation, ChainCombination combination) {
-		AsteriskNode asteNode = (AsteriskNode)root;
+	private static ChainNode searchChainedSubstituteNode(AsteriskNode root, SignChar targetSC, ScoredString.Relation ssRelation, ChainCombination combination) {
 		SignDir signDir = combination.getSignDir();
 		ScoredString ssKind = combination.getKind();
 
 		ChainNode.Relation nodeRelation = (ssRelation == ScoredString.Relation.PREVIOUS) ? ChainNode.Relation.PARENT : ChainNode.Relation.CHILD;
-		for (ChainNode substituteNode : asteNode.getSubstituteNodes()) {
+		for (ChainNode substituteNode : root.getSubstituteNodes()) {
 			for (ChainNode nextNode : substituteNode.get(nodeRelation)) {
 				SignChar nextSC = nextNode.getSignChar();
 				if (nextSC.equals(targetSC)) {
@@ -179,7 +178,7 @@ public class ChainSearcher {
 				break;
 			case NEXT:
 				me.add(you, ChainNode.Relation.CHILD);
-				me.add(me, ChainNode.Relation.PARENT);
+				you.add(me, ChainNode.Relation.PARENT);
 				break;
 		}
 	}
