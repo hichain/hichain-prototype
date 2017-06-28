@@ -1,11 +1,10 @@
 package jp.hichain.prototype.algorithm;
 
 import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 
-import jp.hichain.prototype.basic.ChainCombination;
-import jp.hichain.prototype.basic.ChainNode;
-import jp.hichain.prototype.basic.SignChar;
-import jp.hichain.prototype.basic.Square;
+import jp.hichain.prototype.basic.*;
 import jp.hichain.prototype.concept.ScoredString;
 import jp.hichain.prototype.concept.SignDir;
 import jp.hichain.prototype.ui.SignData;
@@ -79,8 +78,24 @@ public class ChainSearcher {
 		//必ずyouが*になるようにする
 		if (mySC.get() == '*') return searchAsterisk(you, me, combination);
 
-		ChainNode asteNode = you.getChainNode(combination);
-		boolean skipSearching = (asteNode == null);
+		boolean searching;
+
+		ChainNode myNode = me.getChainNode(combination);
+		if (myNode == null) {
+			myNode = new ChainNode(me);
+			me.addChainNode(combination, myNode);
+		}
+
+		AsteriskNode asteriskNode = null;
+		ChainNode asteriskNodeTmp = you.getChainNode(combination);
+		if (asteriskNodeTmp instanceof AsteriskNode) {
+			asteriskNode = (AsteriskNode) asteriskNodeTmp;
+			searching = true;
+		} else {
+			asteriskNode = new AsteriskNode(you);
+			you.addChainNode(combination, asteriskNode);
+			searching = false;
+		}
 
 		EnumSet<ScoredString.Relation> relations = EnumSet.of(ScoredString.Relation.PREVIOUS);
 		if (!(ssKind == ScoredString.IDENTICAL)) {
@@ -90,16 +105,24 @@ public class ChainSearcher {
 			SignChar targetSC = mySC.getRelation(combination.getKind(), ssRelation, 2);
 			if (targetSC == null) continue;
 
-			boolean hit = skipSearching || isChainedToAsterisk(asteNode, targetSC, ssRelation, combination);
-			if (!hit) continue;
-
-			addChainNode(me, you, combination, ssRelation);
-
-			if (skipSearching) {
-				asteNode = you.getChainNode(combination);
-				ChainNode.Relation nodeRelation = (ssRelation == ScoredString.Relation.PREVIOUS) ? ChainNode.Relation.CHILD : ChainNode.Relation.PARENT;
-				asteNode.setActive(nodeRelation, false);
+			boolean hit = false;
+			if (searching) {
+				Set<ChainNode> sourceNodes = new HashSet<>();
+				for (ChainPair pair : asteriskNode.getAlonePairs()) {
+					ChainNode aloneNode = pair.getAloneNode();
+					SignChar aloneSC = aloneNode.getSquare().getSign().getSN().get(signDir);
+					if (targetSC.equals(aloneSC)) {
+						sourceNodes.add(aloneNode);
+					}
+				}
+				ChainNode.Relation nodeRelation = (ssRelation == ScoredString.Relation.PREVIOUS) ? ChainNode.Relation.PARENT : ChainNode.Relation.CHILD;
+				for (ChainNode sourceNode : sourceNodes) {
+					asteriskNode.add(myNode, sourceNode, nodeRelation);
+				}
+				hit = sourceNodes.size() != 0;
 			}
+
+			if (!hit) addChainNode(me, you, combination, ssRelation);
 
 			judgeMatureAndValid(me, you, combination);
 
@@ -107,22 +130,6 @@ public class ChainSearcher {
 		}
 
 		return hits;
-	}
-
-	private static boolean isChainedToAsterisk(ChainNode asteNode, SignChar targetSC, ScoredString.Relation ssRelation, ChainCombination combination) {
-		SignDir signDir = combination.getSignDir();
-		ScoredString ssKind = combination.getKind();
-
-		ChainNode.Relation nodeRelation = (ssRelation == ScoredString.Relation.PREVIOUS) ? ChainNode.Relation.PARENT : ChainNode.Relation.CHILD;
-		asteNode.setActive(nodeRelation, true);
-		for (ChainNode nextNode : asteNode.get(nodeRelation)) {
-			SignChar nextSC = nextNode.getSquare().getSign().getSN().get(signDir);
-			if (nextSC.equals(targetSC)) {
-				return true;
-			}
-		}
-		asteNode.setActive(nodeRelation, false);
-		return false;
 	}
 
 	private static void judgeMatureAndValid(Square me, Square you, ChainCombination combination) {
