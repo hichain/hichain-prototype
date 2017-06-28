@@ -1,10 +1,8 @@
 package jp.hichain.prototype.algorithm;
 
-import jp.hichain.prototype.basic.AsteriskNode;
 import jp.hichain.prototype.basic.ChainCombination;
 import jp.hichain.prototype.basic.ChainNode;
 import jp.hichain.prototype.basic.Square;
-import jp.hichain.prototype.concept.ScoredString;
 
 import java.util.Collection;
 import java.util.Map;
@@ -14,10 +12,10 @@ import java.util.Set;
  * Created by NT on 2017/06/11.
  */
 public class ScoreSearcher {
-	public static boolean judgeMature(ChainNode node) {
-		ScoredString kind = node.getCombination().getKind();
+	public static boolean judgeMature(Square square, ChainCombination combination) {
+		ChainNode node = square.getChainNode(combination);
 		int maxLength = getMaxLength(node);
-		if (Converter.getChainLengthMin(kind) <= maxLength) {
+		if (Converter.getChainLengthMin(combination.getKind()) <= maxLength) {
 			node.setMatureAll(true);
 			return true;
 		}
@@ -27,15 +25,8 @@ public class ScoreSearcher {
 	public static boolean judgeValid(ChainNode node) {
 		int maxLength = getMaxLength(node);
 		int anotherMaxLength = 0;
-
-		Collection<ChainNode> nodes;
-		if (node.isSubstituteForAsterisk()) {
-			AsteriskNode asteriskNode = (AsteriskNode)(node.getSquare().getChainNode( node.getCombination() ));
-			nodes = asteriskNode.getSubstituteNodes();
-		} else {
-			nodes = node.getSquare().getChainNodes();
-		}
-		for (ChainNode overlappingNode : nodes) {
+		Map<ChainCombination, ChainNode> nodes = node.getSquare().getChainMap();
+		for (ChainNode overlappingNode : nodes.values()) {
 			if (overlappingNode == node) continue;
 			int max = getMaxLength(overlappingNode);
 			if (anotherMaxLength < max) {
@@ -45,7 +36,7 @@ public class ScoreSearcher {
 		if (maxLength <= anotherMaxLength) {
 			return false;
 		}
-		for (ChainNode overlappingNode : nodes) {
+		for (ChainNode overlappingNode : nodes.values()) {
 			overlappingNode.setValidAll(false);
 		}
 		node.setValidAll(true);
@@ -61,7 +52,6 @@ public class ScoreSearcher {
 
 	private static int getMaxLength(ChainNode root, ChainNode.Relation relation, int length) {
 		if (root.isEdgeOf( relation.getEdge() )) {
-			if (!root.isActive()) length--;
 			return length;
 		}
 

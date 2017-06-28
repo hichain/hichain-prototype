@@ -94,12 +94,8 @@ public class Square {
 	 * 連鎖ノードを返す
 	 * @return ChainNode
 	 */
-	public ChainNode getChainNode(ChainCombination _combination) {
-		return chainMap.get(_combination);
-	}
-
-	public Collection<ChainNode> getChainNodes() {
-		return chainMap.values();
+	public ChainNode getChainNode(ChainCombination _ChainCombination) {
+		return chainMap.get(_ChainCombination);
 	}
 
 	/**
@@ -142,8 +138,8 @@ public class Square {
 	}
 
 	public boolean hasPluralChains() {
-		for (ChainNode node : getChainNodes()) {
-			if (node.isValid() || node instanceof AsteriskNode) {
+		for (ChainNode node : getChainMap().values()) {
+			if (node.isValid()) {
 				return true;
 			}
 		}
@@ -155,7 +151,7 @@ public class Square {
 		String string = "";
 		int i = 0;
 		for (Map.Entry<ChainCombination, ChainNode> entry : chainMap.entrySet()) {
-			string += entry.getValue();
+			string += entry.getKey() + "\n" + entry.getValue();
 			if (i < chainMap.size()-1) string += "\n";
 			i++;
 		}
