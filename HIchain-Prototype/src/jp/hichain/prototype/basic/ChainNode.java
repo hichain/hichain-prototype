@@ -4,7 +4,6 @@ import jp.hichain.prototype.concept.ScoredString;
 import jp.hichain.prototype.ui.SignData;
 import java.util.*;
 
-//TODO: ROOT/LEAFフラグを導入する (手動で立てる)
 public class ChainNode {
 	private final Square thisSquare;
 	private EnumMap<Relation, Set<ChainNode>> relationMap;
