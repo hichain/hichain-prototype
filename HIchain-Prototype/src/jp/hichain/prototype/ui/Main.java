@@ -52,7 +52,6 @@ public class Main {
 		around1.make(player, SignData.get('*'));
 		Square around2 = around1.getAround(AroundDir.SOUTH);
 		ChainSign sign = SignData.get('F');
-//		sign.rotate(Direction.Relation.OPPOSITE);
 		around2.make(player, sign);
 /*		Square around3 = around1.getAround(AroundDir.EAST);
 		around3.make(player, SignData.get('J'));
