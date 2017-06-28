@@ -13,10 +13,8 @@ import jp.hichain.prototype.concept.SignDir;
 
 /*
  * 考慮してない事項:
- * アスタリスク
- * ぞろ目
- * 重複除去 (X*Z問題)
- * 連鎖ループ問題 (A-Z問題)
+ * アスタリスク (WIP)
+ * 回帰
  */
 public class Converter {
 	private static Map<ScoredString, Integer> chainLengthMin;

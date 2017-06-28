@@ -3,10 +3,7 @@ package jp.hichain.prototype.algorithm;
 import jp.hichain.prototype.basic.ChainCombination;
 import jp.hichain.prototype.basic.ChainNode;
 import jp.hichain.prototype.basic.Square;
-
-import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by NT on 2017/06/11.
