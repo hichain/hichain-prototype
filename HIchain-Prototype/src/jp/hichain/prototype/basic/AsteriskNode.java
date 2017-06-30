@@ -1,8 +1,6 @@
 package jp.hichain.prototype.basic;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by NT on 2017/06/28.
@@ -54,7 +52,7 @@ public class AsteriskNode extends ChainNode {
 	public Set<ChainNode> get(ChainNode sourceNode, Relation relation) {
 		Set<ChainNode> outputNodes = new HashSet<>();
 		for (ChainPair pair : pairs) {
-			if (pair.get(relation.getOpposite()) == sourceNode) {
+			if (pair.get(relation.getOpposite()) == sourceNode && !pair.isAlone()) {
 				outputNodes.add( pair.get(relation) );
 			}
 		}
@@ -83,5 +81,49 @@ public class AsteriskNode extends ChainNode {
 
 	private void addPair(ChainPair chainPair) {
 		pairs.add(chainPair);
+	}
+
+	@Override
+	protected String toString(String inputStr, ChainNode sourceNode) {
+		String pos = getSquare().getPosition().toString();
+		if (isMature(sourceNode, Relation.CHILD)) pos += "m";
+		if (isValid()) pos += "v";
+		if (isEdgeOf(Edge.LEAF, sourceNode)) return (inputStr + pos);
+
+		String currentStr = inputStr + pos + " -> ";
+		String str = (inputStr.equals("")) ? " > " : "";
+		Iterator<ChainNode> iterator = get(sourceNode, Relation.CHILD).iterator();
+		while (iterator.hasNext()){
+			ChainNode child = iterator.next();
+			str += child.toString(currentStr, this);
+			if (iterator.hasNext()) str += "\n > ";
+		}
+
+		return str;
+	}
+
+	@Override
+	protected List<ChainNode> getEdges(Edge edge) {
+		List<ChainNode> edgeNodes = new ArrayList<>();
+		for (ChainPair pair : pairs) {
+			if (pair.isAlone()) {
+				search(edgeNodes, edge, pair.getAloneNode());
+			} else {
+				search(edgeNodes, edge, pair.get(Relation.PARENT));
+			}
+		}
+		return edgeNodes;
+	}
+
+	@Override
+	protected void search(List<ChainNode> nodes, Edge edge, ChainNode sourceNode) {
+		if(this.isEdgeOf(edge, sourceNode)) {
+			nodes.add(this);
+			return;
+		}
+
+		for (ChainNode parent : get(edge.getRelation())) {
+			parent.search(nodes, edge, this);
+		}
 	}
 }

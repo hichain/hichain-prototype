@@ -6,7 +6,7 @@ import java.util.*;
 
 public class ChainNode {
 	private final Square thisSquare;
-	private EnumMap<Relation, Set<ChainNode>> relationMap;
+	protected EnumMap<Relation, Set<ChainNode>> relationMap;
 	private boolean valid = true;
 	private boolean mature = false;
 
@@ -102,13 +102,13 @@ public class ChainNode {
 		List<ChainNode> roots = getEdges(Edge.ROOT);
 		for (int i = 0; i < roots.size(); i++) {
 			ChainNode root = roots.get(i);
-			str += root.toScoredString("");
+			str += root.toString("", null);
 			if (i < roots.size()-1) str += "\n";
 		}
 		return str;
 	}
 
-	private String toScoredString(String inputStr) {
+	protected String toString(String inputStr, ChainNode sourceNode) {
 		String pos = thisSquare.getPosition().toString();
 		if (mature) pos += "m";
 		if (valid) pos += "v";
@@ -118,7 +118,7 @@ public class ChainNode {
 		String str = (inputStr.equals("")) ? " > " : "";
 		int i = 0;
 		for (ChainNode child : get(Relation.CHILD)) {
-			str += child.toScoredString(currentStr);
+			str += child.toString(currentStr, this);
 			if (i < relationMap.get(Relation.CHILD).size()-1) str += "\n > ";
 			i++;
 		}
@@ -126,19 +126,20 @@ public class ChainNode {
 		return str;
 	}
 
-	private List<ChainNode> getEdges(Edge edge) {
-		List<ChainNode> roots = new ArrayList<>();
-		search(roots, edge);
-		return roots;
+	protected List<ChainNode> getEdges(Edge edge) {
+		List<ChainNode> edgeNodes = new ArrayList<>();
+		search(edgeNodes, edge, null);
+		return edgeNodes;
 	}
 
-	private void search(List <ChainNode> nodes, Edge edge) {
+	protected void search(List <ChainNode> nodes, Edge edge, ChainNode sourceNode) {
 		if (isEdgeOf(edge)) {
 			nodes.add(this);
 			return;
 		}
+
 		for (ChainNode parent : get(edge.getRelation())) {
-			parent.search(nodes, edge);
+			parent.search(nodes, edge, this);
 		}
 	}
 
