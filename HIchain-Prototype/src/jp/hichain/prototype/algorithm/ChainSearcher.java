@@ -7,7 +7,6 @@ import java.util.Set;
 import jp.hichain.prototype.basic.*;
 import jp.hichain.prototype.concept.ScoredString;
 import jp.hichain.prototype.concept.SignDir;
-import jp.hichain.prototype.ui.SignData;
 
 public class ChainSearcher {
 
@@ -82,7 +81,7 @@ public class ChainSearcher {
 
 		ChainNode myNode = me.getChainNode(combination);
 		if (myNode == null) {
-			myNode = new ChainNode(me);
+			myNode = new ChainNode(me, combination);
 			me.addChainNode(combination, myNode);
 		}
 
@@ -92,7 +91,7 @@ public class ChainSearcher {
 			asteriskNode = (AsteriskNode) asteriskNodeTmp;
 			searching = true;
 		} else {
-			asteriskNode = new AsteriskNode(you);
+			asteriskNode = new AsteriskNode(you, combination);
 			you.addChainNode(combination, asteriskNode);
 			searching = false;
 		}
@@ -110,7 +109,7 @@ public class ChainSearcher {
 				Set<ChainNode> sourceNodes = new HashSet<>();
 				for (ChainPair pair : asteriskNode.getAlonePairs()) {
 					ChainNode aloneNode = pair.getAloneNode();
-					SignChar aloneSC = aloneNode.getSquare().getSign().getSN().get(signDir);
+					SignChar aloneSC = aloneNode.getSignChar();
 					if (targetSC.equals(aloneSC)) {
 						sourceNodes.add(aloneNode);
 					}
@@ -152,12 +151,12 @@ public class ChainSearcher {
 		System.out.println(me.getPosition() + " -> " + you.getPosition() + ":" + combination.getSignDir() + " => " + combination.getKind() + " (" + relation + ")");
 		ChainNode myNode = me.getChainNode(combination);
 		if (myNode == null) {
-			myNode = new ChainNode(me);
+			myNode = new ChainNode(me, combination);
 			me.addChainNode(combination, myNode);
 		}
 		ChainNode yourNode = you.getChainNode(combination);
 		if (yourNode == null) {
-			yourNode = new ChainNode(you);
+			yourNode = new ChainNode(you, combination);
 			you.addChainNode(combination, yourNode);
 		}
 

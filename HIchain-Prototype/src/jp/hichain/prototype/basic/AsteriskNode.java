@@ -8,18 +8,22 @@ import java.util.*;
 public class AsteriskNode extends ChainNode {
 	private Set<ChainPair> pairs;
 
-	public AsteriskNode(Square _thisSq) {
-		super(_thisSq);
+	public AsteriskNode(Square _thisSq, ChainCombination combination) {
+		super(_thisSq, combination);
 		pairs = new HashSet<>();
 	}
 
 	public boolean isEdgeOf(Edge edge, ChainNode sourceNode) {
-		Set<ChainNode> nextNodes = get(sourceNode, edge.getRelation().getOpposite());
+		Set<ChainNode> nextNodes = get(sourceNode, edge.getRelation());
 		return nextNodes.size() == 0;
 	}
 
 	public boolean isMature(ChainNode sourceNode, Relation relation) {
 		return !isEdgeOf(relation.getEdge(), sourceNode);
+	}
+
+	public Set<ChainPair> getPairs() {
+		return pairs;
 	}
 
 	public ChainPair getAlonePair(ChainNode node) {
@@ -85,12 +89,14 @@ public class AsteriskNode extends ChainNode {
 
 	@Override
 	protected String toString(String inputStr, ChainNode sourceNode) {
-		String pos = getSquare().getPosition().toString();
-		if (isMature(sourceNode, Relation.CHILD)) pos += "m";
-		if (isValid()) pos += "v";
-		if (isEdgeOf(Edge.LEAF, sourceNode)) return (inputStr + pos);
+		String sign = "";
+		sign += getSignChar().get();
+		sign += getSquare().getPosition().toString();
+		if (isMature(sourceNode, Relation.CHILD)) sign += "m";
+		if (isValid()) sign += "v";
+		if (isEdgeOf(Edge.LEAF, sourceNode)) return (inputStr + sign);
 
-		String currentStr = inputStr + pos + " -> ";
+		String currentStr = inputStr + sign + " -> ";
 		String str = (inputStr.equals("")) ? " > " : "";
 		Iterator<ChainNode> iterator = get(sourceNode, Relation.CHILD).iterator();
 		while (iterator.hasNext()){
@@ -124,6 +130,12 @@ public class AsteriskNode extends ChainNode {
 
 		for (ChainNode parent : get(edge.getRelation())) {
 			parent.search(nodes, edge, this);
+		}
+	}
+
+	protected void setMaturesAll(boolean mature, Relation relation, ChainNode sourceNode) {
+		for (ChainNode node : get(sourceNode, relation)) {
+			node.setMaturesAll(mature, relation);
 		}
 	}
 }

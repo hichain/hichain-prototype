@@ -1,13 +1,11 @@
 package jp.hichain.prototype.algorithm;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
-import jp.hichain.prototype.basic.ChainCombination;
-import jp.hichain.prototype.basic.ChainNode;
-import jp.hichain.prototype.basic.Player;
-import jp.hichain.prototype.basic.Position;
-import jp.hichain.prototype.basic.Square;
+import jp.hichain.prototype.basic.*;
 import jp.hichain.prototype.concept.ScoredString;
 import jp.hichain.prototype.concept.SignDir;
 
@@ -33,41 +31,36 @@ public class Converter {
 			}
 			for (Map.Entry<ChainCombination, ChainNode> chainEntry : square.getChainMap().entrySet()) {
 				ChainCombination combination = chainEntry.getKey();
-				ChainNode node = chainEntry.getValue();
-				if (!node.isEdgeOf(ChainNode.Edge.ROOT)) {
-					continue;
+				ChainNode targetNode = chainEntry.getValue();
+
+				Set<ChainNode> startNodes = new HashSet<>();
+				//*ノードならその中の孤立ノードを探す
+				if (targetNode instanceof AsteriskNode) {
+					AsteriskNode asteriskNode = (AsteriskNode)targetNode;
+					for (ChainPair pair : asteriskNode.getPairs()) {
+						if (pair.isAlone()) {
+							startNodes.add(pair.getAloneNode());
+						}
+					}
+					if (startNodes.size() == 0) continue;
+				} else {
+					if (!targetNode.isEdgeOf(ChainNode.Edge.ROOT)) {
+						continue;
+					}
+					if (!(targetNode.isMature() && targetNode.isValid())) {
+						continue;
+					}
+					startNodes.add(targetNode);
 				}
-				if (!(node.isMature() && node.isValid())) {
-					continue;
-				}
+
 				if (combination.getKind() == ScoredString.ROYAL) {
-					if ( completedRoyalString(node) ) return -1;
+					for (ChainNode node : startNodes) {
+						if ( completedRoyalString(node)) return -1;
+						points += getPoints(node, null, 1);
+					}
 				}
-				points += getPoints(node, combination.getKind(), 1);
+
 			}
-		}
-
-		return points;
-	}
-
-	private static boolean completedRoyalString(ChainNode root) {
-		int royalPoints = getPoints(root, ScoredString.ROYAL, 1);
-		int royalMin = getChainLengthMin(ScoredString.ROYAL);
-		return royalPoints >= royalMin*royalMin;
-	}
-
-	private static int getPoints(ChainNode root, ScoredString kind, int length) {
-		int points = 0;
-
-		if (root.isEdgeOf(ChainNode.Edge.LEAF)) {
-			if( getChainLengthMin(kind) <= length ) {
-				return length*length;
-			}
-			return 0;
-		}
-
-		for (ChainNode child : root.get(ChainNode.Relation.CHILD)) {
-			points += getPoints(child, kind, length+1);
 		}
 
 		return points;
@@ -76,14 +69,49 @@ public class Converter {
 	public static void init(int alphabetical, int identical, int royal) {
 		chainLengthMin = new HashMap<ScoredString, Integer>() {{
 			put(
-				ScoredString.ALPHABETICAL, alphabetical
+					ScoredString.ALPHABETICAL, alphabetical
 			);
 			put(
-				ScoredString.IDENTICAL, identical
+					ScoredString.IDENTICAL, identical
 			);
 			put(
-				ScoredString.ROYAL, royal
+					ScoredString.ROYAL, royal
 			);
 		}};
+	}
+
+	private static boolean completedRoyalString(ChainNode root) {
+		int royalPoints = getPoints(root, null, 1);
+		int royalMin = getChainLengthMin(ScoredString.ROYAL);
+		return royalPoints >= royalMin*royalMin;
+	}
+
+	private static int getPoints(ChainNode root, ChainNode sourceNode, int length) {
+		int points = 0;
+
+		if (root instanceof AsteriskNode) return getPoints((AsteriskNode)root, sourceNode, length);
+		if (!(root.isMature() && root.isValid())) {
+			return (length-1)*(length-1);
+		}
+
+		for (ChainNode child : root.get(ChainNode.Relation.CHILD)) {
+			points += getPoints(child, root, length+1);
+		}
+
+		return points;
+	}
+
+	private static int getPoints(AsteriskNode root, ChainNode sourceNode, int length) {
+		int points = 0;
+
+		if (!root.isMature(sourceNode, ChainNode.Relation.CHILD) ) {
+			return (length-1)*(length-1);
+		}
+
+		for (ChainNode child : root.get(sourceNode, ChainNode.Relation.CHILD)) {
+			points += getPoints(child, root, length+1);
+		}
+
+		return points;
 	}
 }

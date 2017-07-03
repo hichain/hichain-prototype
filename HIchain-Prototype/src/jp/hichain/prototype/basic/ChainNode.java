@@ -5,18 +5,23 @@ import jp.hichain.prototype.ui.SignData;
 import java.util.*;
 
 public class ChainNode {
-	private final Square thisSquare;
+	private final Square square;
+	private ChainCombination combination;
+	private SignChar signChar;
+
 	protected EnumMap<Relation, Set<ChainNode>> relationMap;
 	private boolean valid = true;
 	private boolean mature = false;
-
-	public ChainNode(Square _thisSq) {
-		thisSquare = _thisSq;
+	
+	public ChainNode(Square _thisSq, ChainCombination combination) {
+		this.square = _thisSq;
+		this.combination = combination;
+		signChar = this.square.getSign().getSN().get( combination.getSignDir() );
 		relationMap = new EnumMap<Relation, Set<ChainNode>>(Relation.class) {{
 			put(Relation.PARENT, new HashSet<>());
 			put(Relation.CHILD, new HashSet<>());
 		}};
-		valid = !thisSquare.hasPluralChains();
+		valid = !this.square.hasPluralChains();
 	}
 
 	public enum Relation {
@@ -56,6 +61,18 @@ public class ChainNode {
 		}
 	}
 
+	public Square getSquare() {
+		return square;
+	}
+
+	public ChainCombination getCombination() {
+		return combination;
+	}
+
+	public SignChar getSignChar() {
+		return signChar;
+	}
+
 	public boolean isEdgeOf(Edge edge) {
 		return relationMap.get( edge.getRelation() ).size() == 0;
 	}
@@ -74,10 +91,6 @@ public class ChainNode {
 		mature = _mature;
 	}
 
-	public Square getSquare() {
-		return thisSquare;
-	}
-
 	public Set<ChainNode> get(Relation relation) {
 		return relationMap.get(relation);
 	}
@@ -87,8 +100,8 @@ public class ChainNode {
 	}
 
 	public void setMatureAll(boolean _mature) {
-		setMaturesAll(Relation.PARENT, _mature);
-		setMaturesAll(Relation.CHILD, _mature);
+		setMaturesAll(_mature, Relation.PARENT);
+		setMaturesAll(_mature, Relation.CHILD);
 	}
 
 	public void setValidAll(boolean _valid) {
@@ -109,12 +122,14 @@ public class ChainNode {
 	}
 
 	protected String toString(String inputStr, ChainNode sourceNode) {
-		String pos = thisSquare.getPosition().toString();
-		if (mature) pos += "m";
-		if (valid) pos += "v";
-		if (isEdgeOf(Edge.LEAF)) return (inputStr + pos);
+		String sign = "";
+		sign += signChar.get();
+		sign += this.square.getPosition().toString();
+		if (mature) sign += "m";
+		if (valid) sign += "v";
+		if (isEdgeOf(Edge.LEAF)) return (inputStr + sign);
 
-		String currentStr = inputStr + pos + " -> ";
+		String currentStr = inputStr + sign + " -> ";
 		String str = (inputStr.equals("")) ? " > " : "";
 		int i = 0;
 		for (ChainNode child : get(Relation.CHILD)) {
@@ -143,10 +158,10 @@ public class ChainNode {
 		}
 	}
 
-	private void setMaturesAll(Relation relation, boolean mature) {
+	protected void setMaturesAll(boolean mature, Relation relation) {
 		setMature(mature);
 		for (ChainNode node : get(relation)) {
-			node.setMaturesAll(relation, mature);
+			node.setMaturesAll(mature, relation);
 		}
 	}
 
