@@ -152,22 +152,9 @@ public class ChainSearcher {
 		ChainNode yourNode = you.getChainNode(combination);
 		if (myNode == null) {
 			myNode = new ChainNode(me, combination, yourNode, relation);
-			me.addChainNode(combination, myNode);
 		}
 		if (yourNode == null) {
-			yourNode = new ChainNode(you, combination);
-			you.addChainNode(combination, yourNode);
-		}
-
-		switch (relation) {
-			case PARENT:
-				myNode.add(yourNode, Chain.Relation.PARENT);
-				yourNode.add(myNode, Chain.Relation.CHILD);
-				break;
-			case CHILD:
-				myNode.add(yourNode, Chain.Relation.CHILD);
-				yourNode.add(myNode, Chain.Relation.PARENT);
-				break;
+			yourNode = new ChainNode(you, combination, myNode, relation);
 		}
 	}
 }

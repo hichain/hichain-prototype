@@ -20,7 +20,7 @@ public enum Chain {
 
 	private final String orderString;
 
-	private Chain(String str) {
+	Chain(String str) {
 		orderString = str;
 	}
 

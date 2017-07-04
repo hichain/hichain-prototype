@@ -23,16 +23,20 @@ public class ChainLength {
 
 	public ChainLength(ChainLength source, Relation updateRelation) {
 		lengthMap = source.lengthMap.clone();
-		lengthMap.put(updateRelation, getLength(updateRelation)+1);
-		updateLength(updateRelation.getOpposite());
+		updateLength(1, updateRelation);
 	}
 
 	public int getLength(Relation relation) {
 		return lengthMap.get(relation);
 	}
 
-	private void updateLength(Relation relation) {
-		lengthMap.put(relation, getLength(relation)+1);
-
+	private void updateLength(int addition, Relation relation) {
+		lengthMap.put(relation, getLength(relation) + addition);
+		for (ChainNode nextNode : get(relation)) {
+			nextNode.updateLength(addition, relation.getOpposite());
+		}
+		for (ChainNode nextNode : get(relation.getOpposite())) {
+			nextNode.updateLength(addition, relation);
+		}
 	}
 }

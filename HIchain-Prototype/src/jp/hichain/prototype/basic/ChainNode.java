@@ -9,8 +9,9 @@ public class ChainNode {
 	private ChainCombination combination;
 	private SignChar signChar;
 
-	protected EnumMap<Relation, Set<ChainNode>> relationMap;
-	private EnumMap<Relation, Integer> lengthMap;
+	private EnumMap<Relation, Set<ChainNode>> relationMap;
+	//TODO: この辺複雑化しそうなのでどうしよう
+	private Map<ChainEdgePair, ChainLength> lengthMap;
 	private boolean valid = true;
 	private boolean mature = false;
 
@@ -26,10 +27,8 @@ public class ChainNode {
 			put(Relation.PARENT, new HashSet<>());
 			put(Relation.CHILD, new HashSet<>());
 		}};
-		lengthMap = new EnumMap<Relation, Integer>(Relation.class) {{
-			put(Relation.PARENT, 0);
-			put(Relation.CHILD, 0);
-		}};
+		lengthMap = new HashMap<>();
+		lengthMap.put(new ChainEdgePair(this), new ChainLength());
 		valid = !this.square.hasPluralChains();
 	}
 
@@ -44,7 +43,12 @@ public class ChainNode {
 		thisSquare.addChainNode(combination, this);
 		add(source, relation);
 		source.add(this, relation.getOpposite());
-		updateLength(source.getLength(relation)+1, relation);
+		lengthMap = new HashMap<>();
+		for (Map.Entry<ChainEdgePair, ChainLength> entry : source.lengthMap.entrySet()) {
+			ChainEdgePair edgePair = entry.getKey();
+			ChainLength length = entry.getValue();
+			lengthMap.put(edgePair, new ChainLength(length, relation));
+		}
 	}
 
 	public Square getSquare() {
@@ -67,18 +71,8 @@ public class ChainNode {
 		relationMap.get(relation).add(node);
 	}
 
-	public int getLength(Relation relation) {
-		return lengthMap.get(relation);
-	}
-
-	private void updateLength(int addition, Relation relation) {
-		lengthMap.put(relation, getLength(relation) + addition);
-		for (ChainNode nextNode : get(relation)) {
-			nextNode.updateLength(addition, relation.getOpposite());
-		}
-		for (ChainNode nextNode : get(relation.getOpposite())) {
-			nextNode.updateLength(addition, relation);
-		}
+	public ChainLength getChainLength(ChainEdgePair edgePair) {
+		return lengthMap.get(edgePair);
 	}
 
 	public boolean isEdgeOf(Relation relation) {
