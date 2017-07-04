@@ -10,18 +10,28 @@ public class ChainNode {
 	private SignChar signChar;
 
 	protected EnumMap<Relation, Set<ChainNode>> relationMap;
+	private EnumMap<Relation, Integer> lengthMap;
 	private boolean valid = true;
 	private boolean mature = false;
 	
-	public ChainNode(Square _thisSq, ChainCombination combination) {
-		this.square = _thisSq;
+	public ChainNode(Square thisSquare, ChainCombination combination) {
+		this.square = thisSquare;
 		this.combination = combination;
 		signChar = this.square.getSign().getSN().get( combination.getSignDir() );
 		relationMap = new EnumMap<Relation, Set<ChainNode>>(Relation.class) {{
 			put(Relation.PARENT, new HashSet<>());
 			put(Relation.CHILD, new HashSet<>());
 		}};
+		lengthMap = new EnumMap<Relation, Integer>(Relation.class) {{
+			put(Relation.PARENT, 0);
+			put(Relation.CHILD, 0);
+		}};
 		valid = !this.square.hasPluralChains();
+	}
+
+	//TODO: Square的にコンストラクタでソースを指定して自動で親子ノードを追加し長さもアップデートする
+	public ChainNode(Square thisSquare, ChainCombination combination, ChainNode source, Relation relation) {
+
 	}
 
 	public enum Relation {
@@ -73,6 +83,22 @@ public class ChainNode {
 		return signChar;
 	}
 
+	public Set<ChainNode> get(Relation relation) {
+		return relationMap.get(relation);
+	}
+
+	public void add(ChainNode node, Relation relation) {
+		relationMap.get(relation).add(node);
+	}
+
+	public int getLength(Relation relation) {
+		return lengthMap.get(relation);
+	}
+
+	private void updateLength(Relation relation) {
+		lengthMap.put(relation, getLength(relation)+1);
+	}
+
 	public boolean isEdgeOf(Edge edge) {
 		return relationMap.get( edge.getRelation() ).size() == 0;
 	}
@@ -89,14 +115,6 @@ public class ChainNode {
 
 	public void setMature(boolean _mature) {
 		mature = _mature;
-	}
-
-	public Set<ChainNode> get(Relation relation) {
-		return relationMap.get(relation);
-	}
-
-	public void add(ChainNode node, Relation relation) {
-		relationMap.get(relation).add(node);
 	}
 
 	public void setMatureAll(boolean _mature) {

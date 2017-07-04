@@ -10,8 +10,7 @@ import java.util.Map;
  * Created by NT on 2017/06/11.
  */
 public class ScoreSearcher {
-	public static boolean judgeMature(Square square, ChainCombination combination) {
-		ChainNode node = square.getChainNode(combination);
+	public static boolean judgeMature(ChainNode node, ChainCombination combination) {
 		int maxLength = getMaxLength(node);
 		if (Converter.getChainLengthMin(combination.getKind()) <= maxLength) {
 			node.setMatureAll(true);
@@ -45,7 +44,7 @@ public class ScoreSearcher {
 		return true;
 	}
 
-	public static int getMaxLength(ChainNode node) {
+	private static int getMaxLength(ChainNode node) {
 		int max = 0;
 		max += getMaxLength(node, ChainNode.Relation.PARENT, null, 1);
 		max += getMaxLength(node, ChainNode.Relation.CHILD, null, 1);
