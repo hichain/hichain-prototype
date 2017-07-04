@@ -1,8 +1,9 @@
 package jp.hichain.prototype.basic;
 
 import java.util.EnumMap;
-import jp.hichain.prototype.basic.ChainNode.Edge;
-import jp.hichain.prototype.basic.ChainNode.Relation;
+
+import com.sun.org.apache.regexp.internal.RE;
+import jp.hichain.prototype.concept.Chain.Relation;
 
 /**
  * 端のChainNodeのペア
@@ -10,25 +11,25 @@ import jp.hichain.prototype.basic.ChainNode.Relation;
  * Created by NT on 2017/07/04.
  */
 public class ChainEdgePair {
-	private EnumMap<Edge, ChainNode> nodeMap;
+	private EnumMap<Relation, ChainNode> nodeMap;
 
 	public ChainEdgePair(ChainNode node) {
-		nodeMap = new EnumMap<Edge, ChainNode>(Edge.class) {{
-			put(Edge.ROOT, node);
-			put(Edge.LEAF, node);
+		nodeMap = new EnumMap<Relation, ChainNode>(Relation.class) {{
+			put(Relation.PARENT, node);
+			put(Relation.CHILD, node);
 		}};
 	}
 
 	public ChainEdgePair(ChainNode node, ChainEdgePair source, Relation updateRelation) {
 		nodeMap = source.nodeMap.clone();
-		nodeMap.put(updateRelation.getEdge(), node);
+		nodeMap.put(updateRelation, node);
 	}
 
-	public void updateEdgeNode(ChainNode node, Edge edge) {
-		nodeMap.put(edge, node);
+	public void updateEdgeNode(ChainNode node, Relation relation) {
+		nodeMap.put(relation, node);
 	}
 
-	public ChainNode getEdgeNode(Edge edge) {
-		return nodeMap.get(edge);
+	public ChainNode getEdgeNode(Relation relation) {
+		return nodeMap.get(relation);
 	}
 }

@@ -2,9 +2,8 @@ package jp.hichain.prototype.basic;
 
 import java.util.EnumMap;
 
-import com.sun.org.apache.regexp.internal.RE;
-import jp.hichain.prototype.basic.ChainNode.Edge;
-import jp.hichain.prototype.basic.ChainNode.Relation;
+import jp.hichain.prototype.concept.Chain;
+import jp.hichain.prototype.concept.Chain.Relation;
 
 /**
  * 連鎖の長さ

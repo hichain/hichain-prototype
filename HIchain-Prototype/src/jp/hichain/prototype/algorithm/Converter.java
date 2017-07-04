@@ -6,8 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import jp.hichain.prototype.basic.*;
-import jp.hichain.prototype.concept.ScoredString;
-import jp.hichain.prototype.concept.SignDir;
+import jp.hichain.prototype.concept.Chain;
 
 /*
  * 考慮してない事項:
@@ -15,9 +14,9 @@ import jp.hichain.prototype.concept.SignDir;
  * 回帰
  */
 public class Converter {
-	private static Map<ScoredString, Integer> chainLengthMin;
+	private static Map<Chain, Integer> chainLengthMin;
 
-	public static int getChainLengthMin(ScoredString kind) {
+	public static int getChainLengthMin(Chain kind) {
 		return chainLengthMin.get(kind);
 	}
 
@@ -44,7 +43,7 @@ public class Converter {
 					}
 					if (startNodes.size() == 0) continue;
 				} else {
-					if (!targetNode.isEdgeOf(ChainNode.Edge.ROOT)) {
+					if (!targetNode.isEdgeOf(Chain.Relation.PARENT)) {
 						continue;
 					}
 					if (!(targetNode.isMature() && targetNode.isValid())) {
@@ -53,7 +52,7 @@ public class Converter {
 					startNodes.add(targetNode);
 				}
 
-				if (combination.getKind() == ScoredString.ROYAL) {
+				if (combination.getKind() == Chain.ROYAL) {
 					for (ChainNode node : startNodes) {
 						if ( completedRoyalString(node)) return -1;
 						points += getPoints(node, null, 1);
@@ -67,22 +66,22 @@ public class Converter {
 	}
 
 	public static void init(int alphabetical, int identical, int royal) {
-		chainLengthMin = new HashMap<ScoredString, Integer>() {{
+		chainLengthMin = new HashMap<Chain, Integer>() {{
 			put(
-					ScoredString.ALPHABETICAL, alphabetical
+					Chain.ALPHABETICAL, alphabetical
 			);
 			put(
-					ScoredString.IDENTICAL, identical
+					Chain.IDENTICAL, identical
 			);
 			put(
-					ScoredString.ROYAL, royal
+					Chain.ROYAL, royal
 			);
 		}};
 	}
 
 	private static boolean completedRoyalString(ChainNode root) {
 		int royalPoints = getPoints(root, null, 1);
-		int royalMin = getChainLengthMin(ScoredString.ROYAL);
+		int royalMin = getChainLengthMin(Chain.ROYAL);
 		return royalPoints >= royalMin*royalMin;
 	}
 
@@ -94,7 +93,7 @@ public class Converter {
 			return (length-1)*(length-1);
 		}
 
-		for (ChainNode child : root.get(ChainNode.Relation.CHILD)) {
+		for (ChainNode child : root.get(Chain.Relation.CHILD)) {
 			points += getPoints(child, root, length+1);
 		}
 
@@ -104,11 +103,11 @@ public class Converter {
 	private static int getPoints(AsteriskNode root, ChainNode sourceNode, int length) {
 		int points = 0;
 
-		if (!root.isMature(sourceNode, ChainNode.Relation.CHILD) ) {
+		if (!root.isMature(sourceNode, Chain.Relation.CHILD) ) {
 			return (length-1)*(length-1);
 		}
 
-		for (ChainNode child : root.get(sourceNode, ChainNode.Relation.CHILD)) {
+		for (ChainNode child : root.get(sourceNode, Chain.Relation.CHILD)) {
 			points += getPoints(child, root, length+1);
 		}
 

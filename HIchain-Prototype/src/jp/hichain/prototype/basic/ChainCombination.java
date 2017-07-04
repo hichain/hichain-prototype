@@ -2,14 +2,14 @@ package jp.hichain.prototype.basic;
 
 import java.util.Objects;
 
-import jp.hichain.prototype.concept.ScoredString;
+import jp.hichain.prototype.concept.Chain;
 import jp.hichain.prototype.concept.SignDir;
 
 public class ChainCombination {
 	private final SignDir signDir;
-	private final ScoredString kind;
+	private final Chain kind;
 
-	public ChainCombination(SignDir signDir, ScoredString kind) {
+	public ChainCombination(SignDir signDir, Chain kind) {
 		this.signDir = signDir;
 		this.kind = kind;
 	}
@@ -18,7 +18,7 @@ public class ChainCombination {
 		return signDir;
 	}
 
-	public ScoredString getKind() {
+	public Chain getKind() {
 		return kind;
 	}
 

@@ -1,7 +1,7 @@
 package jp.hichain.prototype.basic;
 
-import jp.hichain.prototype.concept.ScoredString;
-import jp.hichain.prototype.ui.SignData;
+import jp.hichain.prototype.concept.Chain;
+import jp.hichain.prototype.concept.Chain.Relation;
 import java.util.*;
 
 public class ChainNode {
@@ -13,7 +13,11 @@ public class ChainNode {
 	private EnumMap<Relation, Integer> lengthMap;
 	private boolean valid = true;
 	private boolean mature = false;
-	
+
+	/*
+	 * @param thisSquare このノードが属するSquare
+	 * @param combination このノードが属するツリーの連鎖条件
+	 */
 	public ChainNode(Square thisSquare, ChainCombination combination) {
 		this.square = thisSquare;
 		this.combination = combination;
@@ -29,46 +33,18 @@ public class ChainNode {
 		valid = !this.square.hasPluralChains();
 	}
 
-	//TODO: Square的にコンストラクタでソースを指定して自動で親子ノードを追加し長さもアップデートする
+	/**
+	 * @param thisSquare このノードが属するSquare
+	 * @param combination このノードが属するツリーの連鎖条件
+	 * @param source ソースSquare
+	 * @param relation このノードから見たソースの親子関係
+	 */
 	public ChainNode(Square thisSquare, ChainCombination combination, ChainNode source, Relation relation) {
-
-	}
-
-	public enum Relation {
-		PARENT,
-		CHILD;
-
-		private Edge edge;
-		private Relation opposite;
-		static {
-			PARENT.edge = Edge.ROOT;
-			CHILD.edge = Edge.LEAF;
-			PARENT.opposite = CHILD;
-			CHILD.opposite = PARENT;
-		}
-
-		public Edge getEdge() {
-			return edge;
-		}
-
-		public Relation getOpposite() {
-			return opposite;
-		}
-	}
-
-	public enum Edge {
-		ROOT,
-		LEAF;
-
-		private Relation relation;
-		static {
-			ROOT.relation = Relation.PARENT;
-			LEAF.relation = Relation.CHILD;
-		}
-
-		public Relation getRelation() {
-			return relation;
-		}
+		this(thisSquare, combination);
+		thisSquare.addChainNode(combination, this);
+		add(source, relation);
+		source.add(this, relation.getOpposite());
+		updateLength(source.getLength(relation)+1, relation);
 	}
 
 	public Square getSquare() {
@@ -95,12 +71,18 @@ public class ChainNode {
 		return lengthMap.get(relation);
 	}
 
-	private void updateLength(Relation relation) {
-		lengthMap.put(relation, getLength(relation)+1);
+	private void updateLength(int addition, Relation relation) {
+		lengthMap.put(relation, getLength(relation) + addition);
+		for (ChainNode nextNode : get(relation)) {
+			nextNode.updateLength(addition, relation.getOpposite());
+		}
+		for (ChainNode nextNode : get(relation.getOpposite())) {
+			nextNode.updateLength(addition, relation);
+		}
 	}
 
-	public boolean isEdgeOf(Edge edge) {
-		return relationMap.get( edge.getRelation() ).size() == 0;
+	public boolean isEdgeOf(Relation relation) {
+		return relationMap.get(relation).size() == 0;
 	}
 
 	public boolean isValid() { return valid; }
@@ -130,7 +112,7 @@ public class ChainNode {
 	@Override
 	public String toString() {
 		String str = "";
-		List<ChainNode> roots = getEdges(Edge.ROOT);
+		List<ChainNode> roots = getEdges(Relation.PARENT);
 		for (int i = 0; i < roots.size(); i++) {
 			ChainNode root = roots.get(i);
 			str += root.toString("", null);
@@ -145,7 +127,7 @@ public class ChainNode {
 		sign += this.square.getPosition().toString();
 		if (mature) sign += "m";
 		if (valid) sign += "v";
-		if (isEdgeOf(Edge.LEAF)) return (inputStr + sign);
+		if (isEdgeOf(Relation.CHILD)) return (inputStr + sign);
 
 		String currentStr = inputStr + sign + " -> ";
 		String str = (inputStr.equals("")) ? " > " : "";
@@ -159,20 +141,20 @@ public class ChainNode {
 		return str;
 	}
 
-	protected List<ChainNode> getEdges(Edge edge) {
+	protected List<ChainNode> getEdges(Relation relation) {
 		List<ChainNode> edgeNodes = new ArrayList<>();
-		search(edgeNodes, edge, null);
+		search(edgeNodes, relation, null);
 		return edgeNodes;
 	}
 
-	protected void search(List <ChainNode> nodes, Edge edge, ChainNode sourceNode) {
-		if (isEdgeOf(edge)) {
+	protected void search(List <ChainNode> nodes, Relation relation, ChainNode sourceNode) {
+		if (isEdgeOf(relation)) {
 			nodes.add(this);
 			return;
 		}
 
-		for (ChainNode parent : get(edge.getRelation())) {
-			parent.search(nodes, edge, this);
+		for (ChainNode parent : get(relation)) {
+			parent.search(nodes, relation, this);
 		}
 	}
 

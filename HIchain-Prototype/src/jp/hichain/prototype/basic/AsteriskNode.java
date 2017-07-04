@@ -1,6 +1,8 @@
 package jp.hichain.prototype.basic;
 
 import java.util.*;
+import jp.hichain.prototype.concept.Chain;
+import jp.hichain.prototype.concept.Chain.Relation;
 
 /**
  * Created by NT on 2017/06/28.
@@ -13,13 +15,13 @@ public class AsteriskNode extends ChainNode {
 		pairs = new HashSet<>();
 	}
 
-	public boolean isEdgeOf(Edge edge, ChainNode sourceNode) {
-		Set<ChainNode> nextNodes = get(sourceNode, edge.getRelation());
+	public boolean isEdgeOf(Relation relation, ChainNode sourceNode) {
+		Set<ChainNode> nextNodes = get(sourceNode, relation);
 		return nextNodes.size() == 0;
 	}
 
 	public boolean isMature(ChainNode sourceNode, Relation relation) {
-		return !isEdgeOf(relation.getEdge(), sourceNode);
+		return !isEdgeOf(relation, sourceNode);
 	}
 
 	public Set<ChainPair> getPairs() {
@@ -47,9 +49,9 @@ public class AsteriskNode extends ChainNode {
 	}
 
 	@Override
-	public boolean isEdgeOf(Edge edge) {
-		assert false : "Not allow isEdgeOf(Edge), Use isEdfeOf(Edge, ChainNode, ChainNode.Relation) from an asterisk node";
-		return super.isEdgeOf(edge);
+	public boolean isEdgeOf(Relation relation) {
+		assert false : "Not allow isEdgeOf(Relation), Use isEdfeOf(Relation, ChainNode, Chain.Relation) from an asterisk node";
+		return super.isEdgeOf(relation);
 	}
 
 	//relation: sourceNodeからみたこのノードとの関係
@@ -94,7 +96,7 @@ public class AsteriskNode extends ChainNode {
 		sign += getSquare().getPosition().toString();
 		if (isMature(sourceNode, Relation.CHILD)) sign += "m";
 		if (isValid()) sign += "v";
-		if (isEdgeOf(Edge.LEAF, sourceNode)) return (inputStr + sign);
+		if (isEdgeOf(Relation.CHILD, sourceNode)) return (inputStr + sign);
 
 		String currentStr = inputStr + sign + " -> ";
 		String str = (inputStr.equals("")) ? " > " : "";
@@ -109,27 +111,27 @@ public class AsteriskNode extends ChainNode {
 	}
 
 	@Override
-	protected List<ChainNode> getEdges(Edge edge) {
+	protected List<ChainNode> getEdges(Relation relation) {
 		List<ChainNode> edgeNodes = new ArrayList<>();
 		for (ChainPair pair : pairs) {
 			if (pair.isAlone()) {
-				search(edgeNodes, edge, pair.getAloneNode());
+				search(edgeNodes, relation, pair.getAloneNode());
 			} else {
-				search(edgeNodes, edge, pair.get(Relation.PARENT));
+				search(edgeNodes, relation, pair.get(Relation.PARENT));
 			}
 		}
 		return edgeNodes;
 	}
 
 	@Override
-	protected void search(List<ChainNode> nodes, Edge edge, ChainNode sourceNode) {
-		if(this.isEdgeOf(edge, sourceNode)) {
+	protected void search(List<ChainNode> nodes, Relation relation, ChainNode sourceNode) {
+		if(this.isEdgeOf(relation, sourceNode)) {
 			nodes.add(this);
 			return;
 		}
 
-		for (ChainNode parent : get(edge.getRelation())) {
-			parent.search(nodes, edge, this);
+		for (ChainNode parent : get(relation)) {
+			parent.search(nodes, relation, this);
 		}
 	}
 

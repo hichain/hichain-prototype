@@ -4,17 +4,17 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
-import jp.hichain.prototype.concept.ScoredString;
+import jp.hichain.prototype.concept.Chain;
 
 public class SignChar {
 	private static Map<Character, SignChar> signs = new HashMap<>();
 
 	private char signChar;
-	private EnumMap<ScoredString, EnumMap<ScoredString.Relation, SignChar>> relationMap;
+	private EnumMap<Chain, EnumMap<Chain.Relation, SignChar>> relationMap;
 
 	private SignChar(char ch) {
 		signChar = ch;
-		relationMap = new EnumMap<>(ScoredString.class);
+		relationMap = new EnumMap<>(Chain.class);
 	}
 
 	static {
@@ -25,11 +25,11 @@ public class SignChar {
 		return signChar;
 	}
 
-	public SignChar getRelation(ScoredString kind, ScoredString.Relation relation) {
+	public SignChar getRelation(Chain kind, Chain.Relation relation) {
 		return getRelation(kind, relation, 1);
 	}
 
-	public SignChar getRelation(ScoredString kind, ScoredString.Relation relation, int times) {
+	public SignChar getRelation(Chain kind, Chain.Relation relation, int times) {
 		if (times == 0) return this;
 		if (!relationMap.containsKey(kind)) return null;
 		SignChar nextSC = relationMap.get(kind).get(relation);
@@ -48,12 +48,12 @@ public class SignChar {
 	private static void init() {
 		signs.put( ' ', new SignChar(' ') );
 		SignChar asterisk = new SignChar('*');
-		EnumMap<ScoredString.Relation, SignChar> asteriskMap = new EnumMap<>(ScoredString.Relation.class);
-		asteriskMap.put( ScoredString.Relation.NEXT, asterisk );
-		asteriskMap.put( ScoredString.Relation.PREVIOUS, asterisk );
+		EnumMap<Chain.Relation, SignChar> asteriskMap = new EnumMap<>(Chain.Relation.class);
+		asteriskMap.put( Chain.Relation.CHILD, asterisk );
+		asteriskMap.put( Chain.Relation.PARENT, asterisk );
 		signs.put('*', asterisk);
 
-		for (ScoredString kind : ScoredString.values()) {
+		for (Chain kind : Chain.values()) {
 			String orderString = kind.getOrderString();
 			char [] chs = orderString.toCharArray();
 			//signs生成
@@ -70,12 +70,12 @@ public class SignChar {
 				int r = (i == chs.length-1) ? 0 : i+1;
 
 				SignChar sc = signs.get(chs[i]);
-				SignChar lsc = (kind == ScoredString.IDENTICAL) ? sc : signs.get(chs[l]);
-				SignChar rsc = (kind == ScoredString.IDENTICAL) ? sc : signs.get(chs[r]);
+				SignChar lsc = (kind == Chain.IDENTICAL) ? sc : signs.get(chs[l]);
+				SignChar rsc = (kind == Chain.IDENTICAL) ? sc : signs.get(chs[r]);
 
-				EnumMap<ScoredString.Relation, SignChar> map = new EnumMap<>(ScoredString.Relation.class);
-				map.put( ScoredString.Relation.NEXT, rsc );
-				map.put( ScoredString.Relation.PREVIOUS, lsc );
+				EnumMap<Chain.Relation, SignChar> map = new EnumMap<>(Chain.Relation.class);
+				map.put( Chain.Relation.CHILD, rsc );
+				map.put( Chain.Relation.PARENT, lsc );
 
 				sc.relationMap.put(kind, map);
 			}

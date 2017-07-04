@@ -1,7 +1,7 @@
 package jp.hichain.prototype.basic;
 
 import java.util.EnumMap;
-import jp.hichain.prototype.basic.ChainNode.Relation;
+import jp.hichain.prototype.concept.Chain.Relation;
 
 /**
  * Created by NT on 2017/06/28.

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jp.hichain.prototype.basic.*;
-import jp.hichain.prototype.concept.ScoredString;
+import jp.hichain.prototype.concept.Chain;
 import jp.hichain.prototype.concept.SignDir;
 
 public class ChainSearcher {
@@ -26,7 +26,7 @@ public class ChainSearcher {
 			if (mySC == null || yourSC == null)	continue;
 			boolean hasAsterisk = (mySC.get() == '*') || (yourSC.get() == '*');
 
-			for (ScoredString kind : ScoredString.values()) {
+			for (Chain kind : Chain.values()) {
 				ChainCombination combination = new ChainCombination(signDir, kind);
 				if (hasAsterisk) {
 					hits += searchAsterisk(me, you, combination);
@@ -43,15 +43,15 @@ public class ChainSearcher {
 		int hits = 0;
 
 		SignDir signDir = combination.getSignDir();
-		ScoredString ssKind = combination.getKind();
+		Chain ssKind = combination.getKind();
 		SignChar mySC = me.getSign().getSN().get(signDir);
 		SignChar yourSC = you.getSign().getSN().get(signDir);
 
-		EnumSet<ScoredString.Relation> relations = EnumSet.of(ScoredString.Relation.PREVIOUS);
-		if (ssKind != ScoredString.IDENTICAL) {
-			relations.add(ScoredString.Relation.NEXT);
+		EnumSet<Chain.Relation> relations = EnumSet.of(Chain.Relation.PARENT);
+		if (ssKind != Chain.IDENTICAL) {
+			relations.add(Chain.Relation.CHILD);
 		}
-		for (ScoredString.Relation relation : relations) {
+		for (Chain.Relation relation : relations) {
 			SignChar targetSC = mySC.getRelation(ssKind, relation);
 			if (targetSC == null) continue;
 
@@ -70,7 +70,7 @@ public class ChainSearcher {
 		int hits = 0;
 
 		SignDir signDir = combination.getSignDir();
-		ScoredString ssKind = combination.getKind();
+		Chain ssKind = combination.getKind();
 		SignChar mySC = me.getSign().getSN().get(signDir);
 		SignChar yourSC = you.getSign().getSN().get(signDir);
 
@@ -96,12 +96,12 @@ public class ChainSearcher {
 			searching = false;
 		}
 
-		EnumSet<ScoredString.Relation> relations = EnumSet.of(ScoredString.Relation.PREVIOUS);
-		if (!(ssKind == ScoredString.IDENTICAL)) {
-			relations.add(ScoredString.Relation.NEXT);
+		EnumSet<Chain.Relation> relations = EnumSet.of(Chain.Relation.PARENT);
+		if (!(ssKind == Chain.IDENTICAL)) {
+			relations.add(Chain.Relation.CHILD);
 		}
-		for (ScoredString.Relation ssRelation : relations) {
-			SignChar targetSC = mySC.getRelation(combination.getKind(), ssRelation, 2);
+		for (Chain.Relation chainRelation : relations) {
+			SignChar targetSC = mySC.getRelation(combination.getKind(), chainRelation, 2);
 			if (targetSC == null) continue;
 
 			boolean hit = false;
@@ -114,14 +114,13 @@ public class ChainSearcher {
 						sourceNodes.add(aloneNode);
 					}
 				}
-				ChainNode.Relation nodeRelation = (ssRelation == ScoredString.Relation.PREVIOUS) ? ChainNode.Relation.PARENT : ChainNode.Relation.CHILD;
 				for (ChainNode sourceNode : sourceNodes) {
-					asteriskNode.add(myNode, sourceNode, nodeRelation);
+					asteriskNode.add(myNode, sourceNode, chainRelation);
 				}
 				hit = sourceNodes.size() != 0;
 			}
 
-			if (!hit) addChainNode(me, you, combination, ssRelation);
+			if (!hit) addChainNode(me, you, combination, chainRelation);
 
 			judgeMatureAndValid(me, you, combination);
 
@@ -137,7 +136,7 @@ public class ChainSearcher {
 		if (yourNode.isMature()) {
 			myNode.setMature(true);
 		} else {
-			ScoreSearcher.judgeMature(me, combination);
+			ScoreSearcher.judgeMature(myNode, combination);
 		}
 		if (!yourNode.isValid()) {
 			ScoreSearcher.judgeValid(yourNode);
@@ -147,27 +146,27 @@ public class ChainSearcher {
 		}
 	}
 
-	private static void addChainNode(Square me, Square you, ChainCombination combination, ScoredString.Relation relation) {
+	private static void addChainNode(Square me, Square you, ChainCombination combination, Chain.Relation relation) {
 		System.out.println(me.getPosition() + " -> " + you.getPosition() + ":" + combination.getSignDir() + " => " + combination.getKind() + " (" + relation + ")");
 		ChainNode myNode = me.getChainNode(combination);
+		ChainNode yourNode = you.getChainNode(combination);
 		if (myNode == null) {
-			myNode = new ChainNode(me, combination);
+			myNode = new ChainNode(me, combination, yourNode, relation);
 			me.addChainNode(combination, myNode);
 		}
-		ChainNode yourNode = you.getChainNode(combination);
 		if (yourNode == null) {
 			yourNode = new ChainNode(you, combination);
 			you.addChainNode(combination, yourNode);
 		}
 
 		switch (relation) {
-			case PREVIOUS:
-				myNode.add(yourNode, ChainNode.Relation.PARENT);
-				yourNode.add(myNode, ChainNode.Relation.CHILD);
+			case PARENT:
+				myNode.add(yourNode, Chain.Relation.PARENT);
+				yourNode.add(myNode, Chain.Relation.CHILD);
 				break;
-			case NEXT:
-				myNode.add(yourNode, ChainNode.Relation.CHILD);
-				yourNode.add(myNode, ChainNode.Relation.PARENT);
+			case CHILD:
+				myNode.add(yourNode, Chain.Relation.CHILD);
+				yourNode.add(myNode, Chain.Relation.PARENT);
 				break;
 		}
 	}
