@@ -10,10 +10,16 @@ public class ChainNode {
 	private SignChar signChar;
 
 	private EnumMap<Relation, Set<ChainNode>> relationMap;
-	//TODO: この辺複雑化しそうなのでどうしよう
-	private Map<ChainEdgePair, ChainLength> lengthMap;
+	private ChainLength length;
 	private boolean valid = true;
 	private boolean mature = false;
+
+	{
+		relationMap = new EnumMap<Relation, Set<ChainNode>>(Relation.class) {{
+			put(Relation.PARENT, new HashSet<>());
+			put(Relation.CHILD, new HashSet<>());
+		}};
+	}
 
 	/*
 	 * @param thisSquare このノードが属するSquare
@@ -23,12 +29,7 @@ public class ChainNode {
 		this.square = thisSquare;
 		this.combination = combination;
 		signChar = this.square.getSign().getSN().get( combination.getSignDir() );
-		relationMap = new EnumMap<Relation, Set<ChainNode>>(Relation.class) {{
-			put(Relation.PARENT, new HashSet<>());
-			put(Relation.CHILD, new HashSet<>());
-		}};
-		lengthMap = new HashMap<>();
-		lengthMap.put(new ChainEdgePair(this), new ChainLength());
+		length = new ChainLength(this);
 		valid = !this.square.hasPluralChains();
 	}
 
@@ -40,15 +41,10 @@ public class ChainNode {
 	 */
 	public ChainNode(Square thisSquare, ChainCombination combination, ChainNode source, Relation relation) {
 		this(thisSquare, combination);
+		length = new ChainLength(this, source.length, relation);
 		thisSquare.addChainNode(combination, this);
 		add(source, relation);
 		source.add(this, relation.getOpposite());
-		lengthMap = new HashMap<>();
-		for (Map.Entry<ChainEdgePair, ChainLength> entry : source.lengthMap.entrySet()) {
-			ChainEdgePair edgePair = entry.getKey();
-			ChainLength length = entry.getValue();
-			lengthMap.put(edgePair, new ChainLength(length, relation));
-		}
 	}
 
 	public Square getSquare() {
@@ -71,8 +67,12 @@ public class ChainNode {
 		relationMap.get(relation).add(node);
 	}
 
-	public ChainLength getChainLength(ChainEdgePair edgePair) {
-		return lengthMap.get(edgePair);
+	public int getLength(Relation relation) {
+		return length.getMaxLength(relation);
+	}
+
+	public ChainLength getLength() {
+		return length;
 	}
 
 	public boolean isEdgeOf(Relation relation) {

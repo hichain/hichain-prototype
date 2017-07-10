@@ -12,31 +12,48 @@ import jp.hichain.prototype.concept.Chain.Relation;
  * Created by NT on 2017/07/04.
  */
 public class ChainLength {
+	private ChainNode thisNode;
 	private EnumMap<Relation, Integer> lengthMap;
 
-	public ChainLength() {
+	public ChainLength(ChainNode node) {
+		thisNode = node;
 		lengthMap = new EnumMap<Relation, Integer>(Relation.class) {{
 			put(Relation.PARENT, 0);
 			put(Relation.CHILD, 0);
 		}};
 	}
 
-	public ChainLength(ChainLength source, Relation updateRelation) {
+	public ChainLength(ChainNode node, ChainLength source, Relation updateRelation) {
+		thisNode = node;
 		lengthMap = source.lengthMap.clone();
-		updateLength(1, updateRelation);
+		updateLength(1, updateRelation, getMaxLength()+1);
 	}
 
-	public int getLength(Relation relation) {
+	public ChainNode getNode() {
+		return thisNode;
+	}
+
+	public int getMaxLength(Relation relation) {
 		return lengthMap.get(relation);
 	}
 
-	private void updateLength(int addition, Relation relation) {
-		lengthMap.put(relation, getLength(relation) + addition);
-		for (ChainNode nextNode : get(relation)) {
-			nextNode.updateLength(addition, relation.getOpposite());
+	public int getMaxLength() {
+		int sumLength = 0;
+		for (int length : lengthMap.values()) {
+			sumLength += length;
 		}
-		for (ChainNode nextNode : get(relation.getOpposite())) {
-			nextNode.updateLength(addition, relation);
+		return sumLength;
+	}
+
+	private void updateLength(int addition, Relation relation, int limitLength) {
+		if (getMaxLength() >= limitLength) return;
+
+		lengthMap.put(relation, getMaxLength(relation) + addition);
+		for (ChainNode nextNode : getNode().get(relation)) {
+			nextNode.getLength().updateLength(addition, relation.getOpposite(), limitLength);
+		}
+		for (ChainNode nextNode : getNode().get(relation.getOpposite())) {
+			nextNode.getLength().updateLength(addition, relation, limitLength);
 		}
 	}
 }
