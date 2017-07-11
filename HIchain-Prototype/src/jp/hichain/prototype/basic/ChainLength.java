@@ -26,7 +26,11 @@ public class ChainLength {
 	public ChainLength(ChainNode node, ChainLength source, Relation updateRelation) {
 		thisNode = node;
 		lengthMap = source.lengthMap.clone();
-		updateLength(1, updateRelation, getMaxLength()+1);
+		int maxLength = getMaxLength() + 1;
+		updateLength(1, updateRelation, maxLength, true);
+		for (ChainNode nextNode : getNode().get(updateRelation)) {
+			updateLength(1, updateRelation.getOpposite(), maxLength, false);
+		}
 	}
 
 	public ChainNode getNode() {
@@ -45,15 +49,13 @@ public class ChainLength {
 		return sumLength;
 	}
 
-	private void updateLength(int addition, Relation relation, int limitLength) {
-		if (getMaxLength() >= limitLength) return;
+	private void updateLength(int addition, Relation updateRelation, int limitLength, boolean forceUpdate) {
+		if (!forceUpdate && limitLength <= getMaxLength()) return;
+		System.out.println("Updated ChainLength");
+		lengthMap.put(updateRelation, getMaxLength(updateRelation) + addition);
 
-		lengthMap.put(relation, getMaxLength(relation) + addition);
-		for (ChainNode nextNode : getNode().get(relation)) {
-			nextNode.getLength().updateLength(addition, relation.getOpposite(), limitLength);
-		}
-		for (ChainNode nextNode : getNode().get(relation.getOpposite())) {
-			nextNode.getLength().updateLength(addition, relation, limitLength);
+		for (ChainNode nextNode : getNode().get(updateRelation.getOpposite())) {
+			nextNode.getLength().updateLength(addition, updateRelation, limitLength, false);
 		}
 	}
 }

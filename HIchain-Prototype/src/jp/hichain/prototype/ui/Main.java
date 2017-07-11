@@ -56,7 +56,7 @@ public class Main {
 		around3.make(player, SignData.get('J'));
 */      System.out.println("\n" + root.chainsToString());
 		System.out.println( "\nPOINTS: " + Converter.getPointsAll(player) );
-		ChainLength length = root.getChainNode(new ChainCombination(SignDir.NORTH, Chain.ALPHABETICAL)).getLength();
+		ChainLength length = around2.getChainNode(new ChainCombination(SignDir.NORTH, Chain.ALPHABETICAL)).getLength();
 		System.out.println("PARENT: " + length.getMaxLength(Chain.Relation.PARENT) + " CHILD: " + length.getMaxLength(Chain.Relation.CHILD));
 	}
 
