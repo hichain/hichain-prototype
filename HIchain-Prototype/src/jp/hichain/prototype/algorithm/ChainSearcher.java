@@ -115,7 +115,7 @@ public class ChainSearcher {
 					}
 				}
 				for (ChainNode sourceNode : sourceNodes) {
-					asteriskNode.add(myNode, sourceNode, chainRelation);
+					ChainNode.connect(myNode, sourceNode, chainRelation);
 				}
 				hit = sourceNodes.size() != 0;
 			}
@@ -150,11 +150,13 @@ public class ChainSearcher {
 		System.out.println(me.getPosition() + " -> " + you.getPosition() + ":" + combination.getSignDir() + " => " + combination.getKind() + " (" + relation + ")");
 		ChainNode myNode = me.getChainNode(combination);
 		ChainNode yourNode = you.getChainNode(combination);
-		if (myNode == null) {
+		if (myNode == null && yourNode == null) {
+			myNode = new ChainNode(me, combination);
+			yourNode = new ChainNode(you, combination, myNode, relation.getOpposite());
+		} else if (yourNode == null) {
+			yourNode = new ChainNode(you, combination, myNode, relation.getOpposite());
+		} else if (myNode == null) {
 			myNode = new ChainNode(me, combination, yourNode, relation);
-		}
-		if (yourNode == null) {
-			yourNode = new ChainNode(you, combination, myNode, relation);
 		}
 	}
 }

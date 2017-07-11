@@ -6,8 +6,8 @@ import java.util.*;
 
 public class ChainNode {
 	private final Square square;
-	private ChainCombination combination;
-	private SignChar signChar;
+	private final ChainCombination combination;
+	private final SignChar signChar;
 
 	private EnumMap<Relation, Set<ChainNode>> relationMap;
 	private ChainLength length;
@@ -21,30 +21,48 @@ public class ChainNode {
 		}};
 	}
 
-	/*
+	/**
+	 * ルートノードの作成
 	 * @param thisSquare このノードが属するSquare
 	 * @param combination このノードが属するツリーの連鎖条件
 	 */
 	public ChainNode(Square thisSquare, ChainCombination combination) {
 		this.square = thisSquare;
 		this.combination = combination;
+		this.square.addChainNode(combination, this);
 		signChar = this.square.getSign().getSN().get( combination.getSignDir() );
+		valid = !(this.square.hasPluralChains());
 		length = new ChainLength(this);
-		valid = !this.square.hasPluralChains();
 	}
 
 	/**
+	 * ルートノードでないノードの作成
+	 * this:relation = source
 	 * @param thisSquare このノードが属するSquare
 	 * @param combination このノードが属するツリーの連鎖条件
 	 * @param source ソースSquare
-	 * @param relation このノードから見たソースの親子関係
+	 * @param relation thisから見たsourceの親子関係
 	 */
 	public ChainNode(Square thisSquare, ChainCombination combination, ChainNode source, Relation relation) {
-		this(thisSquare, combination);
+		this.square = thisSquare;
+		this.combination = combination;
+		this.square.addChainNode(combination, this);
+		signChar = this.square.getSign().getSN().get( combination.getSignDir() );
+		valid = !(this.square.hasPluralChains());
 		length = new ChainLength(this, source.length, relation);
-		thisSquare.addChainNode(combination, this);
-		add(source, relation);
-		source.add(this, relation.getOpposite());
+		connect(this, source, relation);
+	}
+
+	/**
+	 * ノード同士を接続する
+	 * node:relation == source
+	 * @param node ノード1
+	 * @param source ノード2
+	 * @param relation ノード1からみたノード2の親子関係
+	 */
+	public static void connect(ChainNode node, ChainNode source, Relation relation) {
+		node.add(source, relation);
+		source.add(node, relation.getOpposite());
 	}
 
 	public Square getSquare() {
@@ -61,10 +79,6 @@ public class ChainNode {
 
 	public Set<ChainNode> get(Relation relation) {
 		return relationMap.get(relation);
-	}
-
-	public void add(ChainNode node, Relation relation) {
-		relationMap.get(relation).add(node);
 	}
 
 	public int getLength(Relation relation) {
@@ -157,6 +171,11 @@ public class ChainNode {
 		for (ChainNode node : get(relation)) {
 			node.setMaturesAll(mature, relation);
 		}
+	}
+
+	//this:relation = source
+	protected void add(ChainNode source, Relation relation) {
+		relationMap.get(relation).add(source);
 	}
 
 	private void setValidAll(Relation relation, boolean valid) {

@@ -38,7 +38,7 @@ public class ChainLength {
 	}
 
 	public int getMaxLength() {
-		int sumLength = 0;
+		int sumLength = 1;
 		for (int length : lengthMap.values()) {
 			sumLength += length;
 		}

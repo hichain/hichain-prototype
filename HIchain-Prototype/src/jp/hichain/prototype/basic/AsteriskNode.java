@@ -72,7 +72,7 @@ public class AsteriskNode extends ChainNode {
 	}
 
 	//matureになる*に対してノードを追加する
-	public void add(ChainNode node, ChainNode sourceNode, Relation relation) {
+	protected void add(ChainNode node, ChainNode sourceNode, Relation relation) {
 		super.add(node, relation);
 		ChainPair pair = new ChainPair( getAlonePair(sourceNode), node, relation );
 		addPair(pair);
