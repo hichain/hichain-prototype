@@ -49,8 +49,8 @@ public class ChainNode {
 		this.square.addChainNode(combination, this);
 		signChar = this.square.getSign().getSN().get( combination.getSignDir() );
 		valid = !(this.square.hasPluralChains());
-		length = new ChainLength(this, source.length, relation);
 		connect(this, source, relation);
+		length = new ChainLength(this, source.length, relation);
 	}
 
 	/**

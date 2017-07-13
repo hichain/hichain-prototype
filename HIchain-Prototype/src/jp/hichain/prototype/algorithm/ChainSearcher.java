@@ -151,8 +151,8 @@ public class ChainSearcher {
 		ChainNode myNode = me.getChainNode(combination);
 		ChainNode yourNode = you.getChainNode(combination);
 		if (myNode == null && yourNode == null) {
-			myNode = new ChainNode(me, combination);
-			yourNode = new ChainNode(you, combination, myNode, relation.getOpposite());
+			yourNode = new ChainNode(you, combination);
+			myNode = new ChainNode(me, combination, yourNode, relation);
 		} else if (yourNode == null) {
 			yourNode = new ChainNode(you, combination, myNode, relation.getOpposite());
 		} else if (myNode == null) {
