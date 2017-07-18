@@ -1,11 +1,11 @@
-### AI開発に向けて [develop-preai](https://github.com/hichain/HIchain-Prototype/tree/develop-preai) で新アルゴリズム実装中
-# HIchain Prototype版
+#### AI開発に向けて [test-complex](https://github.com/hichain/HIchain-Prototype/tree/test-complex) で新アルゴリズム実装中
+# HIchain Prototype
 
 ![ゲームイメージ](https://github.com/hichain/HIchain-Prototype/blob/master/images/playing3.gif)
 
 ## HICHAIN(ハイチェイン) とは
-  + 同人ボードゲームサークル｢[HIchain Project](http://hichain.sokon.jp)｣が制作した配列ゲームです
-  + ルールは[こちら](http://hichain.sokon.jp/rule.html)
+  + 同人ボードゲームサークル｢[HIchain Project](http://hichain.sokon.jp)｣が制作した完全情報ゲームです
+  + ルールは[こちら](https://scrapbox.io/hichain/ルール)
 
 ## ダウンロード
   + r1.0.1 (2016/08/28)
@@ -64,15 +64,15 @@
 + ルキ
 
 ## ライセンス
-HIchain Prototype版  
-Copyright (C) 2016 Tokiwa  
-Copyright (C) 2016 Unno  
-Copyright (C) 2016 Ruk  
+HIchain Prototype  
+© 2016 Tokiwa  
+© 2016 Unno  
+© 2016 Ruk  
 
 本ソフトウェアは個人利用のみ使用できる  
 再配布､複製､改変を禁ずる
 
 ## リンク
 + [HP](http://hichain.sokon.jp/)
++ [用語](https://scrapbox.io/hichain/)
 + [Twitter](https://twitter.com/HIchain_game)
-  + 試合結果や出展イベントの情報などを呟きます
