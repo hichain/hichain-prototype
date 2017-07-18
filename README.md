@@ -4,8 +4,8 @@
 ![ゲームイメージ](https://github.com/hichain/HIchain-Prototype/blob/master/images/playing3.gif)
 
 ## HICHAIN(ハイチェイン) とは
-  + 同人ボードゲームサークル｢[HIchain Project](http://hichain.sokon.jp)｣が制作した完全情報ゲームです
-  + ルールは[こちら](https://scrapbox.io/hichain/ルール)
++ 同人ボードゲームサークル｢[HIchain Project](http://hichain.sokon.jp)｣が制作した完全情報ゲームです
++ ルールは[こちら](https://scrapbox.io/hichain/ルール)
 
 ## ダウンロード
   + r1.0.1 (2016/08/28)
