@@ -46,23 +46,25 @@ public class Main {
 
 	private static void testConvert() {
 		Player player = Player.get("1P");
+
 		Square root = Position.getRoot().getSquare();
 		root.make(player, SignData.get('D'));
 		Square around1 = root.getAround(AroundDir.SOUTH);
 		around1.make(player, SignData.get('E'));
 		Square around2 = around1.getAround(AroundDir.SOUTH);
 		around2.make(player, SignData.get('F'));
-		Square around3 = around1.getAround(AroundDir.EAST);
+/*		Square around3 = around1.getAround(AroundDir.EAST);
 		around3.make(player, SignData.get('F'));
-	    System.out.println("\n" + root.chainsToString());
 	    Square around4 = around3.getAround(AroundDir.EAST);
-	    around4.make(player, SignData.get('G'));
-	    Square around5 = around4.getAround(AroundDir.EAST);
-	    around5.make(player, SignData.get('H'));
-	    Square around6 = around2.getAround(AroundDir.SOUTH);
-	    around6.make(player, SignData.get('G'));
+		around4.make(player, SignData.get('G'));
+		Square around5 = around4.getAround(AroundDir.EAST);
+		around5.make(player, SignData.get('H'));
+		Square around6 = around2.getAround(AroundDir.SOUTH);
+		around6.make(player, SignData.get('G'));
+*/
+		System.out.println("\n" + root.chainsToString());
 		System.out.println( "\nPOINTS: " + Converter.getPointsAll(player) );
-		ChainLength length = around6.getChainNode(new ChainCombination(SignDir.NORTH, Chain.ALPHABETICAL)).getLength();
+		ChainLength length = around1.getChainNode(new ChainCombination(SignDir.NORTH, Chain.ALPHABETICAL)).getLength();
 		System.out.println("PARENT: " + length.getMaxLength(Chain.Relation.PARENT) + " CHILD: " + length.getMaxLength(Chain.Relation.CHILD));
 	}
 

@@ -28,6 +28,7 @@ public class Converter {
 			if (square.isEmpty() || square.getPlayer() != player) {
 				continue;
 			}
+
 			for (Map.Entry<ChainCombination, ChainNode> chainEntry : square.getChainMap().entrySet()) {
 				ChainCombination combination = chainEntry.getKey();
 				ChainNode targetNode = chainEntry.getValue();
@@ -52,11 +53,12 @@ public class Converter {
 					startNodes.add(targetNode);
 				}
 
-				if (combination.getKind() == Chain.ROYAL) {
-					for (ChainNode node : startNodes) {
-						if ( completedRoyalString(node)) return -1;
-						points += getPoints(node, null, 1);
+				for (ChainNode node : startNodes) {
+					if (combination.getKind() == Chain.ROYAL) {
+						if (completedRoyalString(node)) return -1;
 					}
+
+					points += getPoints(node, null);
 				}
 
 			}
@@ -68,47 +70,53 @@ public class Converter {
 	public static void init(int alphabetical, int identical, int royal) {
 		chainLengthMin = new HashMap<Chain, Integer>() {{
 			put(
-					Chain.ALPHABETICAL, alphabetical
+				Chain.ALPHABETICAL, alphabetical
 			);
 			put(
-					Chain.IDENTICAL, identical
+				Chain.IDENTICAL, identical
 			);
 			put(
-					Chain.ROYAL, royal
+				Chain.ROYAL, royal
 			);
 		}};
 	}
 
 	private static boolean completedRoyalString(ChainNode root) {
-		int royalPoints = getPoints(root, null, 1);
+		int royalPoints = getPoints(root, null);
 		int royalMin = getChainLengthMin(Chain.ROYAL);
 		return royalPoints >= royalMin*royalMin;
 	}
 
-	private static int getPoints(ChainNode root, ChainNode sourceNode, int length) {
+	private static int getPoints(ChainNode root, ChainNode sourceNode) {
 		int points = 0;
 
-		if (root instanceof AsteriskNode) return getPoints((AsteriskNode)root, sourceNode, length);
+		if (root instanceof AsteriskNode) return getPoints((AsteriskNode)root, sourceNode);
+
 		if (!(root.isMature() && root.isValid())) {
-			return (length-1)*(length-1);
+			int sourceChildLength = sourceNode.getLength(Chain.Relation.CHILD);
+			sourceChildLength++;
+			return sourceChildLength*sourceChildLength;
+		}
+
+		int childLength = root.getLength(Chain.Relation.CHILD);
+		if (childLength == 0) {
+			int parentLength = root.getLength(Chain.Relation.PARENT);
+			parentLength++;
+			return parentLength*parentLength;
 		}
 
 		for (ChainNode child : root.get(Chain.Relation.CHILD)) {
-			points += getPoints(child, root, length+1);
+			points += getPoints(child, root);
 		}
 
 		return points;
 	}
 
-	private static int getPoints(AsteriskNode root, ChainNode sourceNode, int length) {
+	private static int getPoints(AsteriskNode root, ChainNode sourceNode) {
 		int points = 0;
 
-		if (!root.isMature(sourceNode, Chain.Relation.CHILD) ) {
-			return (length-1)*(length-1);
-		}
-
 		for (ChainNode child : root.get(sourceNode, Chain.Relation.CHILD)) {
-			points += getPoints(child, root, length+1);
+			points += getPoints(child, root);
 		}
 
 		return points;
