@@ -4,7 +4,10 @@ import java.util.EnumMap;
 import jp.hichain.prototype.concept.Chain.Relation;
 
 /**
+ * 連鎖のペア
+ * アスタリスクとの連鎖を構築する
  * Created by NT on 2017/06/28.
+ * @deprecated AsteriskNodeで用いるため
  */
 public final class ChainPair {
 	private boolean alone;

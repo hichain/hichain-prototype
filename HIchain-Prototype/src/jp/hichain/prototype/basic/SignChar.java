@@ -47,11 +47,6 @@ public class SignChar {
 
 	private static void init() {
 		signs.put( ' ', new SignChar(' ') );
-		SignChar asterisk = new SignChar('*');
-		EnumMap<Chain.Relation, SignChar> asteriskMap = new EnumMap<>(Chain.Relation.class);
-		asteriskMap.put( Chain.Relation.CHILD, asterisk );
-		asteriskMap.put( Chain.Relation.PARENT, asterisk );
-		signs.put('*', asterisk);
 
 		for (Chain kind : Chain.values()) {
 			String orderString = kind.getOrderString();
@@ -79,8 +74,6 @@ public class SignChar {
 
 				sc.relationMap.put(kind, map);
 			}
-
-			asterisk.relationMap.put(kind, asteriskMap);
 		}
 
 	}

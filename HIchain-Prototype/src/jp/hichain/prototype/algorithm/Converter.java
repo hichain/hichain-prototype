@@ -10,8 +10,7 @@ import jp.hichain.prototype.concept.Chain;
 
 /*
  * 考慮してない事項:
- * アスタリスク (WIP)
- * 回帰
+ * 回帰 (A-Z問題)
  */
 public class Converter {
 	private static Map<Chain, Integer> chainLengthMin;
@@ -34,24 +33,13 @@ public class Converter {
 				ChainNode targetNode = chainEntry.getValue();
 
 				Set<ChainNode> startNodes = new HashSet<>();
-				//*ノードならその中の孤立ノードを探す
-				if (targetNode instanceof AsteriskNode) {
-					AsteriskNode asteriskNode = (AsteriskNode)targetNode;
-					for (ChainPair pair : asteriskNode.getPairs()) {
-						if (pair.isAlone()) {
-							startNodes.add(pair.getAloneNode());
-						}
-					}
-					if (startNodes.size() == 0) continue;
-				} else {
-					if (!targetNode.isEdgeOf(Chain.Relation.PARENT)) {
-						continue;
-					}
-					if (!(targetNode.isMature() && targetNode.isValid())) {
-						continue;
-					}
-					startNodes.add(targetNode);
+				if (!targetNode.isEdgeOf(Chain.Relation.PARENT)) {
+					continue;
 				}
+				if (!(targetNode.isMature() && targetNode.isValid())) {
+					continue;
+				}
+				startNodes.add(targetNode);
 
 				for (ChainNode node : startNodes) {
 					if (combination.getKind() == Chain.ROYAL) {
@@ -90,8 +78,6 @@ public class Converter {
 	private static int getPoints(ChainNode root, ChainNode sourceNode) {
 		int points = 0;
 
-		if (root instanceof AsteriskNode) return getPoints((AsteriskNode)root, sourceNode);
-
 		if (!(root.isMature() && root.isValid())) {
 			int sourceChildLength = sourceNode.getLength(Chain.Relation.CHILD);
 			sourceChildLength++;
@@ -106,16 +92,6 @@ public class Converter {
 		}
 
 		for (ChainNode child : root.get(Chain.Relation.CHILD)) {
-			points += getPoints(child, root);
-		}
-
-		return points;
-	}
-
-	private static int getPoints(AsteriskNode root, ChainNode sourceNode) {
-		int points = 0;
-
-		for (ChainNode child : root.get(sourceNode, Chain.Relation.CHILD)) {
 			points += getPoints(child, root);
 		}
 

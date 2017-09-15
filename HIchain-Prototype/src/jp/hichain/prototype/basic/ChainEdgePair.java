@@ -9,6 +9,7 @@ import jp.hichain.prototype.concept.Chain.Relation;
  * 端のChainNodeのペア
  * 成熟判定、ポイント換算で利用する
  * Created by NT on 2017/07/04.
+ * @deprecated 使われなくなったため
  */
 public class ChainEdgePair {
 	private EnumMap<Relation, ChainNode> nodeMap;

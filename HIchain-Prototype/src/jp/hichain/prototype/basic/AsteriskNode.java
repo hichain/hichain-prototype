@@ -6,6 +6,7 @@ import jp.hichain.prototype.concept.Chain.Relation;
 
 /**
  * Created by NT on 2017/06/28.
+ * @deprecated アスタリスクの実装が未完成
  */
 public class AsteriskNode extends ChainNode {
 	private Set<ChainPair> pairs;

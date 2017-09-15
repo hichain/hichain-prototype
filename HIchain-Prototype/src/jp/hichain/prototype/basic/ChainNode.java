@@ -4,6 +4,10 @@ import jp.hichain.prototype.concept.Chain;
 import jp.hichain.prototype.concept.Chain.Relation;
 import java.util.*;
 
+/**
+ * 連鎖ツリーを構成するノード
+ * マスと対になる
+ */
 public class ChainNode {
 	private final Square square;
 	private final ChainCombination combination;
