@@ -14,14 +14,19 @@ public class Move {
 	private final Square me;	//自分の手
 	private List <Move> children;	//子どもの手
 
-	private List <ChainSign> fieldSigns;
+	private List <ChainSign> fieldSigns;    //場にある文字
 
 	private int moveValue;    //手の評価
 	private int moveDepth;    //手の深さ
 
-	private Move(Square _thisSquare, Move parentMove) {
+	protected Move(Square thisSquare) {
+		this(thisSquare, lastMove);
+		lastMove = this;
+	}
+
+	private Move(Square thisSquare, Move parentMove) {
 		children = new ArrayList<>();
-		me = _thisSquare;
+		me = thisSquare;
 		parent = parentMove;
 		fieldSigns = new ArrayList<>( parent.getFieldSigns() );
 		fieldSigns.remove( me.getSign() );
