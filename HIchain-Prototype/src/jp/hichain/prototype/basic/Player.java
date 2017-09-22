@@ -15,8 +15,7 @@ public class Player {
 
 	private String name;
 	private CardColor cardColor;
-	private List <Move> moves;
-	private List <ChainSign> fieldSigns;
+	private Move lastMove;
 
 	public Player(String _name, CardColor _color) {
 		name = _name;
@@ -57,16 +56,8 @@ public class Player {
 		return cardColor;
 	}
 
-	public List<Move> getMoves() {
-		return moves;
-	}
-
 	public Move getLastMove() {
-		return moves.get(moves.size()-1);
-	}
-
-	public List<ChainSign> getFieldSigns() {
-		return fieldSigns;
+		return lastMove;
 	}
 
 	@Override
