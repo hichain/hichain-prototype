@@ -8,16 +8,28 @@ import jp.hichain.prototype.basic.*;
 import jp.hichain.prototype.concept.Chain;
 import jp.hichain.prototype.concept.SignDir;
 
+/**
+ * 連鎖探索
+ * 連鎖ツリーを構築する
+ * 成熟・有効判定
+ */
 public class ChainSearcher {
 
+	/**
+	 * 連鎖を探索する
+	 * マス1→マス2における連鎖を探索し成熟・有効を判定する
+	 * @param me マス1
+	 * @param you マス2
+	 * @return ヒットした連鎖数
+	 */
 	public static int search(Square me, Square you) {
 		int hits = 0;
 
 		if (me == null || you == null) {
-			return hits;
+			return 0;
 		}
 		if (me.isEmpty() || you.isEmpty()) {
-			return hits;
+			return 0;
 		}
 
 		for (SignDir signDir : SignDir.values()) {
@@ -34,6 +46,14 @@ public class ChainSearcher {
 		return hits;
 	}
 
+	/**
+	 * 指定の連鎖の組み合わせにおける連鎖を判定する
+	 * マス1→マス2における連鎖を探索し成熟・有効を判定する
+	 * @param me マス1
+	 * @param you マス2
+	 * @param combination 連鎖の組み合わせ
+	 * @return ヒットした連鎖数
+	 */
 	private static int search(Square me, Square you, ChainCombination combination) {
 		int hits = 0;
 
@@ -61,6 +81,13 @@ public class ChainSearcher {
 		return hits;
 	}
 
+	/**
+	 * 成熟・有効を判定する
+	 * マス1→マス2における連鎖の成熟・有効を判定
+	 * @param me マス1
+	 * @param you マス2
+	 * @param combination 連鎖の組み合わせ
+	 */
 	private static void judgeMatureAndValid(Square me, Square you, ChainCombination combination) {
 		ChainNode myNode = me.getChainNode(combination);
 		ChainNode yourNode = you.getChainNode(combination);
@@ -77,6 +104,13 @@ public class ChainSearcher {
 		}
 	}
 
+	/**
+	 * 連鎖ツリーにノードを追加する
+	 * @param me マス1
+	 * @param you マス2
+	 * @param combination 連鎖の組み合わせ
+	 * @param relation 連鎖関係
+	 */
 	private static void addChainNode(Square me, Square you, ChainCombination combination, Chain.Relation relation) {
 		System.out.println(me.getPosition() + " -> " + you.getPosition() + ":" + combination.getSignDir() + " => " + combination.getKind() + " (" + relation + ")");
 		ChainNode myNode = me.getChainNode(combination);

@@ -10,8 +10,18 @@ import jp.hichain.prototype.concept.PS;
 import jp.hichain.prototype.concept.PS.Contact;
 import jp.hichain.prototype.concept.PS.Type;
 
+/**
+ * 着手ルール判定
+ */
 public class Judge {
 
+	/**
+	 * 接点の判定をする
+	 * @param player プレイヤー
+	 * @param holding 設置する文字
+	 * @param target 対象マス
+	 * @return 接点の種類
+	 */
 	public static PS.Contact getContact(Player player, ChainSign holding, Square target) {
 		SignPS holdingSPS = holding.getSPS();
 		System.out.println("HoldingSPS:\n" + holdingSPS.toString());
@@ -35,6 +45,12 @@ public class Judge {
 		return Contact.NONE;
 	}
 
+	/**
+	 * 辺の接点を判定する
+	 * @param holdingSPS 設置する文字のSPS
+	 * @param target 対象マス
+	 * @return 設置できるかどうか
+	 */
 	private static boolean getSideJudge(SignPS holdingSPS, Square target) {
 		SignPS.TypePart typePart = holdingSPS.getTypePart(Type.SIDE);
 
@@ -67,6 +83,13 @@ public class Judge {
 		return false;
 	}
 
+	/**
+	 * 点の接点を判定する
+	 * @param player プレイヤー
+	 * @param holdingSPS 設置する文字のSPS
+	 * @param target 対象マス
+	 * @return 設置できるかどうか
+	 */
 	private static boolean getPointJudge(Player player, SignPS holdingSPS, Square target) {
 		SignPS.TypePart typePart = holdingSPS.getTypePart(Type.POINT);
 
@@ -98,6 +121,13 @@ public class Judge {
 		return false;
 	}
 
+	/**
+	 * 角の接点を判定する
+	 * @param player プレイヤー
+	 * @param holdingSPS 設置する文字のSPS
+	 * @param target 対象マス
+	 * @return 設置できるかどうか
+	 */
 	private static boolean getCornerJudge(Player player, SignPS holdingSPS, Square target) {
 		SignPS.TypePart typePart = holdingSPS.getTypePart(Type.CORNER);
 
