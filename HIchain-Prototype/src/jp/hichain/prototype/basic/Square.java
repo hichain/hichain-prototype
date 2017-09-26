@@ -64,6 +64,7 @@ public class Square {
 		chainSign = _sign;
 		position.searchChainsAll();
 		position.createAroundsAll();
+		move = new Move(this);
 	}
 
 	/**
@@ -145,7 +146,6 @@ public class Square {
 		}
 		return false;
 	}
-
 
 	public String chainsToString() {
 		String string = "";
