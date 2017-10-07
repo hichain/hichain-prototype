@@ -48,11 +48,11 @@ public class Main {
 		Player player = Player.get("1P");
 
 		Square root = Position.getRoot().getSquare();
-		root.make(player, SignData.get('D'));
+		root.make(player, SignData.get('H'));
 		Square around1 = root.getAround(AroundDir.SOUTH);
-		around1.make(player, SignData.get('E'));
-		Square around2 = around1.getAround(AroundDir.SOUTH);
-		around2.make(player, SignData.get('F'));
+		around1.make(player, SignData.get('H'));
+		Square around2 = root.getAround(AroundDir.NORTH);
+		around2.make(player, SignData.get('H'));
 /*		Square around3 = around1.getAround(AroundDir.EAST);
 		around3.make(player, SignData.get('F'));
 	    Square around4 = around3.getAround(AroundDir.EAST);
@@ -64,7 +64,7 @@ public class Main {
 */
 		System.out.println("\n" + root.chainsToString());
 		System.out.println( "\nPOINTS: " + Converter.getPointsAll(player) );
-		ChainLength length = root.getChainNode(new ChainCombination(SignDir.NORTH, Chain.ALPHABETICAL)).getLength();
+		ChainLength length = root.getChainNode(new ChainCombination(SignDir.NORTH, Chain.IDENTICAL)).getLength();
 		System.out.println("PARENT: " + length.getMaxLength(Chain.Relation.PARENT) + " CHILD: " + length.getMaxLength(Chain.Relation.CHILD));
 	}
 
