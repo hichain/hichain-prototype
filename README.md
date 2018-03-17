@@ -1,4 +1,4 @@
-#### 現在開発は [test-complex](https://github.com/hichain/HICHAIN-Java) にシフトしています
+#### 現在開発は [Java版](https://github.com/hichain/HICHAIN-Java) にシフトしています
 # HIchain Prototype
 
 ![ゲームイメージ](https://github.com/hichain/HIchain-Prototype/blob/master/images/playing3.gif)
