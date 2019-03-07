@@ -8,12 +8,13 @@
 + ルールは[こちら](https://scrapbox.io/hichain/ルール)
 
 ## ダウンロード
-  + r1.0.1 (2016/08/28)
-    + [Windows 32bit版](https://github.com/hichain/HIchain-Prototype/releases/download/r1.0.1/HIchain_Prototype_r1_0_1_x86.zip)
-    + [Windows 64bit版](https://github.com/hichain/HIchain-Prototype/releases/download/r1.0.1/HIchain_Prototype_r1_0_1_x64.zip)
-    + [Mac版](https://github.com/hichain/HIchain-Prototype/releases/download/r1.0.1/HIchain_Prototype_r1_0_1_macosx.zip)
-    + [Linux 32bit版](https://github.com/hichain/HIchain-Prototype/releases/download/r1.0.1/HIchain_Prototype_r1_0_1_linux32.zip)
-    + [Linux 64bit版](https://github.com/hichain/HIchain-Prototype/releases/download/r1.0.1/HIchain_Prototype_r1_0_1_linux64.zip)
+  + r1.0.2 (2019/03/08)
+    + [Windows 32bit版](https://github.com/hichain/HIchain-Prototype/releases/download/r1.0.2/HIchain-Prototype_r1.0.2_win32.zip)
+    + [Windows 64bit版](https://github.com/hichain/HIchain-Prototype/releases/download/r1.0.2/HIchain-Prototype_r1.0.2_win64.zip)
+    + [Mac版](https://github.com/hichain/HIchain-Prototype/releases/download/r1.0.2/HIchain-Prototype_r1.0.2_macosx.zip)
+      + Mac版が実行できない問題を修正しました
+    + [Linux 32bit版](https://github.com/hichain/HIchain-Prototype/releases/download/r1.0.2/HIchain-Prototype_r1.0.2_linux32.zip)
+    + [Linux 64bit版](https://github.com/hichain/HIchain-Prototype/releases/download/r1.0.2/HIchain-Prototype_r1.0.2_linux64.zip)
     + **現在ネットワーク対戦は実装しておりません**
   + [リリースノート](https://github.com/hichain/HIchain-Prototype/releases)
 
@@ -41,16 +42,8 @@
 + **M**:  現在の試合結果をエクスポートする
 + **G**:  画面の録画スタート/ストップ (GIFアニメ)
   + 録画中は大変重くなりますが、生成されるGIFは正常です
-+ **BACKSPACE**: リセット (盤面のクリア)
-+ **DELETE**: リロード
-
-### 遊び方
-+ r1.0.1ではネットワーク対戦機能がないため、同じデバイスに2人が向かい合って対戦するか
-画面共有しながら対戦して遊びます
-+ タブレットならスペースインベーダーのように机に向かい合ってタッチ操作で対戦できるのでおすすめです
-(カードの回転だけはタッチで操作できないためご了承ください)
-+ ランダムにカードを置く機能を使って、擬似的に人工無能と対戦することもできます
-+ 試合が終わったらスクリーンショットを撮って、Twitterなどで拡散しましょう！
++ **BACKSPACE** (Windows) / **delete** (Mac): リセット (盤面のクリア)
++ **DELETE** (Windows) / **fn+delete** (Mac): リロード
 
 ## バグ報告に関して
 + プロトタイプ版ではバグ報告をお願いしています
@@ -59,20 +52,20 @@
 + バグ報告の際は、Mキーを押して生成された試合結果を添付してください
 
 ## 制作者
-+ [ときわ](https://github.com/TokiwaTools)
++ [kiito](https://github.com/kiito1000)
 + [うんの](https://github.com/funi)
 + ルキ
 
 ## ライセンス
 HIchain Prototype  
-© 2016 Tokiwa  
-© 2016 Unno  
-© 2016 Ruk  
+© 2019 kiito  
+© 2019 Unno  
+© 2019 Ruk  
 
 本ソフトウェアは個人利用のみ使用できる  
 再配布､複製､改変を禁ずる
 
 ## リンク
-+ [HP](http://hichain.sokon.jp/)
++ [HP](https://hichain.jp)
 + [用語](https://scrapbox.io/hichain/)
 + [Twitter](https://twitter.com/HIchain_game)
