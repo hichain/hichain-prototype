@@ -7,12 +7,13 @@
 + ルールは[こちら](https://hichain.jp/hichain/)
 
 ## ダウンロード
-  + r1.0.2 (2019/03/08)
-    + [Windows 32bit版](https://github.com/hichain/hichain-prototype/releases/download/r1.0.2/hichain-prototype_r1.0.2_win32.zip)
-    + [Windows 64bit版](https://github.com/hichain/hichain-prototype/releases/download/r1.0.2/hichain-prototype_r1.0.2_win64.zip)
-    + [Mac版](https://github.com/hichain/hichain-prototype/releases/download/r1.0.2/hichain-prototype_r1.0.2_macosx.zip)
-    + [Linux 32bit版](https://github.com/hichain/hichain-prototype/releases/download/r1.0.2/hichain-prototype_r1.0.2_linux32.zip)
-    + [Linux 64bit版](https://github.com/hichain/hichain-prototype/releases/download/r1.0.2/hichain-prototype_r1.0.2_linux64.zip)
+  + r1.0.3 (2021/05/08)
+    + [Windows 32bit](https://github.com/hichain/hichain-prototype/releases/download/r1.0.3/hichain-prototype_r1.0.3_win32.zip)
+    + [Windows 64bit](https://github.com/hichain/hichain-prototype/releases/download/r1.0.3/hichain-prototype_r1.0.3_win64.zip)
+    + [macOS](https://github.com/hichain/hichain-prototype/releases/download/r1.0.3/hichain-prototype_r1.0.3_macos.zip)
+    + [Linux 32bit](https://github.com/hichain/hichain-prototype/releases/download/r1.0.3/hichain-prototype_r1.0.3_linux32.zip)
+    + [Linux 64bit](https://github.com/hichain/hichain-prototype/releases/download/r1.0.3/hichain-prototype_r1.0.3_linux64.zip)
+  + 実行にはJava 8 Update 74以降が必要です
   + [リリースノート](https://github.com/hichain/hichain-prototype/releases)
 
 ## 画面説明
