@@ -1,25 +1,22 @@
-#### 現在開発は [Java版](https://github.com/hichain/HICHAIN-Java) にシフトしています
-# HIchain Prototype
+# HICHAIN Prototype
 
-![ゲームイメージ](https://github.com/hichain/HIchain-Prototype/blob/master/images/playing3.gif)
+![ゲームイメージ](https://github.com/hichain/hichain-prototype/blob/master/images/playing3.gif)
 
-## HICHAIN(ハイチェイン) とは
-+ 同人ボードゲームサークル｢[HIchain Project](http://hichain.sokon.jp)｣が制作した完全情報ゲームです
-+ ルールは[こちら](https://scrapbox.io/hichain/ルール)
+## [HICHAIN](https://hichain.jp/hichain/) とは
++ ボードゲームサークル｢[Hichain Project](https://hichain.jp)｣が制作した2人用アブストラクトゲーム
++ ルールは[こちら](https://hichain.jp/hichain/)
 
 ## ダウンロード
   + r1.0.2 (2019/03/08)
-    + [Windows 32bit版](https://github.com/hichain/HIchain-Prototype/releases/download/r1.0.2/HIchain-Prototype_r1.0.2_win32.zip)
-    + [Windows 64bit版](https://github.com/hichain/HIchain-Prototype/releases/download/r1.0.2/HIchain-Prototype_r1.0.2_win64.zip)
-    + [Mac版](https://github.com/hichain/HIchain-Prototype/releases/download/r1.0.2/HIchain-Prototype_r1.0.2_macosx.zip)
-      + Mac版が実行できない問題を修正しました
-    + [Linux 32bit版](https://github.com/hichain/HIchain-Prototype/releases/download/r1.0.2/HIchain-Prototype_r1.0.2_linux32.zip)
-    + [Linux 64bit版](https://github.com/hichain/HIchain-Prototype/releases/download/r1.0.2/HIchain-Prototype_r1.0.2_linux64.zip)
-    + **現在ネットワーク対戦は実装しておりません**
-  + [リリースノート](https://github.com/hichain/HIchain-Prototype/releases)
+    + [Windows 32bit版](https://github.com/hichain/hichain-prototype/releases/download/r1.0.2/hichain-prototype_r1.0.2_win32.zip)
+    + [Windows 64bit版](https://github.com/hichain/hichain-prototype/releases/download/r1.0.2/hichain-prototype_r1.0.2_win64.zip)
+    + [Mac版](https://github.com/hichain/hichain-prototype/releases/download/r1.0.2/hichain-prototype_r1.0.2_macosx.zip)
+    + [Linux 32bit版](https://github.com/hichain/hichain-prototype/releases/download/r1.0.2/hichain-prototype_r1.0.2_linux32.zip)
+    + [Linux 64bit版](https://github.com/hichain/hichain-prototype/releases/download/r1.0.2/hichain-prototype_r1.0.2_linux64.zip)
+  + [リリースノート](https://github.com/hichain/hichain-prototype/releases)
 
 ## 画面説明
-![画面説明](https://raw.githubusercontent.com/hichain/HIchain-Prototype/master/images/description.png)
+![画面説明](https://raw.githubusercontent.com/hichain/hichain-prototype/master/images/description.png)
 
 ## 操作方法
 ### マウス操作
@@ -45,10 +42,8 @@
 + **BACKSPACE** (Windows) / **delete** (Mac): リセット (盤面のクリア)
 + **DELETE** (Windows) / **fn+delete** (Mac): リロード
 
-## バグ報告に関して
-+ プロトタイプ版ではバグ報告をお願いしています
-+ 固まる･ルール上の問題等見つかりましたらページ上のIssuesかTwitterのリプライで報告してください
-  (既知のバグもありますので予めIssuesのトピックをご確認ください)
+## 不具合報告
++ [Issues](https://github.com/hichain/hichain-prototype/issues)もしくは[Twitter](https://twitter.com/hichain_game)でご報告お願いします
 + バグ報告の際は、Mキーを押して生成された試合結果を添付してください
 
 ## 制作者
@@ -56,16 +51,11 @@
 + [うんの](https://github.com/funi)
 + ルキ
 
-## ライセンス
-HIchain Prototype  
-© 2019 kiito  
-© 2019 Unno  
-© 2019 Ruk  
+## LICENSE
 
-本ソフトウェアは個人利用のみ使用できる  
-再配布､複製､改変を禁ずる
+No License
 
 ## リンク
-+ [HP](https://hichain.jp)
++ [Hichain Project](https://hichain.jp)
 + [用語](https://scrapbox.io/hichain/)
-+ [Twitter](https://twitter.com/HIchain_game)
++ [Twitter](https://twitter.com/hichain_game)
