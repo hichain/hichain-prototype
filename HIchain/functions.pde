@@ -137,10 +137,6 @@ void drawLoading() {
   fill(#559CF7);
   textAlign(CENTER, CENTER);
   text("LOADING...", width/2, height/2);
-  textAlign(RIGHT, DOWN);
-  fill(0);
-  textSize(20);
-  text(VERSION, width-20, height-20);
 }
 
 //データベースに初期の場の文字を追加

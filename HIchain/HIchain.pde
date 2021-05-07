@@ -1,6 +1,5 @@
 import gifAnimation.*;
 
-final String VERSION = "r1.0.2";   //バージョン
 //カードの画像のパス
 final String [] IMAGEPATH = {
   "cards/D", "cards/R"
@@ -43,7 +42,7 @@ void settings() {
 void setup() {
   PFont font = createFont("Arial", 48, true);
   textFont(font, 25);
-  surface.setTitle("HIchain Prototype " + VERSION);
+  surface.setTitle("HICHAIN Prototype");
   //surface.setResizable(true);
 }
 
